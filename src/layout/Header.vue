@@ -42,6 +42,7 @@
           fab
           dark
           x-small
+          @click="myInfo"
         >
           <v-icon>mdi-account-circle</v-icon>
         </v-btn>
@@ -135,16 +136,23 @@ export default {
       this.$store.dispatch("login",{
         'id':this.username,
         'pwd':this.password
-      }).then(()=>{
+      }).then((resp)=>{
         this.drawer = !this.drawer;
         this.username = "";
         this.password = "";
+        if(resp){
+          this.$router.push("/");
+        }
       });
     },
     logout(){
       this.$store.commit("setUserId","");
       this.$store.commit("setToken","");
     },
+    myInfo(){
+      if(this.$route.path!= "/MyPage")
+      this.$router.push("/MyPage");
+    }
   },
   computed:{
     isLogin: function() {

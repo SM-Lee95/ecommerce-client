@@ -101,6 +101,7 @@
               hide-details="auto"
               required
               v-model="postcode"
+                        readonly
               @click="daumPostCode"
             ></v-text-field>
             </v-col>
@@ -113,6 +114,7 @@
               label="Main Address"
               hide-details="auto"
               required
+                          readonly
               v-model="mainAddress"
               @click="daumPostCode"
             ></v-text-field>
@@ -128,7 +130,7 @@
             </v-container>
             </v-col>
             <v-col cols="5">
-              <v-row justify="left">
+              <v-row justify="start">
                 <label>Birth Day</label>
                 <v-date-picker
                   v-model="birth"
@@ -195,10 +197,8 @@ export default {
     etcAddress: "",
     birth: null,
   }),
-
   methods: {
     submit () {
-      console.log(this.$refs.observer.validate());
       this.$store.dispatch("signUp",{
         name:this.name,
         id:this.id,
@@ -211,8 +211,14 @@ export default {
         main_address:this.mainAddress,
         etc_address:this.etcAddress,
         birth:this.birth,
-      }).then((resp)=>{
-        console.log(resp);
+      }).then((resp) => {
+          if(resp == "200")
+            this.$store.dispatch("login",{
+              id:this.id,
+              pwd:this.pwd,
+            }).then(() => {
+              this.$router.push("/");
+            })
       })
     },
     clear () {

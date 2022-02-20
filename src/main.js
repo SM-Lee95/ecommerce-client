@@ -11,10 +11,8 @@ for (let rule in rules) {
     extend(rule, rules[rule]);
 }
 extend('existId',{validate(value) {
-  console.log(value);
   return store.dispatch("existId",value).then((resp)=>{
-    console.log(resp.data.statusCode+"<<<");
-    if(resp.data.message == "success")return true;
+    if(resp.data.statusCode == "200")return true;
     return false;
   })
 },message: "존재하는 아이디입니다. 다른 아이디를 입력해주세요."})
