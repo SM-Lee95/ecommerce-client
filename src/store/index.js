@@ -48,9 +48,24 @@ export default new Vuex.Store({
         context.commit("setUserId", data.username);//유저 아이디를 저장해준다
         context.commit("setToken",resp.headers.authorization);// 토큰을 적용해준다
       }).catch((resp) =>{
-        alert("login 실패"+ resp);
+        alert("로그인 실패"+ resp);
       });
-    }
+    },
+    signUp(context , data){
+      console.log(data);
+      return http.post("/user/signUp",data).then((resp) =>{
+        console.log(resp);
+      }).catch((resp) =>{
+        alert("회원가입 실패"+ resp);
+      });
+    },
+    existId(context , data){
+      return http.post("/user/existId/"+data).then((resp) =>{
+        return resp;
+      }).catch((resp) =>{
+        alert("잘못된 접근입니다. "+ resp);
+      });
+    },
   },
   modules:{
 

@@ -6,20 +6,18 @@ import vuetify from "./plugins/vuetify";
 import VeeValidate from 'vee-validate';
 import { ValidationObserver, ValidationProvider, setInteractionMode , extend} from 'vee-validate'
 import * as rules from "vee-validate/dist/rules"
-import {
-  required
-} from 'vee-validate/dist/rules';
+
 for (let rule in rules) {
-  // add the rule
-  if(rule == "is"){
-    extend('required', {
-      ...required,
-      message: 'Password와 일치하지 않습니다.'
-    });
-  }else{
     extend(rule, rules[rule]);
-  }
 }
+extend('existId',{validate(value) {
+  console.log(value);
+  return store.dispatch("existId",value).then((resp)=>{
+    console.log(resp.data.statusCode+"<<<");
+    if(resp.data.message == "success")return true;
+    return false;
+  })
+},message: "존재하는 아이디입니다. 다른 아이디를 입력해주세요."})
 Vue.component("ValidationProvider", ValidationProvider)
 Vue.component("ValidationObserver", ValidationObserver)
 setInteractionMode('eager')

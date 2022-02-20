@@ -7,68 +7,69 @@
         <form @submit.prevent="submit">
           <validation-provider
             v-slot="{ errors }"
-            name="Name"
-            rules="required|max:20"
+            name="name"
+            rules="required|max:15"
           >
             <v-text-field
               v-model="name"
-              :counter="10"
+              :counter="15"
               :error-messages="errors"
-              label="Name"
+              label="Full Name"
               required
             ></v-text-field>
-          </validation-provider><validation-provider
+          </validation-provider>
+          <validation-provider
             v-slot="{ errors }"
-            name="Id"
-            rules="required|max:20"
+            name="id"
+            rules="required|max:20|existId"
           >
             <v-text-field
-              v-model="Id"
-              :counter="10"
+              v-model="id"
+              :counter="20"
               :error-messages="errors"
-              label="Id"
+              label="ID"
               required
             ></v-text-field>
-          </validation-provider><validation-provider
+          </validation-provider>
+          <validation-provider
             v-slot="{ errors }"
-            name="Password"
+            name="pwd"
             rules="required|max:20|min:8"
           >
             <v-text-field
-              v-model="Password"
-              :counter="10"
+              v-model="pwd"
+              :counter="20"
               :error-messages="errors"
               label="Password"
-              :type="'password'"
-              v-validate="{ is: Confirm }"
-              required
-            ></v-text-field>
-          </validation-provider><validation-provider
-            v-slot="{ errors }"
-            name="Confirm"
-            rules="required|max:20|min:8"
-          >
-            <v-text-field
-              v-model="Confirm"
-              :counter="10"
-              :error-messages="errors"
-              label="Confirm"
               :type="'password'"
               required
             ></v-text-field>
           </validation-provider>
           <validation-provider
             v-slot="{ errors }"
-            name="Phone"
+            name="confirm"
+            rules="required|max:20|min:8|confirmed:pwd"
+          >
+            <v-text-field
+              v-model="confirm"
+              :counter="20"
+              :error-messages="errors"
+              label="Confirm Input Password"
+              :type="'password'"
+              required
+            ></v-text-field>
+          </validation-provider>
+          <validation-provider
+            v-slot="{ errors }"
+            name="phone"
             :rules="{
           required: true,
-          digits: 11,
-          regex: '^(71|72|74|76|81|82|84|85|86|87|88|89)\\d{5}$'
+          regex: [/^\d{2,3}-\d{3,4}-\d{4}$/]
         }"
           >
             <v-text-field
-              v-model="Phone"
-              :counter="11"
+              v-model="phone"
+              :counter="13"
               :error-messages="errors"
               label="Phone Number"
               required
@@ -86,44 +87,92 @@
               required
             ></v-text-field>
           </validation-provider>
-          <validation-provider
-            v-slot="{ errors }"
-            name="select"
-            rules="required"
-          >
-            <v-select
-              v-model="select"
-              :items="items"
-              :error-messages="errors"
-              label="Select"
-              data-vv-name="select"
+          <v-container>
+            <v-row>
+            <v-col cols="6">
+          <v-container>
+            <label>Address</label>
+            <v-row>
+            <v-col
+              cols="6"
+            >
+          <v-text-field dense
+              label="Postcode"
+              hide-details="auto"
               required
-            ></v-select>
-          </validation-provider>
-          <validation-provider
+              v-model="postcode"
+              @click="daumPostCode"
+            ></v-text-field>
+            </v-col>
+            </v-row>
+            <v-row>
+            <v-col
+              cols="12"
+            >
+            <v-text-field dense
+              label="Main Address"
+              hide-details="auto"
+              required
+              v-model="mainAddress"
+              @click="daumPostCode"
+            ></v-text-field>
+            </v-col>
+              </v-row>
+            <v-row>
+            <v-col
+              cols="12"
+            >
+            <v-text-field dense label="ETC Address" v-model="etcAddress"></v-text-field>
+            </v-col>
+            </v-row>
+            </v-container>
+            </v-col>
+            <v-col cols="5">
+              <v-row justify="left">
+                <label>Birth Day</label>
+                <v-date-picker
+                  v-model="birth"
+                  year-icon="mdi-calendar-blank"
+                  prev-icon="mdi-skip-previous"
+                  next-icon="mdi-skip-next"
+                ></v-date-picker>
+              </v-row>
+            </v-col>
+            </v-row>
+            </v-container>
+            <validation-provider
             v-slot="{ errors }"
             rules="required"
             name="checkbox"
           >
             <v-checkbox
-              v-model="checkbox"
+              v-model="emailYn"
               :error-messages="errors"
-              value="1"
-              label="Option"
+              label="Email 수신 동의"
               type="checkbox"
-              required
             ></v-checkbox>
           </validation-provider>
-
+            <validation-provider
+              v-slot="{ errors }"
+              rules="required"
+              name="checkbox"
+            >
+            <v-checkbox
+              v-model="phoneYn"
+              :error-messages="errors"
+              label="SMS 수신 동의"
+              type="checkbox"
+            ></v-checkbox>
+          </validation-provider>
           <v-btn
             class="mr-4"
             type="submit"
             :disabled="invalid"
           >
-            submit
+            회원가입
           </v-btn>
           <v-btn @click="clear">
-            clear
+            초기화
           </v-btn>
         </form>
       </validation-observer>
@@ -134,36 +183,93 @@
 export default {
   data: () => ({
     name: '',
-    phoneNumber: '',
-    email: '',
-    select: null,
-    items: [
-      'Item 1',
-      'Item 2',
-      'Item 3',
-      'Item 4',
-    ],
-    Confirm: null,
-    checkbox: null,
-    Password: null,
+    id: '',
+    pwd: '',
+    confirm: null,
+    phone: null,
+    email: null,
+    phoneYn: 1,
+    emailYn: 1,
+    postcode: "",
+    mainAddress: "",
+    etcAddress: "",
+    birth: null,
   }),
 
   methods: {
     submit () {
-      this.$refs.observer.validate()
+      console.log(this.$refs.observer.validate());
+      this.$store.dispatch("signUp",{
+        name:this.name,
+        id:this.id,
+        pwd:this.pwd,
+        phone:this.phone,
+        email:this.email,
+        sms_yn:this.phoneYn,
+        email_yn:this.emailYn,
+        postcode:this.postcode,
+        main_address:this.mainAddress,
+        etc_address:this.etcAddress,
+        birth:this.birth,
+      }).then((resp)=>{
+        console.log(resp);
+      })
     },
     clear () {
       this.name = ''
-      this.phoneNumber = ''
+      this.id = ''
+      this.pwd = ''
+      this.confirm = null
+      this.phone = null
       this.email = ''
-      this.select = null
-      this.checkbox = null
-      this.$refs.observer.reset()
+      this.mainAddress = ''
+      this.etcAddress = ''
+      this.birth=null
+      this.$refs.observer.reset();
+    },
+    daumPostCode(){
+      new window.daum.Postcode({
+        oncomplete: (data) => {
+          if (this.etcAddress !== "") {
+            this.etcAddress = "";
+          }
+          if (data.userSelectedType === "R") {
+            // 사용자가 도로명 주소를 선택했을 경우
+            this.mainAddress = data.roadAddress;
+          } else {
+            // 사용자가 지번 주소를 선택했을 경우(J)
+            this.mainAddress = data.jibunAddress;
+          }
+
+          // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+          if (data.userSelectedType === "R") {
+            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+            if (data.bname !== "" && /[동|로|가]$/g.test(data.bname)) {
+              this.etcAddress += data.bname;
+            }
+            // 건물명이 있고, 공동주택일 경우 추가한다.
+            if (data.buildingName !== "" && data.apartment === "Y") {
+              this.etcAddress +=
+                this.etcAddress !== ""
+                  ? `, ${data.buildingName}`
+                  : data.buildingName;
+            }
+            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+            if (this.etcAddress !== "") {
+              this.etcAddress = `(${this.etcAddress})`;
+            }
+          } else {
+            this.etcAddress = "";
+          }
+          // 우편번호를 입력한다.
+          this.postcode = data.zonecode;
+        },
+      }).open();
     },
   },
 }
 </script>
-
 <style scoped>
 
 </style>
