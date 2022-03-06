@@ -3,7 +3,6 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Main from "../components/MainPage.vue";
 import JoinForm from "../components/JoinForm.vue";
-import MyPage from "../components/MyPage.vue";
 
 
 Vue.use(VueRouter);
@@ -23,11 +22,6 @@ const routes = [
     path: "/JoinForm",
     name: "JoinForm",
     component: JoinForm,
-  },
-  {
-    path: "/MyPage",
-    name: "MyPage",
-    component: MyPage,
   },
 ];
 
