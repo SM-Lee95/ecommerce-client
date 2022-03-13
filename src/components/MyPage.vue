@@ -5,6 +5,11 @@
     class="mx-auto"
   >
     <v-list two-line>
+        <v-img
+          max-height="300px"
+          dark
+          :src="this.userInfo.profile_url"
+        ></v-img>
       <v-list-item>
         <v-list-item-icon>
           <v-icon color="indigo">
@@ -128,18 +133,6 @@ export default {
     },
     transForm() {
 
-    },
-    clear() {
-      this.name = "";
-      this.id = "";
-      this.pwd = "";
-      this.confirm = null;
-      this.phone = null;
-      this.email = "";
-      this.mainAddress = "";
-      this.etcAddress = "";
-      this.birth = null;
-      this.$refs.observer.reset();
     },
     daumPostCode() {
       new window.daum.Postcode({

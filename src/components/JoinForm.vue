@@ -89,49 +89,25 @@
           </validation-provider>
           <v-container>
             <v-row>
+              <v-col cols="6">
+                <v-row  justify="start">
+                <v-chip
+                  class="ma-2"
+                  label
+                >
+                  Profile
+                </v-chip>
+                  <v-img :src="preview" max-width="290px" max-height="388px" alt="프로필 사진을 등록해주세요."></v-img>
+                </v-row>
+            </v-col>
             <v-col cols="6">
-          <v-container>
-            <label>Address</label>
-            <v-row>
-            <v-col
-              cols="6"
-            >
-          <v-text-field dense
-              label="Postcode"
-              hide-details="auto"
-              required
-              v-model="postcode"
-                        readonly
-              @click="daumPostCode"
-            ></v-text-field>
-            </v-col>
-            </v-row>
-            <v-row>
-            <v-col
-              cols="12"
-            >
-            <v-text-field dense
-              label="Main Address"
-              hide-details="auto"
-              required
-                          readonly
-              v-model="mainAddress"
-              @click="daumPostCode"
-            ></v-text-field>
-            </v-col>
-              </v-row>
-            <v-row>
-            <v-col
-              cols="12"
-            >
-            <v-text-field dense label="ETC Address" v-model="etcAddress"></v-text-field>
-            </v-col>
-            </v-row>
-            </v-container>
-            </v-col>
-            <v-col cols="5">
               <v-row justify="start">
-                <label>Birth Day</label>
+                <v-chip
+                  class="ma-2"
+                  label
+                >
+                  Birth Day
+                </v-chip>
                 <v-date-picker
                   v-model="birth"
                   year-icon="mdi-calendar-blank"
@@ -141,7 +117,66 @@
               </v-row>
             </v-col>
             </v-row>
+            <v-row>
+              <v-col cols="12">
+                <validation-provider
+                  v-slot="{ errors }"
+                  rules="fileSize"
+                  name="Profile Input"
+                >
+                  <v-file-input
+                    @change="imgPreview"
+                    label="Profile Input"
+                    show-size
+                    :error-messages="errors"
+                    accept="image/png, image/jpeg, image/bmp"
+                    placeholder="Pick an your picture"
+                    filled
+                    prepend-icon="mdi-camera"
+                    v-model="profile_photo"
+                  ></v-file-input>
+                </validation-provider>
+              </v-col>
+            </v-row>
             </v-container>
+          <v-container>
+            <label>Address</label>
+            <v-row>
+              <v-col
+                cols="6"
+              >
+                <v-text-field dense
+                              label="Postcode"
+                              hide-details="auto"
+                              required
+                              v-model="postcode"
+                              readonly
+                              @click="daumPostCode"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col
+                cols="12"
+              >
+                <v-text-field dense
+                              label="Main Address"
+                              hide-details="auto"
+                              required
+                              readonly
+                              v-model="mainAddress"
+                              @click="daumPostCode"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col
+                cols="12"
+              >
+                <v-text-field dense label="ETC Address" v-model="etcAddress"></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
             <validation-provider
             v-slot="{ errors }"
             rules="required"
@@ -196,11 +231,13 @@ export default {
     mainAddress: "",
     etcAddress: "",
     birth: null,
+    profile_photo: null,
+    preview: null,
   }),
   methods: {
     submit () {
-      this.$store.dispatch("signUp",{
-        name:this.name,
+      const formData = new FormData();
+      const userInfoDto = { name:this.name,
         id:this.id,
         pwd:this.pwd,
         phone:this.phone,
@@ -210,8 +247,10 @@ export default {
         postcode:this.postcode,
         main_address:this.mainAddress,
         etc_address:this.etcAddress,
-        birth:this.birth,
-      }).then((resp) => {
+        birth:this.birth};
+      formData.append("file",this.profile_photo);
+      formData.append("userInfoDto",new Blob([JSON.stringify(userInfoDto)],{type:"application/json"}));
+      this.$store.dispatch("signUp",formData).then((resp) => {
           if(resp == "200")
             this.$store.dispatch("login",{
               id:this.id,
@@ -220,6 +259,10 @@ export default {
               this.$router.push("/");
             })
       })
+    },
+    imgPreview(){
+      console.log(">>"+this.profile_photo);
+      this.preview = URL.createObjectURL(this.profile_photo);
     },
     clear () {
       this.name = ''

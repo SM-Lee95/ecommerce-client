@@ -106,12 +106,13 @@
         </v-btn>
       </div>
     </v-navigation-drawer>
-    <v-dialog
-      v-model="userInfoDrawer"
-      fullscreen
-      hide-overlay
-      transition="dialog-bottom-transition"
-    >
+    <v-row justify="center">
+      <v-overlay
+        :absolute="true"
+        :opacity="0.3"
+        :value="userInfoDrawer"
+        light
+      >
       <v-btn
         class=""
         icon
@@ -120,7 +121,8 @@
         <v-icon>mdi-close-outline</v-icon>
       </v-btn>
       <MyPage />
-    </v-dialog>
+    </v-overlay>
+    </v-row>
   </div>
 </template>
 
@@ -168,7 +170,7 @@ export default {
       });
     },
     logout() {
-      this.$store.commit("setUserId", "");
+      this.$store.commit("setUserInfo", null);
       this.$store.commit("setToken", "");
     }
   },

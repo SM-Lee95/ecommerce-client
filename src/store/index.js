@@ -22,7 +22,9 @@ export default new Vuex.Store({
       email: '',
       sms_yn: '',
       email_yn: '',
-      auth: ''
+      auth: '',
+      profile_cd: '',
+      profile_url: '',
     }
   },
   //
@@ -52,17 +54,35 @@ export default new Vuex.Store({
       }
     },
     setUserInfo(state, payload){
-        state.userInfo.id=payload.id;
-        state.userInfo.name=payload.name
-        state.userInfo.postcode=payload.postcode;
-        state.userInfo.main_address=payload.main_address;
-        state.userInfo.etc_address=payload.etc_address;
-        state.userInfo.phone=payload.phone;
-        state.userInfo.email=payload.email;
-        state.userInfo.sms_yn=payload.sms_yn;
-        state.userInfo.email_yn=payload.email_yn;
-        state.userInfo.auth=payload.auth;
-    }
+      if(payload !=null) {
+        state.userInfo.id = payload.id;
+        state.userInfo.name = payload.name
+        state.userInfo.postcode = payload.postcode;
+        state.userInfo.main_address = payload.main_address;
+        state.userInfo.etc_address = payload.etc_address;
+        state.userInfo.phone = payload.phone;
+        state.userInfo.email = payload.email;
+        state.userInfo.sms_yn = payload.sms_yn;
+        state.userInfo.email_yn = payload.email_yn;
+        state.userInfo.auth = payload.auth;
+        state.userInfo.profile_url = payload.profile_url;
+        state.userInfo.profile_cd = payload.profile_cd;
+        console.log(state.userInfo.profile_url+" <<");
+      }else{
+        state.userInfo.id = '';
+        state.userInfo.name = '';
+        state.userInfo.postcode = '';
+        state.userInfo.main_address = '';
+        state.userInfo.etc_address = '';
+        state.userInfo.phone = '';
+        state.userInfo.email = '';
+        state.userInfo.sms_yn = '';
+        state.userInfo.email_yn = '';
+        state.userInfo.auth = '';
+        state.userInfo.profile_url = '';
+        state.userInfo.profile_cd = '';
+      }
+      }
   },
   actions:{
     login(context , data){
