@@ -1,12 +1,32 @@
 <template>
   <div>
+    <v-dialog
+      transition="dialog-bottom-transition"
+      v-model="userInfoDrawer"
+      persistent
+      max-width="600px"
+    >
+      <v-row >
+      <v-col cols="11"></v-col>
+      <v-col cols="1">
+      <v-btn
+        class=""
+        icon
+        @click.stop="userInfoDrawer = !userInfoDrawer"
+        left
+      >
+        <v-icon>mdi-close-box</v-icon>
+      </v-btn>
+      </v-col>
+      </v-row>
+      <MyPage />
+    </v-dialog>
     <v-card>
       <v-app-bar
-        absolute
         color="white"
-        elevation="1"
         dense
         app
+        fixed
       >
         <template v-slot:img="{ props }">
           <v-img
@@ -106,23 +126,6 @@
         </v-btn>
       </div>
     </v-navigation-drawer>
-    <v-row justify="center">
-      <v-overlay
-        :absolute="true"
-        :opacity="0.3"
-        :value="userInfoDrawer"
-        light
-      >
-      <v-btn
-        class=""
-        icon
-        @click.stop="userInfoDrawer = !userInfoDrawer"
-      >
-        <v-icon>mdi-close-outline</v-icon>
-      </v-btn>
-      <MyPage />
-    </v-overlay>
-    </v-row>
   </div>
 </template>
 
