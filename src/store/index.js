@@ -13,6 +13,7 @@ export default new Vuex.Store({
     Title: 'PlumGreenTea',
     token: '',
     userInfo: {
+      cd: '',
       id: '',
       name: '',
       postcode: '',
@@ -56,6 +57,7 @@ export default new Vuex.Store({
     setUserInfo(state, payload){
       if(payload !=null) {
         state.userInfo.id = payload.id;
+        state.userInfo.cd = payload.cd;
         state.userInfo.name = payload.name
         state.userInfo.postcode = payload.postcode;
         state.userInfo.main_address = payload.main_address;
@@ -67,9 +69,9 @@ export default new Vuex.Store({
         state.userInfo.auth = payload.auth;
         state.userInfo.profile_url = payload.profile_url;
         state.userInfo.profile_cd = payload.profile_cd;
-        console.log(state.userInfo.profile_url+" <<");
       }else{
         state.userInfo.id = '';
+        state.userInfo.cd = '';
         state.userInfo.name = '';
         state.userInfo.postcode = '';
         state.userInfo.main_address = '';
@@ -124,8 +126,12 @@ export default new Vuex.Store({
       })
     },
     updateInfo(context, data){
-      return http.put("/user/info/"+context.state.userInfo.id,data).then((resp)=>{
-        console.log(resp);
+      return http.post("/user/info/"+context.state.userInfo.cd,data).then((resp)=>{
+        if(resp.data.statusCode =="200" )alert("정보 변경에 성공하셨습니다.");
+        if(resp.data.statusCode =="400" )alert("정보 변경에 실패하셨습니다. 다시 시도해주세요.");
+        return resp.data.statusCode;
+      }).catch((resp)=>{
+        alert("잘못된 접근입니다. " + resp);
       })
     }
   },

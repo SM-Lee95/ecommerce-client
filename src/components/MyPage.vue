@@ -102,7 +102,7 @@
           </validation-provider>
         </v-list-item-content>
         <v-list-item-icon>
-          <v-icon>mdi-lead-pencil</v-icon>
+          <v-icon @click="transForm">mdi-lead-pencil</v-icon>
         </v-list-item-icon>
       </v-list-item>
       <v-divider inset></v-divider>
@@ -169,7 +169,7 @@
           <v-list-item-title>SMS 수신 여부</v-list-item-title>
         </v-list-item-content>
         <v-list-item-action>
-          <v-checkbox v-model="sms_yn"></v-checkbox>
+          <v-checkbox @change="transForm" v-model="sms_yn"></v-checkbox>
         </v-list-item-action>
       </v-list-item>
       <v-divider inset></v-divider>
@@ -183,7 +183,7 @@
           <v-list-item-title>Email 수신 여부</v-list-item-title>
         </v-list-item-content>
         <v-list-item-action>
-          <v-checkbox v-model="email_yn"></v-checkbox>
+          <v-checkbox @change="transForm" v-model="email_yn"></v-checkbox>
         </v-list-item-action>
       </v-list-item>
     </v-list>
@@ -202,8 +202,8 @@ export default {
     postcode:"",
     mainAddress:"",
     etcAddress:"",
-    sms_yn: true,
-    email_yn: true,
+    sms_yn: null,
+    email_yn: null,
     profile_photo: null,
     preview: null,
   }),
@@ -220,30 +220,30 @@ export default {
        alert("변경 후 저장을 시도해주세요.");
        return;
       }
-      if(this.preview.size >= 5000000){
-        alert("파일 크기는 5MB 이하로 등록해주세요.");
-        return;
-      }
       this.$refs.observer.validate().then((resp)=>{
         if(resp == false){
-          alert("입력값을 확인해주세요.");
+          alert("입력값을 확인해주세요. ex) 파일크기 5MB 제한");
           return;
         }else{
-          this.$store.dispatch("updateInfo", {
-            name: this.name,
-            id: this.id,
-            pwd: this.pwd,
+          const userInfoDto = {
             phone: this.phone,
             email: this.email,
-            sms_yn: this.phoneYn,
-            email_yn: this.emailYn,
+            sms_yn: this.phoneYn?1:0,
+            email_yn: this.emailYn?1:0,
             postcode: this.postcode,
             main_address: this.mainAddress,
             etc_address: this.etcAddress,
-            birth: this.birth
-          }).then((resp) => {
-            if (resp == "200")
-              this.isModi = false;
+          };
+          const formData = new FormData();
+          if(this.preview != null)
+            formData.append("file",this.profile_photo);
+          formData.append("userInfoDto",new Blob([JSON.stringify(userInfoDto)],{type:"application/json"}));
+          console.log(formData);
+          this.$store.dispatch("updateInfo", formData).then((resp) => {
+            this.isModi = false;
+            if (resp == "200"){
+              this.$store.dispatch("getUserInfo",this.userInfo.id);
+            }
           });
         }
       });
@@ -299,8 +299,8 @@ export default {
     this.postcode = this.userInfo.postcode;
     this.mainAddress = this.userInfo.main_address;
     this.etcAddress = this.userInfo.etc_address;
-    this.email_yn = this.userInfo.email_yn;
-    this.sms_yn = this.userInfo.sms_yn;
+    this.email_yn = this.userInfo.email_yn==1?true:false;
+    this.sms_yn = this.userInfo.sms_yn==1?true:false;
     this.preview = this.userInfo.profile_url;
   }
 };

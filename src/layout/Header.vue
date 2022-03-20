@@ -5,10 +5,9 @@
       v-model="userInfoDrawer"
       persistent
       max-width="600px"
+      height="1000px"
     >
-      <v-row>
-      <v-col cols="11"></v-col>
-      <v-col cols="1">
+      <v-container class="white">
       <v-btn
         icon
         @click.stop="userInfoDrawer = !userInfoDrawer"
@@ -16,8 +15,7 @@
       >
         <v-icon>mdi-close-box</v-icon>
       </v-btn>
-      </v-col>
-      </v-row>
+      </v-container>
       <MyPage />
     </v-dialog>
     <v-card>

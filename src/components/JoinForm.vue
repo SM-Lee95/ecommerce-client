@@ -225,8 +225,8 @@ export default {
     confirm: null,
     phone: null,
     email: null,
-    phoneYn: 1,
-    emailYn: 1,
+    phoneYn: true,
+    emailYn: true,
     postcode: "",
     mainAddress: "",
     etcAddress: "",
@@ -237,13 +237,14 @@ export default {
   methods: {
     submit () {
       const formData = new FormData();
+      console.log(this.phoneYn);
       const userInfoDto = { name:this.name,
         id:this.id,
         pwd:this.pwd,
         phone:this.phone,
         email:this.email,
-        sms_yn:this.phoneYn,
-        email_yn:this.emailYn,
+        sms_yn:this.phoneYn?1:0,
+        email_yn:this.emailYn?1:0,
         postcode:this.postcode,
         main_address:this.mainAddress,
         etc_address:this.etcAddress,
@@ -261,7 +262,8 @@ export default {
       })
     },
     imgPreview(){
-      this.preview = URL.createObjectURL(this.profile_photo);
+      if(this.profile_photo != null)
+        this.preview = URL.createObjectURL(this.profile_photo);
     },
     clear () {
       this.name = ''
