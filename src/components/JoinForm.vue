@@ -261,7 +261,6 @@ export default {
       })
     },
     imgPreview(){
-      console.log(">>"+this.profile_photo);
       this.preview = URL.createObjectURL(this.profile_photo);
     },
     clear () {

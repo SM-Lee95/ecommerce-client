@@ -122,6 +122,11 @@ export default new Vuex.Store({
       }).catch((resp)=>{
         alert("잘못된 접근입니다. "+ resp);
       })
+    },
+    updateInfo(context, data){
+      return http.put("/user/info/"+context.state.userInfo.id,data).then((resp)=>{
+        console.log(resp);
+      })
     }
   },
   modules:{

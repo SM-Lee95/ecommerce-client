@@ -6,14 +6,13 @@
       persistent
       max-width="600px"
     >
-      <v-row >
+      <v-row>
       <v-col cols="11"></v-col>
       <v-col cols="1">
       <v-btn
-        class=""
         icon
         @click.stop="userInfoDrawer = !userInfoDrawer"
-        left
+        right
       >
         <v-icon>mdi-close-box</v-icon>
       </v-btn>

@@ -10,33 +10,13 @@
         <v-img
           max-height="300px"
           dark
-          :src="this.userInfo.profile_url"
+          :src="preview"
         >
-          <v-row>
-            <v-card-title>
-              <v-btn
-                dark
-                icon
-              >
-                <v-icon>mdi-chevron-left</v-icon>
-              </v-btn>
-              <v-spacer></v-spacer>
-              <v-btn
-                dark
-                icon
-                class="mr-4"
-                @click="transForm"
-              >
-                <v-icon>mdi-pencil</v-icon>
-              </v-btn>
-              <v-btn
-                dark
-                icon
-              >
-                <v-icon>mdi-content-save-edit</v-icon>
-              </v-btn>
-            </v-card-title>
-          </v-row>
+            <v-card-text class="align-self-end">
+              <button>
+                <v-icon @click="saveInfo">mdi-content-save-move</v-icon>
+              </button>
+            </v-card-text>
         </v-img>
       <v-list-item>
         <v-list-item-icon>
@@ -49,9 +29,20 @@
           <v-list-item-subtitle>Name</v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-icon>
-          <button type="submit">
-          <v-icon @click="saveInfo">mdi-content-save-edit</v-icon>
-          </button>
+          <validation-provider
+            v-slot="{ errors }"
+            rules="fileSize"
+          >
+            <v-file-input
+              @change="imgPreview"
+              :error-messages="errors"
+              accept="image/png, image/jpeg, image/bmp"
+              prepend-icon="mdi-camera-plus-outline"
+              v-model="profile_photo"
+              hide-input
+              truncate-length="15"
+            ></v-file-input>
+          </validation-provider>
         </v-list-item-icon>
       </v-list-item>
       <v-divider inset></v-divider>
@@ -213,12 +204,26 @@ export default {
     etcAddress:"",
     sms_yn: true,
     email_yn: true,
+    profile_photo: null,
+    preview: null,
   }),
   computed: {
     ...mapState(["userInfo"])
   },
   methods: {
+    imgPreview(){
+      this.preview = URL.createObjectURL(this.profile_photo);
+      this.isModi=true;
+    },
     saveInfo(){
+      if(!this.isModi){
+       alert("변경 후 저장을 시도해주세요.");
+       return;
+      }
+      if(this.preview.size >= 5000000){
+        alert("파일 크기는 5MB 이하로 등록해주세요.");
+        return;
+      }
       this.$refs.observer.validate().then((resp)=>{
         if(resp == false){
           alert("입력값을 확인해주세요.");
@@ -244,7 +249,7 @@ export default {
       });
     },
     transForm() {
-      this.isModi = true;
+      this.isModi = !this.isModi;
     },
     daumPostCode() {
       this.isModi = true;
@@ -296,6 +301,7 @@ export default {
     this.etcAddress = this.userInfo.etc_address;
     this.email_yn = this.userInfo.email_yn;
     this.sms_yn = this.userInfo.sms_yn;
+    this.preview = this.userInfo.profile_url;
   }
 };
 </script>
