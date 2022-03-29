@@ -8,13 +8,21 @@
       height="1000px"
     >
       <v-container class="white">
-      <v-btn
+        <v-row>
+          <v-col cols="3" align-self="center">
+            개인정보수정
+          </v-col>
+          <v-col cols="8"></v-col>
+          <v-col cols="1">
+       <v-btn
         icon
         @click.stop="userInfoDrawer = !userInfoDrawer"
         right
-      >
+        >
         <v-icon>mdi-close-box</v-icon>
-      </v-btn>
+        </v-btn>
+          </v-col>
+        </v-row>
       </v-container>
       <MyPage />
     </v-dialog>

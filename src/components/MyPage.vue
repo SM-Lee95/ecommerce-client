@@ -12,15 +12,10 @@
           dark
           :src="preview"
         >
-            <v-card-text class="align-self-end">
-              <button>
-                <v-icon @click="saveInfo">mdi-content-save-move</v-icon>
-              </button>
-            </v-card-text>
         </v-img>
       <v-list-item>
         <v-list-item-icon>
-          <v-icon color="indigo">
+          <v-icon color="green darken-2">
             mdi-account
           </v-icon>
         </v-list-item-icon>
@@ -48,7 +43,7 @@
       <v-divider inset></v-divider>
       <v-list-item>
         <v-list-item-icon>
-          <v-icon color="indigo">
+          <v-icon color="green darken-2">
             mdi-phone
           </v-icon>
         </v-list-item-icon>
@@ -80,7 +75,7 @@
       <v-divider inset></v-divider>
       <v-list-item>
         <v-list-item-icon>
-          <v-icon color="indigo">
+          <v-icon color="green darken-2">
             mdi-email
           </v-icon>
         </v-list-item-icon>
@@ -108,7 +103,7 @@
       <v-divider inset></v-divider>
       <v-list-item>
         <v-list-item-icon>
-          <v-icon color="indigo">
+          <v-icon color="green darken-2">
             mdi-map-marker
           </v-icon>
         </v-list-item-icon>
@@ -161,7 +156,7 @@
       <v-divider inset></v-divider>
       <v-list-item>
         <v-list-item-icon>
-          <v-icon color="indigo">
+          <v-icon color="green darken-2">
             mdi-message-processing
           </v-icon>
         </v-list-item-icon>
@@ -175,7 +170,7 @@
       <v-divider inset></v-divider>
       <v-list-item>
         <v-list-item-icon>
-          <v-icon color="indigo">
+          <v-icon color="green darken-2">
             mdi-email-receive
           </v-icon>
         </v-list-item-icon>
@@ -186,7 +181,121 @@
           <v-checkbox @change="transForm" v-model="email_yn"></v-checkbox>
         </v-list-item-action>
       </v-list-item>
+      <v-divider inset></v-divider>
+      <v-container>
+        <v-row>
+          <v-col cols="6"></v-col>
+          <v-col cols="2">
+            <v-btn @click="saveInfo">
+              저장
+              <v-icon color="green darken-2">mdi-content-save-move</v-icon>
+            </v-btn>
+          </v-col>
+          <v-col cols="4">
+            <v-btn @click.stop="passModiDrawer = !passModiDrawer">
+              비밀번호변경
+              <v-icon color="green darken-2" >mdi-close</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-list>
+      <v-dialog
+        v-model="passModiDrawer"
+        persistent
+        width="600px"
+        height="500px"
+      >
+        <v-container class="white">
+          <v-row>
+            <v-col cols="3" align-self="center">
+              비밀번호변경
+            </v-col>
+            <v-col cols="8"></v-col>
+            <v-col cols="1">
+              <v-btn
+                small
+                icon
+                @click.stop="passModiDrawer = !passModiDrawer"
+              >
+                <v-icon color="green darken-2" >mdi-close-box</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-divider></v-divider>
+          <v-row>
+            <v-col cols="12">
+              <validation-provider
+                v-slot="{ errors }"
+                name="curPwd"
+                rules="required|max:20|min:8"
+              >
+                <v-text-field
+                  v-model="currentPwd"
+                  :counter="20"
+                  :error-messages="errors"
+                  label="기존 비밀번호"
+                  :type="'password'"
+                  required
+                ></v-text-field>
+              </validation-provider>
+            </v-col>
+           </v-row>
+            <v-divider></v-divider>
+          <v-row>
+            <v-col cols="12">
+              <validation-provider
+                v-slot="{ errors }"
+                name="newPassword"
+                rules="required|max:20|min:8"
+              >
+                <v-text-field
+                  v-model="newPwd"
+                  :counter="20"
+                  :error-messages="errors"
+                  label="새로운 비밀번호"
+                  :type="'password'"
+                  required
+                ></v-text-field>
+              </validation-provider>
+            </v-col>
+          </v-row>
+            <v-divider></v-divider>
+            <v-row>
+              <v-col cols="12">
+              <validation-provider
+                v-slot="{ errors }"
+                name="confirm"
+                rules="required|max:20|min:8|confirmed:newPassword"
+              >
+                <v-text-field
+                  v-model="confirmPwd"
+                  :counter="20"
+                  :error-messages="errors"
+                  label="비밀번호 확인"
+                  :type="'password'"
+                  required
+                ></v-text-field>
+              </validation-provider>
+              </v-col>
+            </v-row>
+          <v-divider></v-divider>
+          <v-row>
+            <v-col cols="3">
+            </v-col>
+            <v-col cols="7"></v-col>
+            <v-col cols="2">
+              <v-btn
+                @click="savePass"
+                icon
+              >
+                저장
+                <v-icon color="green darken-2" >mdi-content-save-move</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-dialog>
     </validation-observer>
   </v-card>
 </template>
@@ -206,6 +315,10 @@ export default {
     email_yn: null,
     profile_photo: null,
     preview: null,
+    passModiDrawer:false,
+    currentPwd: null,
+    newPwd: null,
+    confirmPwd: null,
   }),
   computed: {
     ...mapState(["userInfo"])
@@ -214,6 +327,25 @@ export default {
     imgPreview(){
       this.preview = URL.createObjectURL(this.profile_photo);
       this.isModi=true;
+    },
+    savePass(){
+      this.$refs.observer.validate().then((resp)=>{
+        if(resp == false){
+          alert("입력값을 확인해주세요.");
+          return;
+        }else{
+          console.log(this.userInfo.id);
+          this.$store.dispatch("updatePass", {
+            id: this.userInfo.id,
+            pwd: this.currentPwd,
+            newPwd: this.newPwd,
+          }).then((resp) => {
+            if (resp == "200"){
+              this.passModiDrawer = false;
+            }
+          });
+        }
+      });
     },
     saveInfo(){
       if(!this.isModi){
@@ -249,7 +381,7 @@ export default {
       });
     },
     transForm() {
-      this.isModi = !this.isModi;
+      this.isModi = true;
     },
     daumPostCode() {
       this.isModi = true;

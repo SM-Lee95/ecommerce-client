@@ -95,7 +95,7 @@ export default new Vuex.Store({
         }
         JSON.stringify(resp);
         context.commit("setToken",resp.headers.authorization);// 토큰을 적용해준다
-        context.dispatch("getUserInfo",data.id).then(()=>{
+        return context.dispatch("getUserInfo",data.id).then(()=>{
           return true;
         });
       }).catch((resp) =>{
@@ -129,6 +129,15 @@ export default new Vuex.Store({
       return http.post("/user/info/"+context.state.userInfo.cd,data).then((resp)=>{
         if(resp.data.statusCode =="200" )alert("정보 변경에 성공하셨습니다.");
         if(resp.data.statusCode =="400" )alert("정보 변경에 실패하셨습니다. 다시 시도해주세요.");
+        return resp.data.statusCode;
+      }).catch((resp)=>{
+        alert("잘못된 접근입니다. " + resp);
+      })
+    },
+    updatePass(context, data){
+      return http.put("/user/pass",data).then((resp)=>{
+        if(resp.data.statusCode =="200" )alert("비밀번호 변경에 성공하셨습니다.");
+        if(resp.data.statusCode =="400" )alert("비밀번호 변경에 실패하셨습니다. 기존 비밀번호를 확인해주세요.");
         return resp.data.statusCode;
       }).catch((resp)=>{
         alert("잘못된 접근입니다. " + resp);
