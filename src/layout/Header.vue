@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <Container>
     <v-dialog
       transition="dialog-bottom-transition"
       v-model="userInfoDrawer"
@@ -26,7 +26,7 @@
       </v-container>
       <MyPage />
     </v-dialog>
-    <v-card>
+    <v-card height="49px">
       <v-app-bar
         color="white"
         dense
@@ -131,7 +131,7 @@
         </v-btn>
       </div>
     </v-navigation-drawer>
-  </div>
+  </Container>
 </template>
 
 <script>
