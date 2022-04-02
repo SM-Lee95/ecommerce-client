@@ -20,8 +20,8 @@
           </v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title v-text="this.userInfo.name"></v-list-item-title>
-          <v-list-item-subtitle>Name</v-list-item-subtitle>
+          <v-list-item-title v-text="this.userInfo.id+' ( '+this.userInfo.name+' )'"></v-list-item-title>
+          <v-list-item-subtitle>ID (이름)</v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-icon>
           <validation-provider
