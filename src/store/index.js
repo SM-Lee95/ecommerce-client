@@ -12,21 +12,13 @@ export default new Vuex.Store({
   state: {
     Title: 'PlumGreenTea',
     token: '',
-    userInfo: {
-      cd: '',
-      id: '',
-      name: '',
-      postcode: '',
-      main_address: '',
-      etc_address: '',
-      phone: '',
-      email: '',
-      sms_yn: '',
-      email_yn: '',
-      auth: '',
-      profile_cd: '',
-      profile_url: '',
-    }
+    userInfo: null,
+    Key: {
+      MyPageKey: 0,
+      MainPageKey: 0,
+      JoinFormKey: 0,
+    },
+    Pagination: null,
   },
   //
   getters:{
@@ -38,6 +30,12 @@ export default new Vuex.Store({
     },
     getUserInfo(state){
       return state.userInfo;
+    },
+    getKey(state){
+      return state.Key;
+    },
+    Pagination(state){
+      return state.Pagination;
     }
   },
   mutations:{
@@ -55,36 +53,20 @@ export default new Vuex.Store({
       }
     },
     setUserInfo(state, payload){
-      if(payload !=null) {
-        state.userInfo.id = payload.id;
-        state.userInfo.cd = payload.cd;
-        state.userInfo.name = payload.name
-        state.userInfo.postcode = payload.postcode;
-        state.userInfo.main_address = payload.main_address;
-        state.userInfo.etc_address = payload.etc_address;
-        state.userInfo.phone = payload.phone;
-        state.userInfo.email = payload.email;
-        state.userInfo.sms_yn = payload.sms_yn;
-        state.userInfo.email_yn = payload.email_yn;
-        state.userInfo.auth = payload.auth;
-        state.userInfo.profile_url = payload.profile_url;
-        state.userInfo.profile_cd = payload.profile_cd;
-      }else{
-        state.userInfo.id = '';
-        state.userInfo.cd = '';
-        state.userInfo.name = '';
-        state.userInfo.postcode = '';
-        state.userInfo.main_address = '';
-        state.userInfo.etc_address = '';
-        state.userInfo.phone = '';
-        state.userInfo.email = '';
-        state.userInfo.sms_yn = '';
-        state.userInfo.email_yn = '';
-        state.userInfo.auth = '';
-        state.userInfo.profile_url = '';
-        state.userInfo.profile_cd = '';
-      }
-      }
+      state.userInfo = payload;
+    },
+    setKey(state, payload){
+      if(payload == "MyPage")
+        state.Key.MyPageKey += 1;
+      if(payload == "MainPage")
+        state.Key.MainPageKey += 1;
+      if(payload == "JoinForm")
+        state.Key.JoinFormKey += 1;
+    },
+    setPagination(state, payload){
+      state.Pagination = payload;
+    }
+
   },
   actions:{
     login(context , data){
@@ -142,10 +124,21 @@ export default new Vuex.Store({
       }).catch((resp)=>{
         alert("잘못된 접근입니다. " + resp);
       })
+    },
+    getMenuList(){
+      return http.get("/cate/list").then((resp)=>{
+        return resp.data;
+      })
+    },
+    getItemList(context, data){
+      return http.get("/prd/list/"+data.param,data).then((resp)=>{
+        context.commit("setPagination",resp.data);
+      }).catch((resp)=>{
+        alert("잘못된 접근입니다. "+ resp);
+      })
     }
   },
   modules:{
 
   }
-  // ...
 });

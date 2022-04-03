@@ -10,9 +10,17 @@
         <v-img
           max-height="300px"
           dark
-          :src="preview"
+          v-show="!isModi"
+          :src="this.userInfo.profile_url"
         >
         </v-img>
+      <v-img
+        max-height="300px"
+        dark
+        :src="preview"
+        v-show="isModi"
+      >
+      </v-img>
       <v-list-item>
         <v-list-item-icon>
           <v-icon color="green darken-2">
@@ -321,7 +329,7 @@ export default {
     confirmPwd: null,
   }),
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(["userInfo"]),
   },
   methods: {
     imgPreview(){
@@ -382,6 +390,7 @@ export default {
     },
     transForm() {
       this.isModi = true;
+      this.setLocalData();
     },
     daumPostCode() {
       this.isModi = true;
@@ -423,17 +432,20 @@ export default {
           this.postcode = data.zonecode;
         }
       }).open();
-    }
+    },
+    setLocalData(){
+      this.email = this.userInfo.email;
+      this.phone = this.userInfo.phone;
+      this.postcode = this.userInfo.postcode;
+      this.mainAddress = this.userInfo.main_address;
+      this.etcAddress = this.userInfo.etc_address;
+      this.email_yn = this.userInfo.email_yn==1?true:false;
+      this.sms_yn = this.userInfo.sms_yn==1?true:false;
+      this.preview = this.userInfo.profile_url;
+    },
   },
   mounted() {
-    this.email = this.userInfo.email;
-    this.phone = this.userInfo.phone;
-    this.postcode = this.userInfo.postcode;
-    this.mainAddress = this.userInfo.main_address;
-    this.etcAddress = this.userInfo.etc_address;
-    this.email_yn = this.userInfo.email_yn==1?true:false;
-    this.sms_yn = this.userInfo.sms_yn==1?true:false;
-    this.preview = this.userInfo.profile_url;
+    this.setLocalData();
   }
 };
 </script>

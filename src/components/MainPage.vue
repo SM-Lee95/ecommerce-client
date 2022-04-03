@@ -70,7 +70,7 @@ export default {
     }
   },
   computed:{
-    ...mapGetters(["Title"]),
+    ...mapGetters(["Item"]),
   }
 }
 </script>

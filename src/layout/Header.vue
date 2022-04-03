@@ -16,7 +16,7 @@
           <v-col cols="1">
        <v-btn
         icon
-        @click.stop="userInfoDrawer = !userInfoDrawer"
+        @click.stop="setUserInfoDrawer"
         right
         >
         <v-icon>mdi-close-box</v-icon>
@@ -67,7 +67,7 @@
             fab
             dark
             x-small
-            @click.stop="userInfoDrawer = !userInfoDrawer"
+            @click.stop="setUserInfoDrawer"
           >
             <v-icon>mdi-account-circle</v-icon>
           </v-btn>
@@ -180,6 +180,11 @@ export default {
     logout() {
       this.$store.commit("setUserInfo", null);
       this.$store.commit("setToken", "");
+      this.$router.go();
+    },
+    setUserInfoDrawer(){
+      this.userInfoDrawer = !this.userInfoDrawer;
+
     }
   },
   computed: {

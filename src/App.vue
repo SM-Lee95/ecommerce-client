@@ -8,6 +8,9 @@
     <v-main>
       <router-view />
     </v-main>
+    <div id="pagination">
+      <pagination/>
+    </div>
     <div id="footer">
       <Footer/>
     </div>
@@ -18,6 +21,7 @@
 import Footer from './layout/Footer.vue'
 import Header from './layout/Header.vue'
 import MenuBar from './layout/MenuBar.vue'
+import Pagination from './layout/Pagination.vue'
 
 export default {
   name: "App",
@@ -25,6 +29,7 @@ export default {
     Footer,
     Header,
     MenuBar,
+    Pagination,
   },
   data: () => ({
     //
