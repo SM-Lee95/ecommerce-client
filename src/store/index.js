@@ -19,6 +19,7 @@ export default new Vuex.Store({
       JoinFormKey: 0,
     },
     Pagination: null,
+    selectMenuCd: 1, //처음 All
   },
   //
   getters:{
@@ -36,7 +37,10 @@ export default new Vuex.Store({
     },
     Pagination(state){
       return state.Pagination;
-    }
+    },
+    selectMenuCd(state){
+      return state.setSelectMenuCd;
+    },
   },
   mutations:{
     setToken(state, payload){
@@ -65,8 +69,10 @@ export default new Vuex.Store({
     },
     setPagination(state, payload){
       state.Pagination = payload;
-    }
-
+    },
+    setSelectMenuCd(state, payload){
+      state.selectMenuCd = payload;
+    },
   },
   actions:{
     login(context , data){
@@ -131,7 +137,26 @@ export default new Vuex.Store({
       })
     },
     getItemList(context, data){
-      return http.get("/prd/list/"+data.param,data).then((resp)=>{
+      // page -> 요청 페이지 번호
+      // param -> 메뉴 코드
+      if(data.param)
+        context.commit("setSelectMenuCd",data.param);
+      return http.get("/prd/list/"+context.state.selectMenuCd+"?page="+data.page+"&size=18").then((resp)=>{
+        console.log(resp.data);
+        context.commit("setPagination",resp.data);
+      }).catch((resp)=>{
+        alert("잘못된 접근입니다. "+ resp);
+      })
+    },
+    getDetailInfo(context, data){
+      return http.get("/prd/detail/"+data).then((resp)=>{
+        context.commit("setPagination",resp.data);
+      }).catch((resp)=>{
+        alert("잘못된 접근입니다. "+ resp);
+      })
+    },
+    putLike(context, data){
+      return http.get("/prd/like/"+data.param,data).then((resp)=>{
         context.commit("setPagination",resp.data);
       }).catch((resp)=>{
         alert("잘못된 접근입니다. "+ resp);

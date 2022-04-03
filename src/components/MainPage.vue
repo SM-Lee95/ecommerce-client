@@ -7,35 +7,27 @@
     <v-container fluid>
       <v-row dense>
         <v-col
-          v-for="product in products"
-          :key="product.title"
-          :cols="product.flex"
+          v-for="product in Pagination.content"
+          :key="product.cd"
+          :cols="2"
         >
           <v-card>
             <v-img
-              :src="product.src"
+              :src="product.thumbnail"
               class="white--text align-end"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
               height="200px"
+              @click="getDetailInfo(product.cd)"
             >
-              <v-card-title v-text="product.title"></v-card-title>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn icon @click="like(product.cd)">
+                  <v-icon>mdi-heart</v-icon>
+                </v-btn>
+              </v-card-actions>
             </v-img>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-
-              <v-btn icon>
-                <v-icon>mdi-heart</v-icon>
-              </v-btn>
-
-              <v-btn icon>
-                <v-icon>mdi-bookmark</v-icon>
-              </v-btn>
-
-              <v-btn icon>
-                <v-icon>mdi-share-variant</v-icon>
-              </v-btn>
-            </v-card-actions>
+            <v-card-title class="col-12 text-body-1 text-truncate" v-text="product.name" @click="getDetailInfo(product.cd)"></v-card-title>
+           <v-card-text  class="col-12 text-body-2 text-truncate" v-text="product.description" @click="getDetailInfo(product.cd)"></v-card-text>
           </v-card>
         </v-col>
       </v-row>
@@ -50,27 +42,20 @@ export default {
   data(){
     return {
       products: [
-        { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 3 },
-        { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 3 },
-        { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-        { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-        { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 3 },
-        { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 3 },
-        { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-        { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-        { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 3 },
-        { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 3 },
-        { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-        { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-        { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 3 },
-        { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 3 },
-        { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-        { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
+
       ],
     }
   },
   computed:{
-    ...mapGetters(["Item"]),
+    ...mapGetters(["Pagination"]),
+  },
+  methods:{
+    getDetailInfo(cd){
+      this.$store.dispatch("getDetailInfo",cd)
+    },
+    like(cd){
+      this.$store.dispatch("putLike",cd)
+    }
   }
 }
 </script>

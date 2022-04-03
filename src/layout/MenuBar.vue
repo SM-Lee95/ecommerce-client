@@ -48,7 +48,7 @@ export default {
   },
   methods:{
     updateList(param){
-      this.$store.dispatch("getItemList",{param:param})
+      this.$store.dispatch("getItemList",{param:param,page:0})
     },
   },
 }
