@@ -69,6 +69,7 @@ export default new Vuex.Store({
     },
     setPagination(state, payload){
       state.Pagination = payload;
+      state.Pagination.number += 1;
     },
     setSelectMenuCd(state, payload){
       state.selectMenuCd = payload;
@@ -108,6 +109,7 @@ export default new Vuex.Store({
     },
     getUserInfo(context, data){
       return http.get("/user/info/"+data).then((resp)=>{
+        console.log(resp.data);
         context.commit("setUserInfo",resp.data);
       }).catch((resp)=>{
         alert("잘못된 접근입니다. "+ resp);

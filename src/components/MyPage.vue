@@ -11,7 +11,7 @@
           max-height="300px"
           dark
           v-show="!isModi"
-          :src="this.userInfo.profile_url"
+          :src="this.userInfo.profileUrl"
         >
         </v-img>
       <v-img
@@ -117,8 +117,8 @@
         </v-list-item-icon>
         <v-list-item-content v-show="!isModi">
           <v-list-item-title v-text="this.userInfo.postcode"></v-list-item-title>
-          <v-list-item-subtitle v-text="this.userInfo.main_address"></v-list-item-subtitle>
-          <v-list-item-subtitle v-text="this.userInfo.etc_address"></v-list-item-subtitle>
+          <v-list-item-subtitle v-text="this.userInfo.mainAddress"></v-list-item-subtitle>
+          <v-list-item-subtitle v-text="this.userInfo.etcAddress"></v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-content v-show="isModi">
         <v-container>
@@ -437,11 +437,11 @@ export default {
       this.email = this.userInfo.email;
       this.phone = this.userInfo.phone;
       this.postcode = this.userInfo.postcode;
-      this.mainAddress = this.userInfo.main_address;
-      this.etcAddress = this.userInfo.etc_address;
-      this.email_yn = this.userInfo.email_yn==1?true:false;
-      this.sms_yn = this.userInfo.sms_yn==1?true:false;
-      this.preview = this.userInfo.profile_url;
+      this.mainAddress = this.userInfo.mainAddress;
+      this.etcAddress = this.userInfo.etcAddress;
+      this.email_yn = this.userInfo.emailYn==1?true:false;
+      this.sms_yn = this.userInfo.smsYn==1?true:false;
+      this.preview = this.userInfo.profileUrl;
     },
   },
   mounted() {

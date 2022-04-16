@@ -1,7 +1,7 @@
 <template>
   <div class="text-center">
     <v-pagination
-      v-model="pageNum"
+      v-model="Pagination.number"
       :length="Pagination.totalPages"
       circle
       @input="updateList"
@@ -13,7 +13,7 @@
 import { mapGetters } from "vuex";
 export default {
   data: () => ({
-    pageNum: this.Pagination.number+1,
+
   }),
   mounted() {
     this.$store.dispatch("getItemList",{param:1}).then((resp)=>{

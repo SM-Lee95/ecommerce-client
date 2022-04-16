@@ -243,11 +243,11 @@ export default {
         pwd:this.pwd,
         phone:this.phone,
         email:this.email,
-        sms_yn:this.phoneYn?1:0,
-        email_yn:this.emailYn?1:0,
+        smsYn:this.phoneYn?1:0,
+        emailYn:this.emailYn?1:0,
         postcode:this.postcode,
-        main_address:this.mainAddress,
-        etc_address:this.etcAddress,
+        mainAddress:this.mainAddress,
+        etcAddress:this.etcAddress,
         birth:this.birth};
       formData.append("file",this.profile_photo);
       formData.append("userInfoDto",new Blob([JSON.stringify(userInfoDto)],{type:"application/json"}));
