@@ -173,14 +173,16 @@ export default {
         this.username = "";
         this.password = "";
         if (resp) {
-          this.$router.push("/");
+          if (this.$route.path != "/")
+            this.$router.push("/");
         }
       });
     },
     logout() {
       this.$store.commit("setUserInfo", null);
       this.$store.commit("setToken", "");
-      this.$router.go();
+      if (this.$route.path != "/")
+        this.$router.push("/");
     },
     setUserInfoDrawer(){
       this.userInfoDrawer = !this.userInfoDrawer;

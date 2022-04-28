@@ -78,17 +78,15 @@ export default new Vuex.Store({
   actions:{
     login(context , data){
       return http.post("/login",data).then((resp) =>{
-        if(!resp.headers.authorization){
-          alert("입력하신 로그인 정보가 일치하지 않습니다.")
-          return false;
-        }
+
         JSON.stringify(resp);
         context.commit("setToken",resp.headers.authorization);// 토큰을 적용해준다
         return context.dispatch("getUserInfo",data.id).then(()=>{
           return true;
         });
-      }).catch((resp) =>{
-        alert("알수없는 이유로 오류 발생"+ resp);
+      }).catch(() =>{
+          alert("입력하신 로그인 정보가 일치하지 않습니다.")
+          return false;
       });
     },
     signUp(context , data){
@@ -143,9 +141,10 @@ export default new Vuex.Store({
       // param -> 메뉴 코드
       if(data.param)
         context.commit("setSelectMenuCd",data.param);
-      return http.get("/prd/list/"+context.state.selectMenuCd+"?page="+data.page+"&size=18").then((resp)=>{
-        console.log(resp.data);
+      var user_cd = context.state.userInfo?"&user_cd="+context.state.userInfo.cd:"";
+      return http.get("/prd/list/"+context.state.selectMenuCd+"?page="+data.page+"&size=18"+user_cd).then((resp)=>{
         context.commit("setPagination",resp.data);
+        console.log(resp.data);
       }).catch((resp)=>{
         alert("잘못된 접근입니다. "+ resp);
       })
@@ -158,8 +157,9 @@ export default new Vuex.Store({
       })
     },
     putLike(context, data){
-      return http.get("/prd/like/"+data.param,data).then((resp)=>{
-        context.commit("setPagination",resp.data);
+      return http.get("/prd/like/"+data+"/"+context.state.userInfo.cd).then((resp)=>{
+        if(resp.data.statusCode =="200")alert("찜 목록에 추가하셨습니다.");
+        return true;
       }).catch((resp)=>{
         alert("잘못된 접근입니다. "+ resp);
       })

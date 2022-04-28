@@ -7,7 +7,7 @@
     <v-container fluid>
       <v-row dense>
         <v-col
-          v-for="product in Pagination.content"
+          v-for="(product,index) in Pagination.content"
           :key="product.cd"
           :cols="2"
         >
@@ -21,7 +21,7 @@
             >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn icon @click="like(product.cd)">
+                <v-btn icon @click.stop="like(index,product.cd,product.love)" :color="true==product.love?'pink':'black'">
                   <v-icon>mdi-heart</v-icon>
                 </v-btn>
               </v-card-actions>
@@ -32,18 +32,24 @@
         </v-col>
       </v-row>
     </v-container>
+    <div id="pagination">
+      <pagination/>
+    </div>
   </v-card>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import Pagination from '../layout/Pagination.vue'
+
 export default {
   name: "MainPage.vue",
+  components:{
+    Pagination,
+  },
   data(){
     return {
-      products: [
 
-      ],
     }
   },
   computed:{
@@ -53,8 +59,14 @@ export default {
     getDetailInfo(cd){
       this.$store.dispatch("getDetailInfo",cd)
     },
-    like(cd){
-      this.$store.dispatch("putLike",cd)
+    like(index,cd,love){
+      if(this.$store.getters.getUserInfo==null){
+        alert("로그인후에 시도해주세요.");
+        return;
+      }
+      this.$store.dispatch("putLike",cd).then(()=> {
+        this.$store.state.Pagination.content[index].love = !love;
+      })
     }
   }
 }
