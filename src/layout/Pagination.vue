@@ -16,9 +16,6 @@ export default {
 
   }),
   mounted() {
-    this.$store.dispatch("getItemList",{param:1,page:0}).then((resp)=>{
-      this.Catalogs = resp;
-    })
   },
   methods:{
     updateList(page){

@@ -90,6 +90,7 @@
             dark
             x-small
             color="pink"
+            @click="goJJim"
           >
             <v-icon dark>
               mdi-heart
@@ -186,7 +187,15 @@ export default {
     },
     setUserInfoDrawer(){
       this.userInfoDrawer = !this.userInfoDrawer;
-
+    },
+    goJJim(){
+      if(this.$route.path != "/JJim"){
+        this.$store.dispatch("getJJimList").then((resp)=>{
+          if(resp){
+            this.$router.push("/JJim");
+          }
+        })
+      }
     }
   },
   computed: {

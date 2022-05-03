@@ -48,7 +48,10 @@ export default {
   },
   methods:{
     updateList(param){
-      this.$store.dispatch("getItemList",{param:param,page:0})
+      this.$store.dispatch("getItemList",{param:param,page:0}).then(()=>{
+        if(this.$route.path !="/")
+          this.$router.push("/");
+      });
     },
   },
 }

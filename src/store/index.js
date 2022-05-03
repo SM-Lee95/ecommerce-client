@@ -20,6 +20,7 @@ export default new Vuex.Store({
     },
     Pagination: null,
     selectMenuCd: 1, //처음 All
+    JJimList: null,
   },
   //
   getters:{
@@ -41,6 +42,9 @@ export default new Vuex.Store({
     selectMenuCd(state){
       return state.setSelectMenuCd;
     },
+    JJimList(state){
+      return state.JJimList;
+    }
   },
   mutations:{
     setToken(state, payload){
@@ -74,6 +78,9 @@ export default new Vuex.Store({
     setSelectMenuCd(state, payload){
       state.selectMenuCd = payload;
     },
+    setJJimList(state, payload){
+      state.JJimList = payload;
+    }
   },
   actions:{
     login(context , data){
@@ -139,12 +146,13 @@ export default new Vuex.Store({
     getItemList(context, data){
       // page -> 요청 페이지 번호
       // param -> 메뉴 코드
+      console.log(data);
       if(data.param)
         context.commit("setSelectMenuCd",data.param);
       var user_cd = context.state.userInfo?"&user_cd="+context.state.userInfo.cd:"";
       return http.get("/prd/list/"+context.state.selectMenuCd+"?page="+data.page+"&size=18"+user_cd).then((resp)=>{
-        context.commit("setPagination",resp.data);
         console.log(resp.data);
+        context.commit("setPagination",resp.data);
       }).catch((resp)=>{
         alert("잘못된 접근입니다. "+ resp);
       })
@@ -163,6 +171,18 @@ export default new Vuex.Store({
       }).catch((resp)=>{
         alert("잘못된 접근입니다. "+ resp);
       })
+    },
+    getJJimList(context){
+      return http.get("/prd/jjim/list/"+context.state.userInfo.cd).then((resp)=>{
+        console.log(resp);
+        if(resp.data){
+          context.commit("setJJimList",resp.data);
+          return true;
+        }
+        else
+          alert("찜 목록에 상품이 존재하지 않습니다.");
+        return false;
+      });
     }
   },
   modules:{
