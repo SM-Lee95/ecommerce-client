@@ -39,13 +39,14 @@
             gradient="to top right, white, white"
           ></v-img>
         </template>
-        <v-app-bar-title><a @click="toMain" style="text-decoration: none">PlumGreenTea</a></v-app-bar-title>
+        <v-app-bar-title>
+          <a @click="toMain" style="text-decoration: none">PlumGreenTea</a>
+        </v-app-bar-title>
         <v-spacer></v-spacer>
         <div v-show="!isLogin">
           <v-btn value="login" small plain @click.stop="drawer = !drawer">
             로그인
           </v-btn>
-
           <v-btn value="Join" small plain @click="toJoinForm">
             회원가입
           </v-btn>
@@ -122,8 +123,8 @@
           prepend-inner-icon="mdi-account-heart-outline"
           v-model="username"
         ></v-text-field>
-        <v-text-field class="mx-auto" label="비밀번호" :rules="rules" prepend-inner-icon="mdi-lock" v-model="password"
-                      :type="'password'"></v-text-field>
+        <v-text-field class="mx-auto" label="비밀번호" :rules="rules" prepend-inner-icon="mdi-lock" v-model="password" :type="'password'">
+        </v-text-field>
         <v-btn
           block
           elevation="2"
@@ -134,7 +135,6 @@
     </v-navigation-drawer>
   </Container>
 </template>
-
 <script>
 import MyPage from "../components/MyPage.vue";
 
@@ -189,14 +189,10 @@ export default {
       this.userInfoDrawer = !this.userInfoDrawer;
     },
     goJJim(){
-      if(this.$route.path != "/JJim"){
-        this.$store.dispatch("getJJimList").then((resp)=>{
-          if(resp){
-            this.$router.push("/JJim");
-          }
-        })
+      this.$store.dispatch("getJJimList");
+      if(this.$route.path != "/JJim")
+        this.$router.push("/JJim");
       }
-    }
   },
   computed: {
     isLogin: function() {

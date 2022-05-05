@@ -342,7 +342,6 @@ export default {
           alert("입력값을 확인해주세요.");
           return;
         }else{
-          console.log(this.userInfo.id);
           this.$store.dispatch("updatePass", {
             id: this.userInfo.id,
             pwd: this.currentPwd,

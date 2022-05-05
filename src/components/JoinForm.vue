@@ -237,8 +237,8 @@ export default {
   methods: {
     submit () {
       const formData = new FormData();
-      console.log(this.phoneYn);
-      const userInfoDto = { name:this.name,
+      const userInfoDto = {
+        name:this.name,
         id:this.id,
         pwd:this.pwd,
         phone:this.phone,
@@ -257,7 +257,8 @@ export default {
               id:this.id,
               pwd:this.pwd,
             }).then(() => {
-              this.$router.push("/");
+              if(this.$route.path != "/")
+                this.$router.push("/");
             })
       })
     },

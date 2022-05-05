@@ -85,7 +85,6 @@ export default new Vuex.Store({
   actions:{
     login(context , data){
       return http.post("/login",data).then((resp) =>{
-
         JSON.stringify(resp);
         context.commit("setToken",resp.headers.authorization);// 토큰을 적용해준다
         return context.dispatch("getUserInfo",data.id).then(()=>{
@@ -114,7 +113,6 @@ export default new Vuex.Store({
     },
     getUserInfo(context, data){
       return http.get("/user/info/"+data).then((resp)=>{
-        console.log(resp.data);
         context.commit("setUserInfo",resp.data);
       }).catch((resp)=>{
         alert("잘못된 접근입니다. "+ resp);
@@ -146,12 +144,10 @@ export default new Vuex.Store({
     getItemList(context, data){
       // page -> 요청 페이지 번호
       // param -> 메뉴 코드
-      console.log(data);
       if(data.param)
         context.commit("setSelectMenuCd",data.param);
       var user_cd = context.state.userInfo?"&user_cd="+context.state.userInfo.cd:"";
       return http.get("/prd/list/"+context.state.selectMenuCd+"?page="+data.page+"&size=18"+user_cd).then((resp)=>{
-        console.log(resp.data);
         context.commit("setPagination",resp.data);
       }).catch((resp)=>{
         alert("잘못된 접근입니다. "+ resp);
@@ -174,7 +170,6 @@ export default new Vuex.Store({
     },
     getJJimList(context){
       return http.get("/prd/jjim/list/"+context.state.userInfo.cd).then((resp)=>{
-        console.log(resp);
         if(resp.data){
           context.commit("setJJimList",resp.data);
           return true;
