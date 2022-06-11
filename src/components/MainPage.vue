@@ -27,7 +27,7 @@
               </v-card-actions>
             </v-img>
             <v-card-title class="col-12 text-body-1 text-truncate" v-text="product.name" @click="getDetailInfo(product.cd)"></v-card-title>
-           <v-card-text  class="col-12 text-body-2 text-truncate" v-text="product.description" @click="getDetailInfo(product.cd)"></v-card-text>
+           <v-card-text  class="col-12 text-body-2 text-truncate" v-text="product.description"></v-card-text>
           </v-card>
         </v-col>
       </v-row>
@@ -57,7 +57,9 @@ export default {
   },
   methods:{
     getDetailInfo(cd){
-      this.$store.dispatch("getDetailInfo",cd)
+      this.$store.dispatch("getDetailInfo",cd).then(()=>{
+        this.$router.push("/Detail")
+      })
     },
     like(index,cd,love){
       if(this.$store.getters.getUserInfo==null){

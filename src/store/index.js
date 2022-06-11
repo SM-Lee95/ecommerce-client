@@ -18,9 +18,10 @@ export default new Vuex.Store({
       MainPageKey: 0,
       JoinFormKey: 0,
     },
-    Pagination: null,
+    Pagination: null, //Item List
     selectMenuCd: 1, //처음 All
-    JJimList: null,
+    JJimList: null, //JJim List
+    DetailInfo: null, //상세 내역
   },
   //
   getters:{
@@ -44,7 +45,10 @@ export default new Vuex.Store({
     },
     JJimList(state){
       return state.JJimList;
-    }
+    },
+    DetailInfo(state){
+      return state.DetailInfo;
+    },
   },
   mutations:{
     setToken(state, payload){
@@ -80,7 +84,10 @@ export default new Vuex.Store({
     },
     setJJimList(state, payload){
       state.JJimList = payload;
-    }
+    },
+    setDetailInfo(state, payload){
+      state.DetailInfo = payload;
+    },
   },
   actions:{
     login(context , data){
@@ -155,7 +162,8 @@ export default new Vuex.Store({
     },
     getDetailInfo(context, data){
       return http.get("/prd/detail/"+data).then((resp)=>{
-        context.commit("setPagination",resp.data);
+        console.log(resp.data);
+        context.commit("setDetailInfo",resp.data);
       }).catch((resp)=>{
         alert("잘못된 접근입니다. "+ resp);
       })
