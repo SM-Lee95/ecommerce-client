@@ -17,6 +17,7 @@ export default new Vuex.Store({
     selectMenuCd: 1, //처음 All
     JJimList: null, //JJim List
     DetailInfo: null, //상세 내역
+    BasketList: null, //장바구니
   },
   //
   getters:{
@@ -37,6 +38,9 @@ export default new Vuex.Store({
     },
     JJimList(state){
       return state.JJimList;
+    },
+    BasketList(state){
+      return state.BasketList;
     },
     DetailInfo(state){
       return state.DetailInfo;
@@ -68,6 +72,9 @@ export default new Vuex.Store({
     },
     setJJimList(state, payload){
       state.JJimList = payload;
+    },
+    setBasketList(state, payload){
+      state.BasketList = payload;
     },
     setDetailInfo(state, payload){
       state.DetailInfo = payload;
@@ -171,6 +178,24 @@ export default new Vuex.Store({
           alert("찜 목록에 상품이 존재하지 않습니다.");
         return false;
       });
+    },
+    postBasket(context, data){
+      return http.post("/prd/basket/"+context.state.userInfo.cd,data).then((resp)=>{
+        console.log(resp);
+        if(resp.data.statusCode =="200")alert("장바구니에 추가하셨습니다.");
+        return true;
+      });
+    },
+    getBasketList(context){
+      return http.get("/prd/basket/list/"+context.state.userInfo.cd).then((resp)=>{
+        if(resp.data){
+          context.commit("setBasketList",resp.data);
+          return true;
+        }
+        else
+          alert("장바구니에 상품이 존재하지 않습니다.");
+        return false;
+      })
     }
   },
   modules:{

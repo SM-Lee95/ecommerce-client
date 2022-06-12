@@ -4,6 +4,7 @@ import Home from "../views/Home.vue";
 import Main from "../components/MainPage.vue";
 import JoinForm from "../components/JoinForm.vue";
 import JJim from "../components/JJimPage.vue";
+import Basket from "../components/BasketPage.vue";
 import Detail from "../components/DetailPage.vue";
 
 
@@ -29,6 +30,11 @@ const routes = [
     path: "/JJim",
     name: "JJim",
     component: JJim,
+  },
+  {
+    path: "/Basket",
+    name: "Basket",
+    component: Basket,
   },
   {
     path: "/Detail",

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <div id="header">
+    <div>
       <Header/>
       <MenuBar/>
       <router-link to="/"></router-link>
@@ -8,7 +8,7 @@
     <v-main>
       <router-view />
     </v-main>
-    <div id="footer">
+    <div>
       <Footer/>
     </div>
   </v-app>

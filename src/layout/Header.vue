@@ -80,6 +80,7 @@
             dark
             x-small
             color="pink"
+            @click="goBasket"
           >
             <v-icon dark>
               mdi-basket
@@ -139,7 +140,6 @@
 import MyPage from "../components/MyPage.vue";
 
 export default {
-  name: "Header.vue",
   components: {
     MyPage
   },
@@ -192,7 +192,12 @@ export default {
       this.$store.dispatch("getJJimList");
       if(this.$route.path != "/JJim")
         this.$router.push("/JJim");
-      }
+      },
+    goBasket(){
+      this.$store.dispatch("getBasketList");
+      if(this.$route.path != "/Basket")
+        this.$router.push("/Basket");
+    }
   },
   computed: {
     isLogin: function() {

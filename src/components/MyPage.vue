@@ -391,8 +391,9 @@ export default {
       });
     },
     transForm() {
+      if(!this.isModi)
+        this.setLocalData();
       this.isModi = true;
-      this.setLocalData();
     },
     daumPostCode() {
       this.isModi = true;
