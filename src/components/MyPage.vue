@@ -7,7 +7,8 @@
       ref="observer"
     >
     <v-list two-line>
-        <v-img
+      <!--
+      <v-img
           max-height="300px"
           dark
           v-show="!isModi"
@@ -21,6 +22,7 @@
         v-show="isModi"
       >
       </v-img>
+      -->
       <v-list-item>
         <v-list-item-icon>
           <v-icon color="green darken-2">
@@ -32,6 +34,7 @@
           <v-list-item-subtitle>ID (이름)</v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-icon>
+          <!--
           <validation-provider
             v-slot="{ errors }"
             rules="fileSize"
@@ -46,6 +49,7 @@
               truncate-length="15"
             ></v-file-input>
           </validation-provider>
+          -->
         </v-list-item-icon>
       </v-list-item>
       <v-divider inset></v-divider>
@@ -321,8 +325,8 @@ export default {
     etcAddress:"",
     sms_yn: null,
     email_yn: null,
-    profile_photo: null,
-    preview: null,
+    //profile_photo: null,
+    //preview: null,
     passModiDrawer:false,
     currentPwd: null,
     newPwd: null,
@@ -374,8 +378,8 @@ export default {
             etcAddress: this.etcAddress,
           };
           const formData = new FormData();
-          if(this.preview != null)
-            formData.append("file",this.profile_photo);
+          //if(this.preview != null)
+            //formData.append("file",this.profile_photo);
           formData.append("userInfoDto",new Blob([JSON.stringify(userInfoDto)],{type:"application/json"}));
           this.$store.dispatch("updateInfo", formData).then((resp) => {
             this.isModi = false;
@@ -439,7 +443,7 @@ export default {
       this.etcAddress = this.userInfo.etcAddress;
       this.email_yn = this.userInfo.emailYn==1?true:false;
       this.sms_yn = this.userInfo.smsYn==1?true:false;
-      this.preview = this.userInfo.profileUrl;
+      //this.preview = this.userInfo.profileUrl;
     },
   },
   mounted() {

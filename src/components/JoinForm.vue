@@ -89,6 +89,7 @@
           </validation-provider>
           <v-container>
             <v-row>
+              <!--
               <v-col cols="6">
                 <v-row  justify="start">
                 <v-chip
@@ -100,6 +101,7 @@
                   <v-img :src="preview" max-width="290px" max-height="388px" alt="프로필 사진을 등록해주세요."></v-img>
                 </v-row>
             </v-col>
+            -->
             <v-col cols="6">
               <v-row justify="start">
                 <v-chip
@@ -117,6 +119,7 @@
               </v-row>
             </v-col>
             </v-row>
+            <!--
             <v-row>
               <v-col cols="12">
                 <validation-provider
@@ -138,6 +141,7 @@
                 </validation-provider>
               </v-col>
             </v-row>
+            -->
             </v-container>
           <v-container>
             <label>Address</label>
@@ -231,8 +235,8 @@ export default {
     mainAddress: "",
     etcAddress: "",
     birth: null,
-    profile_photo: null,
-    preview: null,
+    //profile_photo: null,
+    //preview: null,
   }),
   methods: {
     submit () {
@@ -249,7 +253,7 @@ export default {
         mainAddress:this.mainAddress,
         etcAddress:this.etcAddress,
         birth:this.birth};
-      formData.append("file",this.profile_photo);
+      //formData.append("file",this.profile_photo);
       formData.append("userInfoDto",new Blob([JSON.stringify(userInfoDto)],{type:"application/json"}));
       this.$store.dispatch("signUp",formData).then((resp) => {
           if(resp == "200")

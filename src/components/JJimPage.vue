@@ -28,6 +28,7 @@
             </v-img>
             <v-card-title class="col-12 text-body-1 text-truncate" v-text="product.name" @click="getDetailInfo(product.cd)"></v-card-title>
             <v-card-text  class="col-12 text-body-2 text-truncate" v-text="product.description" @click="getDetailInfo(product.cd)"></v-card-text>
+            <v-card-text  class="col-11 text-body-2 text-truncate" v-text="'Price : '+product.depoPri"></v-card-text>
           </v-card>
         </v-col>
       </v-row>

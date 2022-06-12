@@ -26,8 +26,23 @@
                 </v-btn>
               </v-card-actions>
             </v-img>
-            <v-card-title class="col-12 text-body-1 text-truncate" v-text="product.name" @click="getDetailInfo(product.cd)"></v-card-title>
-           <v-card-text  class="col-12 text-body-2 text-truncate" v-text="product.description"></v-card-text>
+            <v-card-title class="col-11 text-body-1 text-truncate" v-text="product.name" @click="getDetailInfo(product.cd)"></v-card-title>
+            <v-card-subtitle  class="col-11 text-body-2 text-truncate" v-text="product.description"></v-card-subtitle>
+            <v-card-text  class="col-11 text-body-2 text-truncate" v-text="'Price : '+product.depoPri"></v-card-text>
+            <v-card-actions>
+              <v-btn
+                class="mx-2"
+                fab
+                dark
+                x-small
+                color="pink"
+                @click="goBasket(product.cd)"
+              >
+                <v-icon dark>
+                  mdi-basket
+                </v-icon>
+              </v-btn>
+            </v-card-actions>
           </v-card>
         </v-col>
       </v-row>
@@ -68,6 +83,11 @@ export default {
       }
       this.$store.dispatch("putLike",cd).then(()=> {
         this.$store.state.Pagination.content[index].love = !love;
+      })
+    },
+    goBasket(cd){
+      this.$store.dispatch("goBasket",cd).then(()=>{
+
       })
     }
   }

@@ -13,11 +13,6 @@ export default new Vuex.Store({
     Title: 'PlumGreenTea',
     token: '',
     userInfo: null,
-    Key: {
-      MyPageKey: 0,
-      MainPageKey: 0,
-      JoinFormKey: 0,
-    },
     Pagination: null, //Item List
     selectMenuCd: 1, //처음 All
     JJimList: null, //JJim List
@@ -33,9 +28,6 @@ export default new Vuex.Store({
     },
     getUserInfo(state){
       return state.userInfo;
-    },
-    getKey(state){
-      return state.Key;
     },
     Pagination(state){
       return state.Pagination;
@@ -66,14 +58,6 @@ export default new Vuex.Store({
     },
     setUserInfo(state, payload){
       state.userInfo = payload;
-    },
-    setKey(state, payload){
-      if(payload == "MyPage")
-        state.Key.MyPageKey += 1;
-      if(payload == "MainPage")
-        state.Key.MainPageKey += 1;
-      if(payload == "JoinForm")
-        state.Key.JoinFormKey += 1;
     },
     setPagination(state, payload){
       state.Pagination = payload;
@@ -156,6 +140,7 @@ export default new Vuex.Store({
       var user_cd = context.state.userInfo?"&user_cd="+context.state.userInfo.cd:"";
       return http.get("/prd/list/"+context.state.selectMenuCd+"?page="+data.page+"&size=18"+user_cd).then((resp)=>{
         context.commit("setPagination",resp.data);
+        console.log(resp.data);
       }).catch((resp)=>{
         alert("잘못된 접근입니다. "+ resp);
       })

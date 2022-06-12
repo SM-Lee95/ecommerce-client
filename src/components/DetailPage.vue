@@ -7,76 +7,31 @@
         max-width="444"
         class="mx-auto"
       >
-        <v-carousel
-          :continuous="false"
-          :cycle="true"
-          :show-arrows="false"
-          hide-delimiter-background
-          delimiter-icon="mdi-minus"
-          height="300"
+        <v-sheet
+          height="100%"
+          tile
         >
-          <v-carousel-item
-            v-for="(slide, i) in DetailInfo.photos"
-            :key="i"
+          <v-row
+            class="fill-height"
+            align="center"
+            justify="center"
           >
-            <v-sheet
-              height="100%"
-              tile
+            <v-img
+              :src="DetailInfo.thumbnail"
             >
-              <v-row
-                class="fill-height"
-                align="center"
-                justify="center"
-              >
-                <v-img
-                  :src="slide"
-                >
-                </v-img>
-              </v-row>
-            </v-sheet>
-          </v-carousel-item>
-
-        </v-carousel>
-        <v-list two-line>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title>리뷰수</v-list-item-title>
-              <v-list-item-subtitle>0</v-list-item-subtitle>
-               <v-list-item-title>사용자 총 평점</v-list-item-title>
-              <v-list-item-subtitle>0.0</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
+            </v-img>
+          </v-row>
+        </v-sheet>
       </v-card>
     </v-col>
     <v-col cols="6">
       <v-card
         elevation="1">
-        <v-card-title>Cafe Badilico</v-card-title>
-
+        <v-card-title>{{DetailInfo.name}}</v-card-title>
         <v-card-text>
-          <v-row
-            align="center"
-            class="mx-0"
-          >
-            <v-rating
-              :value="4.5"
-              color="amber"
-              dense
-              half-increments
-              readonly
-              size="14"
-            ></v-rating>
-
-            <div class="grey--text ms-4">
-              4.5 (413)
-            </div>
-          </v-row>
-
           <div class="my-4 text-subtitle-1">
-            $ • Italian, Cafe
+            {{DetailInfo.description}}
           </div>
-
           <div>Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.</div>
         </v-card-text>
 
@@ -86,7 +41,7 @@
 
         <v-card-text>
           <v-chip-group
-            v-model="selection"
+            v-model="size"
             active-class="deep-purple accent-4 white--text"
             column
           >
@@ -99,7 +54,7 @@
             <v-chip>9:00PM</v-chip>
           </v-chip-group>
           <v-chip-group
-            v-model="selection"
+            v-model="color"
             active-class="deep-purple accent-4 white--text"
             column
           >
