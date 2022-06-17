@@ -1,17 +1,37 @@
 <template>
+  <v-container>
+    <v-card
+      class="mx-auto"
+    >
+      <v-row no-gutters>
+        <v-col cols="2">
+
+      <v-card-title>
+        <v-icon large left color="">
+          mdi-basket
+        </v-icon> 장바구니
+      </v-card-title>
+        </v-col>
+        <v-col cols="8"></v-col>
+        <v-col cols="2">
+      <v-card-subtitle>
+        <b>장바구니</b>  >  주문/결제
+      </v-card-subtitle>
+        </v-col>
+      </v-row>
+    </v-card>
+<v-divider></v-divider>
   <v-card
     class="mx-auto"
-    width="100%"
-    height="100%"
   >
-    <v-container fluid>
-      <v-row dense>
-        <v-col
-          v-for="(product,index) in BasketList"
-          :key="product.cd"
-          :cols="2"
-        >
+    <v-container>
+      <v-row dense
+             v-for="(product,index) in BasketList"
+             :key="index">
+        <v-col>
           <v-card>
+            <v-row>
+              <v-col cols="3">
             <v-img
               :src="product.thumbnail"
               class="white--text align-end"
@@ -26,14 +46,26 @@
                 </v-btn>
               </v-card-actions>
             </v-img>
-            <v-card-title class="col-12 text-body-1 text-truncate" v-text="product.name" @click="getDetailInfo(product.cd)"></v-card-title>
-            <v-card-text  class="col-12 text-body-2 text-truncate" v-text="product.description" @click="getDetailInfo(product.cd)"></v-card-text>
-            <v-card-text  class="col-11 text-body-2 text-truncate" v-text="'Price : '+product.depoPri"></v-card-text>
+              </v-col>
+              <v-col cols="9">
+                <v-card-actions>
+                  <v-checkbox
+                  v-model="SelectBasketItems[index]"
+                  color="indigo"
+                  hide-details
+                  value="product.productKey"
+                ></v-checkbox></v-card-actions>
+                <v-card-title class="col-12 text-body-1 text-truncate " v-text="product.name" @click="getDetailInfo(product.cd)"></v-card-title>
+                <v-card-text class="col-8 " v-text="'Lovane('+product.corpNm+')'"></v-card-text>
+                <v-card-text  class="col-4 text-body-2 text-truncate" v-text="product.depoPri+' 원'"></v-card-text>
+              </v-col>
+            </v-row>
           </v-card>
         </v-col>
       </v-row>
     </v-container>
   </v-card>
+  </v-container>
 </template>
 
 <script>
@@ -42,18 +74,20 @@ import { mapGetters } from "vuex";
 export default {
   name: "BasketPage.vue",
   components:{
+
   },
   data(){
     return {
-
     }
   },
   computed:{
-    ...mapGetters(["BasketList"]),
+    ...mapGetters(["BasketList","SelectBasketItems"]),
   },
   methods:{
     getDetailInfo(cd){
-      this.$store.dispatch("getDetailInfo",cd)
+      this.$store.dispatch("getDetailInfo",cd).then(()=>{
+        this.$router.push("/Detail")
+      })
     },
     like(index,cd,love){
       if(this.$store.getters.getUserInfo==null){
@@ -61,7 +95,7 @@ export default {
         return;
       }
       this.$store.dispatch("putLike",cd).then(()=> {
-        this.$store.state.Pagination.content[index].love = !love;
+        this.$store.state.BasketList[index].love = !love;
       })
     },
   }

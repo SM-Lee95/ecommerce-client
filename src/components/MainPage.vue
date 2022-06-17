@@ -1,4 +1,5 @@
 <template>
+  <v-container>
   <v-card
     class="mx-auto"
     width="100%"
@@ -29,20 +30,6 @@
             <v-card-title class="col-11 text-body-1 text-truncate" v-text="product.name" @click="getDetailInfo(product.cd)"></v-card-title>
             <v-card-subtitle  class="col-11 text-body-2 text-truncate" v-text="product.description"></v-card-subtitle>
             <v-card-text  class="col-11 text-body-2 text-truncate" v-text="'Price : '+product.depoPri"></v-card-text>
-            <v-card-actions>
-              <v-btn
-                class="mx-2"
-                fab
-                dark
-                x-small
-                color="pink"
-                @click="goBasket(product.cd)"
-              >
-                <v-icon dark>
-                  mdi-basket
-                </v-icon>
-              </v-btn>
-            </v-card-actions>
           </v-card>
         </v-col>
       </v-row>
@@ -51,6 +38,7 @@
       <pagination/>
     </div>
   </v-card>
+  </v-container>
 </template>
 
 <script>

@@ -1,39 +1,27 @@
 <template>
-  <v-card  height="49px">
-    <v-app-bar
-      color="#7ea098"
-      dark
-      prominent
-      height="49px"
+  <v-sheet
+    class="mx-auto"
+    height="100%"
+  >
+    <v-sheet height="70%"></v-sheet>
+    <v-slide-group
+      multiple
     >
-      <v-btn
-        class="mx-4 align-self-center"
-        fab
-        x-small
-        dark
-        color="#b3d6ce"
+      <v-slide-item
+        v-for="catalog in Catalogs"
+        :key="catalog.cd"
+        v-slot="{ active }"
       >
-        <v-icon>
-          mdi-menu
-        </v-icon>
-      </v-btn>
-      <v-divider/>
-      <v-row dense class="align-self-center">
-        <v-col
-          v-for="catalog in Catalogs"
-          :key="catalog.cd"
-          :cols="1"
+        <v-btn
+          @click="updateList(catalog.cd)"
+          v-text="catalog.name"
+          :input-value="active"
+          text
         >
-          <v-btn
-            @click="updateList(catalog.cd)"
-            v-text="catalog.name"
-            x-small
-          >
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-app-bar>
-  </v-card>
+        </v-btn>
+      </v-slide-item>
+    </v-slide-group>
+  </v-sheet>
 </template>
 
 <script>

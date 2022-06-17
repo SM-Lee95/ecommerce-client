@@ -18,6 +18,7 @@ export default new Vuex.Store({
     JJimList: null, //JJim List
     DetailInfo: null, //상세 내역
     BasketList: null, //장바구니
+    SelectBasketItems: null, //주문으로 넘겨줄 아이템
   },
   //
   getters:{
@@ -44,6 +45,9 @@ export default new Vuex.Store({
     },
     DetailInfo(state){
       return state.DetailInfo;
+    },
+    SelectBasketItems(state){
+      return state.SelectBasketItems;
     },
   },
   mutations:{
@@ -77,6 +81,9 @@ export default new Vuex.Store({
       state.BasketList = payload;
     },
     setDetailInfo(state, payload){
+      state.DetailInfo = payload;
+    },
+    setSelectBasketItems(state, payload){
       state.DetailInfo = payload;
     },
   },
@@ -153,7 +160,10 @@ export default new Vuex.Store({
       })
     },
     getDetailInfo(context, data){
-      return http.get("/prd/detail/"+data).then((resp)=>{
+      var user_cd = "";
+      if(context.state.userInfo)
+        user_cd = "?user_cd="+context.state.userInfo.cd;
+      return http.get("/prd/detail/"+data+user_cd).then((resp)=>{
         console.log(resp.data);
         context.commit("setDetailInfo",resp.data);
       }).catch((resp)=>{
@@ -162,15 +172,20 @@ export default new Vuex.Store({
     },
     putLike(context, data){
       return http.get("/prd/like/"+data+"/"+context.state.userInfo.cd).then((resp)=>{
-        if(resp.data.statusCode =="200")alert("찜 목록에 추가하셨습니다.");
+        if(resp.data.statusCode =="200")alert("Success");
         return true;
       }).catch((resp)=>{
         alert("잘못된 접근입니다. "+ resp);
       })
     },
     getJJimList(context){
+      if(!context.state.userInfo){
+        alert("로그인 후에 시도해주세요.")
+        return;
+      }
       return http.get("/prd/jjim/list/"+context.state.userInfo.cd).then((resp)=>{
         if(resp.data){
+          console.log(resp.data);
           context.commit("setJJimList",resp.data);
           return true;
         }
@@ -187,8 +202,13 @@ export default new Vuex.Store({
       });
     },
     getBasketList(context){
+      if(!context.state.userInfo){
+        alert("로그인 후에 시도해주세요.")
+        return;
+      }
       return http.get("/prd/basket/list/"+context.state.userInfo.cd).then((resp)=>{
         if(resp.data){
+          console.log(resp.data);
           context.commit("setBasketList",resp.data);
           return true;
         }

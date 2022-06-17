@@ -53,7 +53,9 @@ export default {
   },
   methods:{
     getDetailInfo(cd){
-      this.$store.dispatch("getDetailInfo",cd)
+      this.$store.dispatch("getDetailInfo",cd).then(()=>{
+        this.$router.push("/Detail")
+      })
     },
     like(index,cd,love){
       if(this.$store.getters.getUserInfo==null){
@@ -61,7 +63,7 @@ export default {
         return;
       }
       this.$store.dispatch("putLike",cd).then(()=> {
-        this.$store.state.Pagination.content[index].love = !love;
+        this.$store.state.JJimList[index].love = !love;
       })
     },
   }

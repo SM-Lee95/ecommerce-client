@@ -1,16 +1,30 @@
 <template>
   <v-app>
-    <div>
-      <Header/>
-      <MenuBar/>
-      <router-link to="/"></router-link>
-    </div>
-    <v-main>
-      <router-view />
-    </v-main>
-    <div>
+    <v-row>
+      <v-col>
+        <v-row>
+          <v-col>
+            <Header/>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <MenuBar/>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+          <router-link to="/"></router-link>
+          <router-view />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
       <Footer/>
-    </div>
+      </v-col>
+    </v-row>
   </v-app>
 </template>
 

@@ -1,106 +1,5 @@
 <template>
   <Container>
-    <v-dialog
-      transition="dialog-bottom-transition"
-      v-model="userInfoDrawer"
-      persistent
-      max-width="600px"
-      height="1000px"
-    >
-      <v-container class="white">
-        <v-row>
-          <v-col cols="3" align-self="center">
-            개인정보수정
-          </v-col>
-          <v-col cols="8"></v-col>
-          <v-col cols="1">
-       <v-btn
-        icon
-        @click.stop="setUserInfoDrawer"
-        right
-        >
-        <v-icon>mdi-close-box</v-icon>
-        </v-btn>
-          </v-col>
-        </v-row>
-      </v-container>
-      <MyPage />
-    </v-dialog>
-    <v-card height="49px">
-      <v-app-bar
-        color="white"
-        dense
-        app
-        fixed
-      >
-        <template v-slot:img="{ props }">
-          <v-img
-            v-bind="props"
-            gradient="to top right, white, white"
-          ></v-img>
-        </template>
-        <v-app-bar-title>
-          <a @click="toMain" style="text-decoration: none">PlumGreenTea</a>
-        </v-app-bar-title>
-        <v-spacer></v-spacer>
-        <div v-show="!isLogin">
-          <v-btn value="login" small plain @click.stop="drawer = !drawer">
-            로그인
-          </v-btn>
-          <v-btn value="Join" small plain @click="toJoinForm">
-            회원가입
-          </v-btn>
-        </div>
-        <div v-show="isLogin">
-          <v-btn
-            class="mx-2"
-            color="warning"
-            fab
-            dark
-            x-small
-            @click="logout"
-          >
-            <v-icon>mdi-logout</v-icon>
-          </v-btn>
-          <v-btn
-            class="mx-2"
-            color="warning"
-            fab
-            dark
-            x-small
-            @click.stop="setUserInfoDrawer"
-          >
-            <v-icon>mdi-account-circle</v-icon>
-          </v-btn>
-        </div>
-        <div>
-          <v-btn
-            class="mx-2"
-            fab
-            dark
-            x-small
-            color="pink"
-            @click="goBasket"
-          >
-            <v-icon dark>
-              mdi-basket
-            </v-icon>
-          </v-btn>
-          <v-btn
-            class="mx-2"
-            fab
-            dark
-            x-small
-            color="pink"
-            @click="goJJim"
-          >
-            <v-icon dark>
-              mdi-heart
-            </v-icon>
-          </v-btn>
-        </div>
-      </v-app-bar>
-    </v-card>
     <v-navigation-drawer
       v-model="drawer"
       absolute
@@ -134,6 +33,108 @@
         </v-btn>
       </div>
     </v-navigation-drawer>
+    <v-dialog
+      transition="dialog-bottom-transition"
+      v-model="userInfoDrawer"
+      persistent
+      max-width="600px"
+      height="1000px"
+    >
+      <v-container class="white">
+        <v-row>
+          <v-col cols="3" align-self="center">
+            개인정보수정
+          </v-col>
+          <v-col cols="8"></v-col>
+          <v-col cols="1">
+       <v-btn
+        icon
+        @click.stop="setUserInfoDrawer"
+        right
+        >
+        <v-icon>mdi-close-box</v-icon>
+        </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+      <MyPage />
+    </v-dialog>
+    <v-card height="100%">
+      <v-app-bar
+        color="grey"
+        dense
+        app
+        fixed
+        elevate-on-scroll
+      >
+        <template v-slot:img="{ props }">
+          <v-img
+            v-bind="props"
+            gradient="to top right, white, white"
+          ></v-img>
+        </template>
+        <v-app-bar-title>
+          <v-btn @click="toMain" x-large plain>로브아네(Lovane)</v-btn>
+        </v-app-bar-title>
+        <v-spacer></v-spacer>
+        <div v-show="!isLogin">
+          <v-btn value="login" small text @click.stop="drawer = !drawer">
+            로그인
+          </v-btn>
+          <v-btn value="Join" small text  @click="toJoinForm">
+            회원가입
+          </v-btn>
+        </div>
+        <div v-show="isLogin">
+          <v-btn
+            class="mx-2"
+            color="brown"
+            fab
+            dark
+            x-small
+            @click="logout"
+          >
+            <v-icon>mdi-logout</v-icon>
+          </v-btn>
+          <v-btn
+            class="mx-2"
+            color="brown"
+            fab
+            dark
+            x-small
+            @click.stop="setUserInfoDrawer"
+          >
+            <v-icon>mdi-account-circle</v-icon>
+          </v-btn>
+        </div>
+        <div>
+          <v-btn
+            class="mx-2"
+            fab
+            dark
+            x-small
+            color="brown"
+            @click="goBasket"
+          >
+            <v-icon dark>
+              mdi-basket
+            </v-icon>
+          </v-btn>
+          <v-btn
+            class="mx-2"
+            fab
+            dark
+            x-small
+            color="pink"
+            @click="goJJim"
+          >
+            <v-icon dark>
+              mdi-heart
+            </v-icon>
+          </v-btn>
+        </div>
+      </v-app-bar>
+    </v-card>
   </Container>
 </template>
 <script>
@@ -189,14 +190,16 @@ export default {
       this.userInfoDrawer = !this.userInfoDrawer;
     },
     goJJim(){
-      this.$store.dispatch("getJJimList");
-      if(this.$route.path != "/JJim")
-        this.$router.push("/JJim");
+      this.$store.dispatch("getJJimList").then((resp) => {
+        if(resp && this.$route.path != "/JJim")
+          this.$router.push("/JJim");
+      });
       },
     goBasket(){
-      this.$store.dispatch("getBasketList");
-      if(this.$route.path != "/Basket")
-        this.$router.push("/Basket");
+      this.$store.dispatch("getBasketList").then((resp)=>{
+        if(resp && this.$route.path != "/Basket")
+          this.$router.push("/Basket");
+      });
     }
   },
   computed: {
