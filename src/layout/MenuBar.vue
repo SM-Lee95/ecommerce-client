@@ -1,12 +1,11 @@
 <template>
   <v-container
-    height="300">
-    <v-container height="200"></v-container>
+    height="100%">
   <v-container height="100">
     <v-row>
-      <v-col cols="2"></v-col>
-      <v-col cols="8">
-        <v-slide-group multiple>
+      <v-col cols="3"></v-col>
+      <v-col cols="6">
+        <v-slide-group multiple align-self="center">
           <v-slide-item
             v-for="catalog in Catalogs"
             :key="catalog.cd"
@@ -22,7 +21,7 @@
           </v-slide-item>
         </v-slide-group>
       </v-col>
-      <v-col cols="2"></v-col>
+      <v-col cols="3"></v-col>
     </v-row>
   </v-container>
   </v-container>

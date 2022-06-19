@@ -1,22 +1,22 @@
 <template>
   <v-app>
-    <v-row>
+    <v-row style="max-height: 35px;min-height: 35px;">
       <v-col>
         <Header/>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row style="min-height: 60px;max-height: 60px; min-width: 100%">
       <v-col>
         <MenuBar/>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row style="min-height: available;">
       <v-col>
           <router-link to="/"></router-link>
           <router-view />
       </v-col>
     </v-row>
-    <v-row>
+    <v-row  style="height: 35px">
       <v-col>
       <Footer/>
       </v-col>

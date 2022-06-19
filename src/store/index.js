@@ -19,6 +19,7 @@ export default new Vuex.Store({
     DetailInfo: null, //상세 내역
     BasketList: null, //장바구니
     OrderList: null, //주문목록
+    OrderInfo: null, //주문정보
   },
   //
   getters:{
@@ -48,6 +49,9 @@ export default new Vuex.Store({
     },
     OrderList(state){
       return state.OrderList;
+    },
+    OrderInfo(state){
+      return state.OrderInfo;
     }
   },
   mutations:{
@@ -97,8 +101,31 @@ export default new Vuex.Store({
       state.DetailInfo = payload;
     },
     setOrderList(state, payload){
+      var midCnt = 0;
+      var deliPri = 200000;
+      var totPri = 0;
+      var totDeliPri = 200000;
+      var OrderInfo = new Object();
+      payload.forEach(function(item){
+        midCnt = 0;
+        deliPri = 200000;
+        if(item.isSelected){
+          item.detail.forEach(function(detail){
+            midCnt += detail.basketCnt;
+            deliPri = Math.min(deliPri,detail.deliPri);
+          })
+          item.midCnt = midCnt;
+          item.deliPri = deliPri;
+          totPri += item.midSum+deliPri;
+          totDeliPri = Math.min(totDeliPri,deliPri);
+        }
+      });
+      OrderInfo.totPrdPri = totPri;
+      OrderInfo.totDeliPri = totDeliPri;
+      OrderInfo.totPri = totPri+totDeliPri;
       state.OrderList = payload;
-    }
+      state.OrderInfo = OrderInfo;
+    },
   },
   actions:{
     login(context , data){

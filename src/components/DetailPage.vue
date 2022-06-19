@@ -1,5 +1,6 @@
 <template>
-<v-container>
+<v-container
+  style="min-height: 1000px">
   <v-row>
     <v-col cols="6">
       <v-card
@@ -18,10 +19,10 @@
           >
             <v-img
               :src="DetailInfo.thumbnail"
-              min-width="450"
-              max-width="450"
-              min-height="600"
-              max-height="600"
+              min-width="100%"
+              max-width="100%"
+              min-height="100%"
+              max-height="100%"
               contain
             >
             </v-img>

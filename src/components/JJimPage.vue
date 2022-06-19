@@ -3,25 +3,23 @@
   <v-card
     class="mx-auto"
     width="100%"
-    height="100%"
+    min-height="1000px"
   >
     <v-container fluid>
       <v-row dense>
         <v-col
           v-for="(product,index) in JJimList"
           :key="product.cd"
-          :cols="2"
+          :cols="3"
         >
-          <v-card>
-            <v-row>
-              <v-col>
+          <v-card height="100%">
             <v-img
               :src="product.thumbnail"
               class="white--text align-end"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-              max-height="100"
-              max-width="130"
-              contain
+              min-height="70%"
+              max-height="70%"
+              min-width="100%"
               @click="getDetailInfo(product.cd)"
             >
               <v-card-actions>
@@ -34,8 +32,6 @@
             <v-card-title class="col-12 text-body-1 text-truncate" v-text="product.name" @click="getDetailInfo(product.cd)"></v-card-title>
             <v-card-text  class="col-12 text-body-2 text-truncate" v-text="product.description" @click="getDetailInfo(product.cd)"></v-card-text>
             <v-card-text  class="col-11 text-body-2 text-truncate" v-text="'Price : '+product.depoPri"></v-card-text>
-              </v-col>
-            </v-row>
           </v-card>
         </v-col>
       </v-row>

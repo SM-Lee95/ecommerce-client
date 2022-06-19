@@ -10,7 +10,7 @@
       disable-sort
     >
       <template v-slot:item.thumbnail="{item}">
-        <v-img :src="item.thumbnail" max-height="100" max-width="100" contain></v-img>
+        <v-img :src="item.thumbnail" max-height="100%" min-height="100%" max-width="100"></v-img>
       </template>
       <template v-slot:item.name="{ item }">
         <v-row>
@@ -133,7 +133,7 @@
           </v-col>
           <v-col cols="6"></v-col>
           <v-col cols="3">
-            {{this.OrderList.totPri}} 원
+            {{this.OrderInfo.totPri}} 원
           </v-col>
         </v-row>
         <v-row>
@@ -142,7 +142,7 @@
           </v-col>
           <v-col cols="6"></v-col>
           <v-col cols="3">
-           + {{this.OrderList.totPrdPri}} 원
+           + {{this.OrderInfo.totPrdPri}} 원
           </v-col>
         </v-row>
         <v-row>
@@ -151,7 +151,7 @@
           </v-col>
           <v-col cols="6"></v-col>
           <v-col cols="3">
-           + {{this.OrderList.totDeliPri}} 원
+           + {{this.OrderInfo.totDeliPri}} 원
           </v-col>
         </v-row>
       </v-col>
@@ -186,7 +186,6 @@ export default {
         { text: '수량', value: 'midCnt' },
         { text: '상품금액(할인포함)', value: 'midSum' },
       ],
-      payPri: 0,
       postcode: null,
       mainAddress: null,
       etcAddress: null,
@@ -200,7 +199,7 @@ export default {
       this.etcAddress = this.getUserInfo.etcAddress;
     },
     doPay(){
-
+console.log(this.OrderList);
     },
     daumPostCode() {
       this.isModi = true;
@@ -245,7 +244,7 @@ export default {
     },
   },
   computed:{
-    ...mapGetters(["OrderList","getUserInfo"]),
+    ...mapGetters(["OrderList","getUserInfo","OrderInfo"]),
   },
 };
 </script>

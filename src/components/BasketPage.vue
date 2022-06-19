@@ -165,30 +165,12 @@ export default {
     },
     order(){
       var orderList = [];
-      var midCnt = 0;
-      var deliPri = 200000;
-      var totPri = 0;
-      var totDeliPri = 200000;
       this.BasketList.forEach(function(item){
-        midCnt = 0;
-        deliPri = 200000;
         if(item.isSelected){
-          item.detail.forEach(function(detail){
-            midCnt += detail.basketCnt;
-            deliPri = Math.min(deliPri,detail.deliPri);
-          })
-          item.midCnt = midCnt;
-          item.deliPri = deliPri;
-          totPri += item.midSum+deliPri;
-          totDeliPri = Math.min(totDeliPri,deliPri);
           orderList.push(item);
         }
       });
-      orderList.totPrdPri = totPri;
-      orderList.totDeliPri = totDeliPri;
-      orderList.totPri = totPri+totDeliPri;
       this.$store.commit("setOrderList",orderList);
-      console.log(orderList);
       this.$router.push("/Order");
     },
     deleteItem(productCd){

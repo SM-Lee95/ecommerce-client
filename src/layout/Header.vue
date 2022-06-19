@@ -59,7 +59,7 @@
       </v-container>
       <MyPage />
     </v-dialog>
-    <v-card height="100%">
+    <v-card>
       <v-app-bar
         color="grey"
         fixed
