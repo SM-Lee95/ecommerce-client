@@ -6,6 +6,7 @@ import JoinForm from "../components/JoinForm.vue";
 import JJim from "../components/JJimPage.vue";
 import Basket from "../components/BasketPage.vue";
 import Detail from "../components/DetailPage.vue";
+import Order from "../components/OrderPage.vue";
 
 
 Vue.use(VueRouter);
@@ -40,6 +41,11 @@ const routes = [
     path: "/Detail",
     name: "Detail",
     component: Detail,
+  },
+  {
+    path: "/Order",
+    name: "Order",
+    component: Order,
   },
 ];
 

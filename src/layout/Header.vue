@@ -62,10 +62,9 @@
     <v-card height="100%">
       <v-app-bar
         color="grey"
-        dense
-        app
         fixed
-        elevate-on-scroll
+        elevation="0"
+        app
       >
         <template v-slot:img="{ props }">
           <v-img

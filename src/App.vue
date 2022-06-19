@@ -2,16 +2,12 @@
   <v-app>
     <v-row>
       <v-col>
-        <v-row>
-          <v-col>
-            <Header/>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <MenuBar/>
-          </v-col>
-        </v-row>
+        <Header/>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <MenuBar/>
       </v-col>
     </v-row>
     <v-row>
@@ -45,3 +41,12 @@ export default {
   }),
 };
 </script>
+<style>
+@font-face {
+  font-family: "mainFont";
+  src: url('./assets/oneMobileRegular.ttf')
+}
+#App{
+  font-family: mainFont;
+}
+</style>

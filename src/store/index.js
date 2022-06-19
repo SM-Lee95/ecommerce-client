@@ -18,7 +18,7 @@ export default new Vuex.Store({
     JJimList: null, //JJim List
     DetailInfo: null, //상세 내역
     BasketList: null, //장바구니
-    SelectBasketItems: null, //주문으로 넘겨줄 아이템
+    OrderList: null, //주문목록
   },
   //
   getters:{
@@ -35,7 +35,7 @@ export default new Vuex.Store({
       return state.Pagination;
     },
     selectMenuCd(state){
-      return state.setSelectMenuCd;
+      return state.selectMenuCd;
     },
     JJimList(state){
       return state.JJimList;
@@ -46,9 +46,9 @@ export default new Vuex.Store({
     DetailInfo(state){
       return state.DetailInfo;
     },
-    SelectBasketItems(state){
-      return state.SelectBasketItems;
-    },
+    OrderList(state){
+      return state.OrderList;
+    }
   },
   mutations:{
     setToken(state, payload){
@@ -78,14 +78,27 @@ export default new Vuex.Store({
       state.JJimList = payload;
     },
     setBasketList(state, payload){
+      var midSum = 0;
+      var endSum = 0;
+      payload.forEach(function(node){
+        midSum = 0;
+        node.isSelected = true;
+        node.detail.forEach(function(detail){
+          midSum += detail.salesPri * detail.basketCnt;
+        });
+        node.midSum = midSum;
+        endSum += midSum;
+        }
+      );
+      payload.endSum = endSum;
       state.BasketList = payload;
     },
     setDetailInfo(state, payload){
       state.DetailInfo = payload;
     },
-    setSelectBasketItems(state, payload){
-      state.DetailInfo = payload;
-    },
+    setOrderList(state, payload){
+      state.OrderList = payload;
+    }
   },
   actions:{
     login(context , data){
@@ -152,7 +165,7 @@ export default new Vuex.Store({
       if(data.param)
         context.commit("setSelectMenuCd",data.param);
       var user_cd = context.state.userInfo?"&user_cd="+context.state.userInfo.cd:"";
-      return http.get("/prd/list/"+context.state.selectMenuCd+"?page="+data.page+"&size=18"+user_cd).then((resp)=>{
+      return http.get("/prd/list/"+context.state.selectMenuCd+"?page="+data.page+"&size=16"+user_cd).then((resp)=>{
         context.commit("setPagination",resp.data);
         console.log(resp.data);
       }).catch((resp)=>{
@@ -164,8 +177,8 @@ export default new Vuex.Store({
       if(context.state.userInfo)
         user_cd = "?user_cd="+context.state.userInfo.cd;
       return http.get("/prd/detail/"+data+user_cd).then((resp)=>{
-        console.log(resp.data);
         context.commit("setDetailInfo",resp.data);
+        console.log(resp);
       }).catch((resp)=>{
         alert("잘못된 접근입니다. "+ resp);
       })
@@ -215,6 +228,19 @@ export default new Vuex.Store({
         else
           alert("장바구니에 상품이 존재하지 않습니다.");
         return false;
+      })
+    },
+    delBasketInfo(context,data){
+      if(!context.state.userInfo){
+        alert("로그인 후에 시도해주세요.");
+        return;
+      }
+      return http.delete("/prd/basket/"+context.state.userInfo.cd+"/"+data.prdCd+"/"+data.listCd).then((resp)=>{
+        console.log(resp);
+        if(resp.data.statusCode =="200"){
+          alert("삭제되었습니다.");
+          context.dispatch("getBasketList");
+        }
       })
     }
   },

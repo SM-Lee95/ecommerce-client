@@ -3,7 +3,7 @@
     <v-pagination
       v-model="Pagination.number"
       :length="Pagination.totalPages"
-      circle
+      color="grey"
       @input="updateList"
     ></v-pagination>
   </div>

@@ -10,14 +10,14 @@
         <v-col
           v-for="(product,index) in Pagination.content"
           :key="product.cd"
-          :cols="2"
+          cols="3"
         >
-          <v-card>
+          <v-card height="100%">
             <v-img
               :src="product.thumbnail"
-              class="white--text align-end"
+              class="white--text"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-              height="200px"
+              contain
               @click="getDetailInfo(product.cd)"
             >
               <v-card-actions>
@@ -27,9 +27,9 @@
                 </v-btn>
               </v-card-actions>
             </v-img>
-            <v-card-title class="col-11 text-body-1 text-truncate" v-text="product.name" @click="getDetailInfo(product.cd)"></v-card-title>
-            <v-card-subtitle  class="col-11 text-body-2 text-truncate" v-text="product.description"></v-card-subtitle>
-            <v-card-text  class="col-11 text-body-2 text-truncate" v-text="'Price : '+product.depoPri"></v-card-text>
+            <v-card-title class="col-11 text-truncate" v-text="product.name" @click="getDetailInfo(product.cd)"></v-card-title>
+            <v-card-subtitle  class="col-11 text-truncate" v-text="product.description"></v-card-subtitle>
+            <v-card-text  class="col-11 text-truncate" v-text="'Price : '+product.depoPri"></v-card-text>
           </v-card>
         </v-col>
       </v-row>
