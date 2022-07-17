@@ -300,6 +300,9 @@
               <v-btn
                 @click="savePass"
                 icon
+                text
+                plain
+
               >
                 저장
                 <v-icon color="green darken-2" >mdi-content-save-move</v-icon>

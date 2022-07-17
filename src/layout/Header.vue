@@ -87,9 +87,8 @@
         <div v-show="isLogin">
           <v-btn
             class="mx-2"
-            color="brown"
+            text
             fab
-            dark
             x-small
             @click="logout"
           >
@@ -97,10 +96,9 @@
           </v-btn>
           <v-btn
             class="mx-2"
-            color="brown"
-            fab
-            dark
+            text
             x-small
+            fab
             @click.stop="setUserInfoDrawer"
           >
             <v-icon>mdi-account-circle</v-icon>
@@ -109,10 +107,9 @@
         <div>
           <v-btn
             class="mx-2"
-            fab
-            dark
             x-small
-            color="brown"
+            text
+            fab
             @click="goBasket"
           >
             <v-icon dark>
@@ -122,7 +119,7 @@
           <v-btn
             class="mx-2"
             fab
-            dark
+            text
             x-small
             color="pink"
             @click="goJJim"

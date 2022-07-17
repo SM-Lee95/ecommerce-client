@@ -62,6 +62,7 @@ export default {
       })
     },
     like(index,cd,love){
+      console.log("like1");
       if(this.$store.getters.getUserInfo==null){
         alert("로그인후에 시도해주세요.");
         return;
