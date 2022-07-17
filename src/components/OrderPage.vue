@@ -158,7 +158,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-btn block @click="doPay">결제하기</v-btn>
+        <v-btn block @click="doPay">주문하기</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -199,7 +199,8 @@ export default {
       this.etcAddress = this.getUserInfo.etcAddress;
     },
     doPay(){
-console.log(this.OrderList);
+      console.log(this.OrderList);
+      this.$store.dispatch("")
     },
     daumPostCode() {
       this.isModi = true;

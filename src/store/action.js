@@ -142,5 +142,20 @@ export default{
         context.dispatch("getBasketList");
       }
     })
+  },
+  orderComplete(context, data){
+    if(!context.state.userInfo){
+      alert("로그인 후에 시도해주세요.");
+      return;
+    }
+    return http.post("/ords/items/"+context.state.userInfo.cd,data).then((resp)=>{
+        console.log(resp);
+        if(resp.data.statusCode == "200"){
+          alert("주문 완료되었습니다.");
+        }else{
+          alert("주문에 실패하셨습니다. 확인 후 재시도 바랍니다.");
+        }
+      }
+    )
   }
 }
