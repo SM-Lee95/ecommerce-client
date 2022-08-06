@@ -51,11 +51,10 @@
         </v-row>
         <v-card-title>{{DetailInfo.name}}</v-card-title>
         <v-card-text>
-          <div class="my-4 text-subtitle-1">
-            {{DetailInfo.description}}
-          </div>
-          <div align="right" class="body-1">가격 : {{DetailInfo.depoPri}} 원</div>
-          <div align="right">배송비 : {{DetailInfo.detail[0].deliPri}} 원</div>
+          <div align="right">할인율 : {{DetailInfo.discountRate}} %</div>
+          <div align="right" class="text-decoration-line-through">{{DetailInfo.salesPri.comma()}} 원</div>
+          <div class="body-1" align="right">가격 : {{String(Number(DetailInfo.salesPri)*((100-Number(DetailInfo.discountRate))/100)).comma()}} 원</div>
+          <div align="right">배송비 : {{DetailInfo.deliPri.comma()}} 원</div>
           <div align="right">제조사 - {{DetailInfo.corpNm}}</div>
         </v-card-text>
         <v-divider class="mx-4"></v-divider>
@@ -124,35 +123,25 @@
           </v-list-item>
           <v-list-item>
           <v-row dense  no-gutters>
-            <v-col cols="9"><b>총 상품 금액</b></v-col>
-            <v-col cols="3">
-                총 수량 {{this.cnt}}개 | {{this.totPrice}}원
+            <v-col cols="8"><b>총 상품 금액</b></v-col>
+            <v-col cols="4">
+                총 수량 {{this.cnt}}개 | {{String(this.totPrice).comma()}}원
             </v-col>
           </v-row>
           </v-list-item>
         </v-card-text>
         <v-card-actions>
           <v-row no-gutters>
-            <v-col cols="8"></v-col>
-            <v-col cols="2">
-              <v-btn
-                text
-                color="deep-purple lighten-2"
-                @click="postOrder"
-              >
-                주문하기
-              </v-btn>
-            </v-col>
-            <v-col cols="1">
+            <v-col>
               <v-btn
                 text
                 color="deep-purple lighten-2"
                 @click="postBasket"
+                block
               >
                 장바구니
               </v-btn>
             </v-col>
-            <v-col cols="1"></v-col>
           </v-row>
         </v-card-actions>
       </v-card>
@@ -224,22 +213,30 @@ export default {
     }
   },
   computed:{
-    ...mapGetters(["DetailInfo"]),
+    ...mapGetters(["DetailInfo","getUserInfo"]),
   },
   methods:{
     like(cd,love){
-      if(this.$store.getters.getUserInfo==null){
-        alert("로그인후에 시도해주세요.");
+      if(!this.getUserInfo){
+        this.$dialog.message.warning("로그인 후에 시도해주세요.");
         return;
       }
-      this.$store.dispatch("putLike",cd).then(()=> {
-        this.$store.state.DetailInfo.love = !love;
+      this.$store.dispatch("putLike",cd).then((resp)=> {
+        if(resp){
+          this.$dialog.message.success("Success");
+          this.$store.state.DetailInfo.love = !love;
+        }else{
+          this.$dialog.message.warning("Fail");
+        }
       })
     },
     getList(param){
-      this.$store.dispatch("getItemList",{param:param,page:0}).then(()=>{
-        if(this.$route.path !="/")
-          this.$router.push("/");
+      this.$store.dispatch("getItemList",{param:param,page:0}).then((resp)=>{
+        if(resp){
+          if(this.$route.path !="/")
+            this.$router.push("/");
+        }else
+          this.$dialog.message.error("상품 목록 조회에 실패했습니다.");
       });
     },
     addOption(){
@@ -250,7 +247,7 @@ export default {
       var option = new Object();
       option.size = this.DetailInfo.detail[this.option].size.name;
       option.color = this.DetailInfo.detail[this.option].color.name;
-      option.price = this.DetailInfo.detail[this.option].salesPri * (100-this.DetailInfo.detail[this.option].discountRate) / 100;
+      option.price = this.DetailInfo.salesPri * (100-this.DetailInfo.discountRate) / 100;
       option.basketKey = this.DetailInfo.detail[this.option].productKey;
       option.cnt = 1;
       if(this.selectOptions.find(value =>
@@ -272,13 +269,25 @@ export default {
        })
     },
     postBasket(){
+      if(!this.getUserInfo){
+        this.$dialog.message.warning("로그인 후에 시도해주세요.")
+        return;
+      }
       if(this.selectOptions.length==0){
-        alert("옵션을 추가하고 시도해주세요.");
+        this.$dialog.message.warning("옵션을 추가하고 시도해주세요.");
         return;
       }
       this.$store.dispatch("postBasket",this.selectOptions).then((resp)=> {
         if(resp){
-          this.$router.push("/Basket");
+          this.$dialog.message.success("장바구니에 추가하셨습니다.");
+          this.$store.dispatch("getBasketList").then((resp)=>{
+            if(resp)
+              this.$router.push("/Basket");
+            else
+              this.$dialog.message.warning("장바구니 조회에 실패했습니다.");
+          });
+        }else{
+          this.$dialog.message.warning("장바구니 추가에 실패했습니다.");
         }
       })
     },

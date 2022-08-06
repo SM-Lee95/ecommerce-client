@@ -34,14 +34,20 @@ export default {
   }),
   mounted() {
     this.$store.dispatch("getMenuList").then((resp)=>{
-      this.Catalogs = resp;
+      if(resp)
+        this.Catalogs = resp;
+      else
+        this.$dialog.message.error("메뉴 조회시 오류가 발생했습니다.");
     })
   },
   methods:{
     updateList(param){
-      this.$store.dispatch("getItemList",{param:param,page:0}).then(()=>{
-        if(this.$route.path !="/")
-          this.$router.push("/");
+      this.$store.dispatch("getItemList",{param:param,page:0}).then((resp)=>{
+        if(resp){
+          if(this.$route.path !="/")
+            this.$router.push("/");
+        }else
+          this.$dialog.message.error("상품 목록 조회에 실패했습니다.");
       });
     },
   },

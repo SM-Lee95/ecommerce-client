@@ -6,6 +6,9 @@ import vuetify from "./plugins/vuetify";
 import { ValidationObserver, ValidationProvider, setInteractionMode , extend} from 'vee-validate'
 import * as rules from "vee-validate/dist/rules"
 import VeeValidate from 'vee-validate';
+import module from './util/module';
+import VuetifyDialog from 'vuetify-dialog';
+import 'vuetify-dialog/dist/vuetify-dialog.css'
 for (let rule in rules) {
     extend(rule, rules[rule]);
 }
@@ -24,6 +27,19 @@ Vue.component("ValidationProvider", ValidationProvider);
 Vue.component("ValidationObserver", ValidationObserver);
 setInteractionMode('eager');
 Vue.config.productionTip = false;
+Vue.use(module);
+Vue.use(VuetifyDialog,{
+  context: {
+    vuetify
+  }
+});
+
+String.prototype.comma = function() {
+  return String(this).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+}
+String.prototype.uncomma = function() {
+  return String(this).replace(/[^\d]+/g, '');
+}
 
 new Vue({
   router,

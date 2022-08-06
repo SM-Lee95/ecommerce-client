@@ -31,10 +31,10 @@
         </v-row>
       </template>
       <template v-slot:item.deliPri="{item}">
-        {{item.deliPri}}원
+        {{String(item.deliPri).comma()}}원
       </template>
       <template v-slot:item.midSum="{item}">
-        {{item.midSum}}원
+        {{String(item.midSum).comma()}}원
       </template>
       <template v-slot:item.midCnt="{item}">
         {{item.midCnt}}개
@@ -104,10 +104,20 @@
             <v-col cols="5" align-self="center">
               주문자 정보
             </v-col>
+            <v-col cols="2">
+            <v-btn text x-small @click="inputUserInfo">
+              주문자 정보 입력
+            </v-btn>
+            </v-col>
           </v-row>
           <v-row>
             <v-col>
-            {{this.getUserInfo.name}} ({{this.getUserInfo.phone}})
+              <v-text-field dense label="성함" v-model="name"></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-text-field dense label="연락처" v-model="phone"></v-text-field>
             </v-col>
           </v-row>
           <v-row>
@@ -133,7 +143,7 @@
           </v-col>
           <v-col cols="6"></v-col>
           <v-col cols="3">
-            {{this.OrderInfo.totPri}} 원
+            {{String(this.OrderInfo.totPri).comma()}} 원
           </v-col>
         </v-row>
         <v-row>
@@ -142,7 +152,7 @@
           </v-col>
           <v-col cols="6"></v-col>
           <v-col cols="3">
-           + {{this.OrderInfo.totPrdPri}} 원
+           + {{String(this.OrderInfo.totPrdPri).comma()}} 원
           </v-col>
         </v-row>
         <v-row>
@@ -151,14 +161,14 @@
           </v-col>
           <v-col cols="6"></v-col>
           <v-col cols="3">
-           + {{this.OrderInfo.totDeliPri}} 원
+           + {{String(this.OrderInfo.totDeliPri).comma()}} 원
           </v-col>
         </v-row>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <v-btn block @click="doPay">주문하기</v-btn>
+        <v-btn block text @click="doPay">주문하기</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -190,6 +200,8 @@ export default {
       mainAddress: null,
       etcAddress: null,
       reqMemo: "",
+      phone: "",
+      name: "",
     }
   },
   methods:{
@@ -198,50 +210,35 @@ export default {
       this.mainAddress = this.getUserInfo.mainAddress;
       this.etcAddress = this.getUserInfo.etcAddress;
     },
+    inputUserInfo(){
+      this.name = this.getUserInfo.name;
+      this.phone = this.getUserInfo.phone;
+    },
     doPay(){
-      console.log(this.OrderList);
-      this.$store.dispatch("")
+      if(!this.getUserInfo){
+        this.$dialog.message.warning("로그인 후에 시도해주세요.");
+        return;
+      }
+      let OrderDto = new Object();
+      OrderDto.productInfoDto = this.OrderList;
+      OrderDto.mainAddress = this.mainAddress;
+      OrderDto.etcAddress = this.etcAddress;
+      OrderDto.postcode = this.postcode;
+      OrderDto.recvPhone = this.phone;
+      OrderDto.recvNm = this.name;
+      OrderDto.totPri = this.OrderInfo.totPrdPri;
+      OrderDto.totDeliPri = this.OrderInfo.totDeliPri;
+      OrderDto.totCnt = this.OrderInfo.totCnt;
+      this.$store.dispatch("orderComplete", OrderDto).then((resp)=>{
+        if(resp)
+          this.$dialog.message.success("주문 완료되었습니다. 안내드린 계좌번호로 입금해주세요.");
+        else
+          this.$dialog.message.error("주문에 실패하셨습니다. 확인 후 재시도 바랍니다.");
+        this.$router.push("/");
+      });
     },
     daumPostCode() {
-      this.isModi = true;
-      new window.daum.Postcode({
-        oncomplete: (data) => {
-          if (this.etcAddress !== "") {
-            this.etcAddress = "";
-          }
-          if (data.userSelectedType === "R") {
-            // 사용자가 도로명 주소를 선택했을 경우
-            this.mainAddress = data.roadAddress;
-          } else {
-            // 사용자가 지번 주소를 선택했을 경우(J)
-            this.mainAddress = data.jibunAddress;
-          }
-
-          // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-          if (data.userSelectedType === "R") {
-            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-            if (data.bname !== "" && /[동|로|가]$/g.test(data.bname)) {
-              this.etcAddress += data.bname;
-            }
-            // 건물명이 있고, 공동주택일 경우 추가한다.
-            if (data.buildingName !== "" && data.apartment === "Y") {
-              this.etcAddress +=
-                this.etcAddress !== ""
-                  ? `, ${data.buildingName}`
-                  : data.buildingName;
-            }
-            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-            if (this.etcAddress !== "") {
-              this.etcAddress = `(${this.etcAddress})`;
-            }
-          } else {
-            this.etcAddress = "";
-          }
-          // 우편번호를 입력한다.
-          this.postcode = data.zonecode;
-        }
-      }).open();
+      this.$daumPostCode();
     },
   },
   computed:{

@@ -1,5 +1,5 @@
 <template>
-  <v-container class="grey lighten-5">
+  <v-container class="white lighten-5">
       <validation-observer
         ref="observer"
         v-slot="{ invalid }"
@@ -101,25 +101,6 @@
                   <v-img :src="preview" max-width="290px" max-height="388px" alt="프로필 사진을 등록해주세요."></v-img>
                 </v-row>
             </v-col>
-            -->
-            <v-col cols="6">
-              <v-row justify="start">
-                <v-chip
-                  class="ma-2"
-                  label
-                >
-                  Birth Day
-                </v-chip>
-                <v-date-picker
-                  v-model="birth"
-                  year-icon="mdi-calendar-blank"
-                  prev-icon="mdi-skip-previous"
-                  next-icon="mdi-skip-next"
-                ></v-date-picker>
-              </v-row>
-            </v-col>
-            </v-row>
-            <!--
             <v-row>
               <v-col cols="12">
                 <validation-provider
@@ -141,80 +122,108 @@
                 </validation-provider>
               </v-col>
             </v-row>
+
             -->
+            <v-col cols="6">
+              <v-row justify="center">
+                <v-chip
+                  class="white"
+                  label
+                >
+                  Birth Day
+                </v-chip>
+                <v-date-picker
+                  v-model="birth"
+                  year-icon="mdi-calendar-blank"
+                  prev-icon="mdi-skip-previous"
+                  next-icon="mdi-skip-next"
+                ></v-date-picker>
+              </v-row>
+            </v-col>
+              <v-col cols="6">
+                <v-container>
+                  <v-row>
+                    <v-col>
+                  <label>Address</label>
+                  <v-row>
+                    <v-col
+                      cols="6"
+                    >
+                      <v-text-field dense
+                                    label="Postcode"
+                                    hide-details="auto"
+                                    required
+                                    v-model="postcode"
+                                    readonly
+                                    @click="daumPostCode"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col
+                      cols="12"
+                    >
+                      <v-text-field dense
+                                    label="Main Address"
+                                    hide-details="auto"
+                                    required
+                                    readonly
+                                    v-model="mainAddress"
+                                    @click="daumPostCode"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col
+                      cols="12"
+                    >
+                      <v-text-field dense label="ETC Address" v-model="etcAddress"></v-text-field>
+                    </v-col>
+                  </v-row>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                    <validation-provider
+                      v-slot="{ errors }"
+                      rules="required"
+                      name="checkbox"
+                    >
+                      <v-checkbox
+                        v-model="emailYn"
+                        :error-messages="errors"
+                        label="Email 수신 동의"
+                        type="checkbox"
+                      ></v-checkbox>
+                    </validation-provider>
+                    <validation-provider
+                      v-slot="{ errors }"
+                      rules="required"
+                      name="checkbox"
+                    >
+                      <v-checkbox
+                        v-model="phoneYn"
+                        :error-messages="errors"
+                        label="SMS 수신 동의"
+                        type="checkbox"
+                      ></v-checkbox>
+                    </validation-provider>
+                    <v-btn
+                      class="mr-4"
+                      type="submit"
+                      :disabled="invalid"
+                    >
+                      회원가입
+                    </v-btn>
+                    <v-btn @click="clear">
+                      초기화
+                    </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-col>
+            </v-row>
             </v-container>
-          <v-container>
-            <label>Address</label>
-            <v-row>
-              <v-col
-                cols="6"
-              >
-                <v-text-field dense
-                              label="Postcode"
-                              hide-details="auto"
-                              required
-                              v-model="postcode"
-                              readonly
-                              @click="daumPostCode"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col
-                cols="12"
-              >
-                <v-text-field dense
-                              label="Main Address"
-                              hide-details="auto"
-                              required
-                              readonly
-                              v-model="mainAddress"
-                              @click="daumPostCode"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col
-                cols="12"
-              >
-                <v-text-field dense label="ETC Address" v-model="etcAddress"></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
-            <validation-provider
-            v-slot="{ errors }"
-            rules="required"
-            name="checkbox"
-          >
-            <v-checkbox
-              v-model="emailYn"
-              :error-messages="errors"
-              label="Email 수신 동의"
-              type="checkbox"
-            ></v-checkbox>
-          </validation-provider>
-            <validation-provider
-              v-slot="{ errors }"
-              rules="required"
-              name="checkbox"
-            >
-            <v-checkbox
-              v-model="phoneYn"
-              :error-messages="errors"
-              label="SMS 수신 동의"
-              type="checkbox"
-            ></v-checkbox>
-          </validation-provider>
-          <v-btn
-            class="mr-4"
-            type="submit"
-            :disabled="invalid"
-          >
-            회원가입
-          </v-btn>
-          <v-btn @click="clear">
-            초기화
-          </v-btn>
         </form>
       </validation-observer>
   </v-container>
@@ -256,7 +265,8 @@ export default {
       //formData.append("file",this.profile_photo);
       formData.append("userInfoDto",new Blob([JSON.stringify(userInfoDto)],{type:"application/json"}));
       this.$store.dispatch("signUp",formData).then((resp) => {
-          if(resp == "200")
+          if(resp){
+            this.$dialog.message.success("회원가입에 성공하셨습니다.");
             this.$store.dispatch("login",{
               id:this.id,
               pwd:this.pwd,
@@ -264,6 +274,9 @@ export default {
               if(this.$route.path != "/")
                 this.$router.push("/");
             })
+          }else{
+            this.$dialog.message.error("회원가입에 실패하셨습니다. 다시 시도해주세요.");
+          }
       })
     },
     imgPreview(){
@@ -283,44 +296,7 @@ export default {
       this.$refs.observer.reset();
     },
     daumPostCode(){
-      new window.daum.Postcode({
-        oncomplete: (data) => {
-          if (this.etcAddress !== "") {
-            this.etcAddress = "";
-          }
-          if (data.userSelectedType === "R") {
-            // 사용자가 도로명 주소를 선택했을 경우
-            this.mainAddress = data.roadAddress;
-          } else {
-            // 사용자가 지번 주소를 선택했을 경우(J)
-            this.mainAddress = data.jibunAddress;
-          }
-
-          // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-          if (data.userSelectedType === "R") {
-            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-            if (data.bname !== "" && /[동|로|가]$/g.test(data.bname)) {
-              this.etcAddress += data.bname;
-            }
-            // 건물명이 있고, 공동주택일 경우 추가한다.
-            if (data.buildingName !== "" && data.apartment === "Y") {
-              this.etcAddress +=
-                this.etcAddress !== ""
-                  ? `, ${data.buildingName}`
-                  : data.buildingName;
-            }
-            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-            if (this.etcAddress !== "") {
-              this.etcAddress = `(${this.etcAddress})`;
-            }
-          } else {
-            this.etcAddress = "";
-          }
-          // 우편번호를 입력한다.
-          this.postcode = data.zonecode;
-        },
-      }).open();
+      this.$daumPostCode();
     },
   },
 }

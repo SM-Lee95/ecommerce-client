@@ -28,5 +28,14 @@ export default{
   },
   OrderInfo(state){
     return state.OrderInfo;
+  },
+  OrderHisList(state){
+    return state.OrderHisList;
+  },
+  OrderHisSummary(state){
+    return state.OrderHisSummary;
+  },
+  OrderProc(state){
+    return state.OrderProc;
   }
 }

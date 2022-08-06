@@ -29,9 +29,10 @@
                 </v-btn>
               </v-card-actions>
             </v-img>
-            <v-card-title class="col-12 text-body-1 text-truncate" v-text="product.name" @click="getDetailInfo(product.cd)"></v-card-title>
-            <v-card-text  class="col-12 text-body-2 text-truncate" v-text="product.description" @click="getDetailInfo(product.cd)"></v-card-text>
-            <v-card-text  class="col-11 text-body-2 text-truncate" v-text="'Price : '+product.depoPri"></v-card-text>
+            <v-card-title class="body-2 col-11" v-text="product.name" @click="getDetailInfo(product.cd)"></v-card-title>
+            <v-card-subtitle  class="text-right col-11 text-decoration-line-through" v-text="product.salesPri.comma()+' 원'"></v-card-subtitle>
+            <v-card-subtitle  class="text-right col-11 text-truncate" v-text="product.discountRate+' %'"></v-card-subtitle>
+            <v-card-text  class="body-1 text-right col-11 text-truncate" v-text="String(Number(product.salesPri)*((100-Number(product.discountRate))/100)).comma()+' 원'"></v-card-text>
           </v-card>
         </v-col>
       </v-row>
@@ -53,22 +54,30 @@ export default {
     }
   },
   computed:{
-    ...mapGetters(["JJimList"]),
+    ...mapGetters(["JJimList","getUserInfo"]),
   },
   methods:{
     getDetailInfo(cd){
-      this.$store.dispatch("getDetailInfo",cd).then(()=>{
-        this.$router.push("/Detail")
+      this.$store.dispatch("getDetailInfo",cd).then((resp)=>{
+        if(resp){
+          if(this.$route.path != "/Detail")
+            this.$router.push("/Detail")
+        }else
+          this.$dialog.message.error("상품 정보를 조회하는 중에 오류가 발생했습니다.");
       })
     },
     like(index,cd,love){
-      console.log("like1");
-      if(this.$store.getters.getUserInfo==null){
-        alert("로그인후에 시도해주세요.");
+      if(!this.getUserInfo){
+        this.$dialog.message.warning("로그인 후에 시도해주세요.");
         return;
       }
-      this.$store.dispatch("putLike",cd).then(()=> {
-        this.$store.state.JJimList[index].love = !love;
+      this.$store.dispatch("putLike",cd).then((resp)=> {
+        if(resp){
+          this.$dialog.message.success("Success");
+          this.$store.state.JJimList[index].love = !love;
+        }else{
+          this.$dialog.message.warning("Fail");
+        }
       })
     },
   }

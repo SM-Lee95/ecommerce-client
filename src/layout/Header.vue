@@ -1,23 +1,28 @@
 <template>
   <Container>
-    <v-navigation-drawer
+    <v-dialog
+      transition="dialog-bottom-transition"
       v-model="drawer"
-      absolute
-      bottom
-      temporary
-      right
+      persistent
+      max-width="600px"
+      height="1000px"
     >
-      <div>
-        <v-btn
-          class=""
-          icon
-          @click.stop="drawer = !drawer"
-        >
+      <v-container class="white">
+        <v-row>
+          <v-col cols="11" class="text-h6 align-center">
+              로그인
+          </v-col>
+          <v-col cols="1">
+          <v-btn
+           icon
+           @click.stop="drawer = !drawer"
+           class="align-center"
+           >
           <v-icon>mdi-close-outline</v-icon>
-        </v-btn>
-        <div></div>
+          </v-btn>
+          </v-col>
+        </v-row>
         <v-text-field
-          class="mx-auto"
           label="아이디"
           :rules="rules"
           prepend-inner-icon="mdi-account-heart-outline"
@@ -31,33 +36,7 @@
           @click="goLogin"
         >로그인
         </v-btn>
-      </div>
-    </v-navigation-drawer>
-    <v-dialog
-      transition="dialog-bottom-transition"
-      v-model="userInfoDrawer"
-      persistent
-      max-width="600px"
-      height="1000px"
-    >
-      <v-container class="white">
-        <v-row>
-          <v-col cols="3" align-self="center">
-            개인정보수정
-          </v-col>
-          <v-col cols="8"></v-col>
-          <v-col cols="1">
-       <v-btn
-        icon
-        @click.stop="setUserInfoDrawer"
-        right
-        >
-        <v-icon>mdi-close-box</v-icon>
-        </v-btn>
-          </v-col>
-        </v-row>
       </v-container>
-      <MyPage />
     </v-dialog>
     <v-card>
       <v-app-bar
@@ -99,7 +78,7 @@
             text
             x-small
             fab
-            @click.stop="setUserInfoDrawer"
+            @click.stop="toMyPage"
           >
             <v-icon>mdi-account-circle</v-icon>
           </v-btn>
@@ -134,18 +113,14 @@
   </Container>
 </template>
 <script>
-import MyPage from "../components/MyPage.vue";
+import { mapGetters } from "vuex";
 
 export default {
-  components: {
-    MyPage
-  },
   data() {
     return {
       username: "",
       password: "",
       drawer: false,
-      userInfoDrawer: false,
       group: null,
       rules: [
         value => !!value || "Required.",
@@ -167,13 +142,15 @@ export default {
         "id": this.username,
         "pwd": this.password
       }).then((resp) => {
-        this.drawer = !this.drawer;
-        this.username = "";
-        this.password = "";
         if (resp) {
+          this.drawer = !this.drawer;
           if (this.$route.path != "/")
             this.$router.push("/");
+        }else{
+          this.$dialog.message.error("입력하신 로그인 정보가 일치하지 않습니다.");
         }
+        this.username = "";
+        this.password = "";
       });
     },
     logout() {
@@ -182,26 +159,54 @@ export default {
       if (this.$route.path != "/")
         this.$router.push("/");
     },
-    setUserInfoDrawer(){
-      this.userInfoDrawer = !this.userInfoDrawer;
-    },
     goJJim(){
+      if(!this.getUserInfo){
+          this.$dialog.message.warning("로그인 후에 시도해주세요.")
+          return;
+      }
       this.$store.dispatch("getJJimList").then((resp) => {
-        if(resp && this.$route.path != "/JJim")
-          this.$router.push("/JJim");
+        if(resp){
+            if(this.$route.path != "/JJim") {
+              this.$router.push("/JJim");
+            }
+        }else{
+          this.$dialog.message.warning("찜 목록에 상품이 존재하지 않습니다.");
+        }
       });
       },
     goBasket(){
+      if(!this.getUserInfo){
+        this.$dialog.message.warning("로그인 후에 시도해주세요.")
+        return;
+      }
       this.$store.dispatch("getBasketList").then((resp)=>{
-        if(resp && this.$route.path != "/Basket")
-          this.$router.push("/Basket");
+        if(resp){
+          if(this.$route.path != "/Basket")
+            this.$router.push("/Basket");
+        } else{
+          this.$dialog.message.warning("장바구니에 상품이 존재하지 않습니다.");
+        }
+      });
+    },
+    toMyPage(){
+      if(!this.getUserInfo){
+        this.$dialog.message.warning("로그인 후에 시도해주세요.");
+        return;
+      }
+      this.$store.dispatch("getMyPageInfo").then((resp)=>{
+        if(resp){
+          if(this.$route.path != "/MyPage")
+            this.$router.push("/MyPage");
+        }else
+          this.$dialog.message.error("주문 정보 확인에 실패했습니다.");
       });
     }
   },
   computed: {
     isLogin: function() {
       return this.$store.getters.getToken == "" ? false : true;
-    }
+    },
+    ...mapGetters(["getUserInfo"]),
   },
   watch: {
     group() {
