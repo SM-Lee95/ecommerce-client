@@ -8,6 +8,7 @@ import Basket from "../components/BasketPage.vue";
 import Detail from "../components/DetailPage.vue";
 import Order from "../components/OrderPage.vue";
 import MyPage from "../components/MyPage.vue";
+import OrderDetailPage from "../components/OrderDetailPage.vue";
 
 
 Vue.use(VueRouter);
@@ -52,6 +53,11 @@ const routes = [
     path: "/MyPage",
     name: "MyPage",
     component: MyPage,
+  },
+  {
+    path: "/OrderDetailPage",
+    name: "OrderDetailPage",
+    component: OrderDetailPage,
   },
 ];
 

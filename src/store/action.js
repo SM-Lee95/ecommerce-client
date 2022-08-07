@@ -168,16 +168,30 @@ export default{
       return false;
     });
   },
-  getMyPageInfo(context){
+  getMyPageInfo(context, data){
     return http.get("/ords/list/"+context.state.userInfo.cd, {
-      params:{
-        
+      params: {
+        procTy: data
       }
     }).then((resp)=>{
        if(resp.data){
             console.log(resp.data);
             context.commit("setOrderHisList",resp.data);
-            context.commit("setOrderHisSummary",resp.data);
+            if(!data)
+              context.commit("setOrderHisSummary",resp.data);
+            return true;
+        }
+         return false;
+      }).catch((resp)=>{
+      console.log("서버오류 \n "+ resp);
+      return false;
+    });
+  },
+  getOrderDetailInfo(context, data){
+    return http.get("/ords/detail/"+data).then((resp)=>{
+       if(resp.data){
+            console.log(resp.data);
+            context.commit("setOrderDetailInfo",resp.data);
             return true;
         }
          return false;

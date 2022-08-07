@@ -37,5 +37,8 @@ export default{
   },
   OrderProc(state){
     return state.OrderProc;
+  },
+  OrderDetailInfo(state){
+    return state.OrderDetailInfo;
   }
 }

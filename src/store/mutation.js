@@ -89,5 +89,8 @@ export default{
     state.OrderHisSummary["교환신청"] = payload.filter((obj)=>obj.procTy=="007").length;//교환신청
     state.OrderHisSummary["물품회수"] = payload.filter((obj)=>obj.procTy=="008").length;//물품회수
     state.OrderHisSummary["환불완료"] = payload.filter((obj)=>obj.procTy=="009").length;//환불완료
+  },
+  setOrderDetailInfo(state, payload){
+    state.OrderDetailInfo = payload;
   }
 }

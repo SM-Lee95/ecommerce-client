@@ -83,6 +83,7 @@
         class="elevation-1"
         hide-default-footer
         disable-sort
+        no-data-text="주문 건이 존재하지 않습니다."
       >
         <template v-slot:item.date="{ item }">
           {{item.regDati[0]+"/"+item.regDati[1]+"/"+item.regDati[2]}}
@@ -91,7 +92,9 @@
           {{item.cd}}
         </template>
         <template v-slot:item.info="{item}">
+          <v-btn text @click="getOrderDetail(item.cd)">
           {{item.ordsDoc}}
+          </v-btn>
         </template>
         <template v-slot:item.pri="{item}">
           {{item.totPri.comma()+" 원"}}
@@ -130,13 +133,27 @@ export default {
       this.userInfoDrawer = !this.userInfoDrawer;
     },
     getHisList(flag){
-      var code = new Array();
+      var code = "";
       for(var codeVal in this.OrderProc){
         if(flag.includes(this.OrderProc[codeVal]))
-            code.push(codeVal);
+            code = code.concat(codeVal+",");
       }
-      this.$store.dispatch("getMyPageInfo",)
-    }
+      this.$store.dispatch("getMyPageInfo",code).then((resp)=>{
+        if(!resp)
+          this.$dialog.message.error(flag+" 상태의 주문 정보 확인에 실패했습니다.");
+      }
+      );
+    },
+    getOrderDetail(ordsCd){
+      console.log(ordsCd);
+      this.$store.dispatch("getOrderDetailInfo",ordsCd).then((resp)=>{
+        if(resp){
+            this.$router.push("OrderDetailInfo");
+        }else{
+          this.$dialog.message.error("주문 상세 정보를 가져오는데 실패했습니다.");
+        }
+      })
+    },
   },
   mounted() {
 

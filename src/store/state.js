@@ -11,6 +11,7 @@ export default{
   OrderInfo: null, //주문 시도 정보
   OrderHisList: null, //주문내역정보
   OrderHisSummary: null, //주문내역요약정보
+  OrderDetailInfo: null, //주문내역상세정보
   OrderProc: {
     "000": "주문접수",
     "001": "결제완료",
