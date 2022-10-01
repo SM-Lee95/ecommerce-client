@@ -8,9 +8,11 @@ import * as rules from "vee-validate/dist/rules"
 import VeeValidate from 'vee-validate';
 import module from './util/module';
 import VuetifyDialog from 'vuetify-dialog';
-import 'vuetify-dialog/dist/vuetify-dialog.css'
+import CKEditor from 'ckeditor4-vue';
+
+/** Validation Rule */
 for (let rule in rules) {
-    extend(rule, rules[rule]);
+  extend(rule, rules[rule]);
 }
 extend('existId',{validate(value) {
   return store.dispatch("existId",value).then((resp)=>{
@@ -18,7 +20,6 @@ extend('existId',{validate(value) {
     return false;
   })
 }, message: "존재하는 아이디입니다. 다른 아이디를 입력해주세요."});
-
 extend('fileSize',{validate(value) {
   return !value||value.size < 5000000?true:false;
 }, message: "파일 크기는 5MB 이하로 등록해주세요."});
@@ -26,6 +27,8 @@ extend('fileSize',{validate(value) {
 Vue.component("ValidationProvider", ValidationProvider);
 Vue.component("ValidationObserver", ValidationObserver);
 setInteractionMode('eager');
+
+/** Registration */
 Vue.config.productionTip = false;
 Vue.use(module);
 Vue.use(VuetifyDialog,{
@@ -33,13 +36,25 @@ Vue.use(VuetifyDialog,{
     vuetify
   }
 });
+Vue.use( CKEditor );
 
+/** Object prototype */
 String.prototype.comma = function() {
   return String(this).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
 }
 String.prototype.uncomma = function() {
   return String(this).replace(/[^\d]+/g, '');
 }
+Date.prototype.YYYYMMDDHHMMSS = function () {
+  var yyyy = this.getFullYear().toString();
+  var MM = this.getMonth() + 1;
+  var dd = this.getDate();
+  var hh = this.getHours();
+  var mm = this.getMinutes();
+  var ss = this.getSeconds();
+  return yyyy +  MM + dd+  hh + mm + ss;
+};
+
 
 new Vue({
   router,

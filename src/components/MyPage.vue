@@ -1,109 +1,108 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <!-- 개인정보 수정 다이얼로그 -->
     <v-dialog
-      transition="dialog-bottom-transition"
       v-model="userInfoDrawer"
-      persistent
       max-width="600px"
-      height="1000px"
+      height="100%"
+      scrollable
     >
-      <v-container class="white">
-        <v-row>
-          <v-col cols="3" align-self="center">
-            개인정보수정
-          </v-col>
-          <v-col cols="8"></v-col>
-          <v-col cols="1">
-            <v-btn
-              icon
-              @click.stop="setUserInfoDrawer"
-              right
-            >
-              <v-icon>mdi-close-box</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-container>
-      <modi-info-page />
-    </v-dialog>
-    <v-container>
-      <v-row>
-        <v-col class="text-h4">
-          MyPage
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="2"></v-col>
-        <v-col align-self="center" cols="7">
+      <v-row class="white">
+        <v-col>
+          <v-row class="mt-1" justify="space-between">
+            <v-col class="ml-2 mt-1 text-h6">
+              개인정보수정
+            </v-col>
+            <v-col></v-col>
+            <v-col class="text-right">
+              <v-btn
+                icon
+                @click.stop="setUserInfoDrawer"
+                right
+              >
+                <v-icon>mdi-close-box</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-divider></v-divider>
           <v-row>
-            <v-col cols="3" class="text-h5">{{getUserInfo.name}}</v-col>
-            <v-col cols="6" class="text-h6">
-            ({{getUserInfo.id}})
+            <v-col>
+              <modi-info-page />
             </v-col>
           </v-row>
         </v-col>
-        <v-col cols="3">
-          <v-btn
-            class="mx-2"
-            text
-            @click.stop="setUserInfoDrawer"
-          >
-            회원정보 확인/변경
-          </v-btn>
-        </v-col>
       </v-row>
-    </v-container>
+    </v-dialog>
+    <v-row>
+      <v-col class="text-h4">
+        MyPage
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="2"></v-col>
+      <v-col align-self="center" cols="7">
+        <v-row>
+          <v-col cols="3" class="text-h5">{{ getUserInfo.name }}</v-col>
+          <v-col cols="6" class="text-h6">
+            ({{ getUserInfo.id }})
+          </v-col>
+        </v-row>
+      </v-col>
+      <v-col cols="3">
+        <v-btn
+          class="mx-2"
+          text
+          @click.stop="setUserInfoDrawer"
+        >
+          회원정보 확인/변경
+        </v-btn>
+      </v-col>
+    </v-row>
     <!--요약 화면-->
-    <v-container>
-      <v-row dense style="min-height: 100%">
-        <v-col>
-          <v-btn
+    <v-row justify="space-around">
+      <v-col>
+        <v-btn
           v-for="(process, index) in OrderHisSummary"
           :key="index"
           text
           @click="getHisList(index)"
-          >
-            {{index + " : " + process}}
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-container>
+        >
+          {{ index + " : " + process }}
+        </v-btn>
+      </v-col>
+    </v-row>
     <v-divider></v-divider>
-    <v-container>
-      <v-row>
-        <v-col class="mb-3">
-          주문목록 / 배송조회 내역 총 {{this.OrderHisList.length}} 건
-        </v-col>
-      </v-row>
-      <v-divider></v-divider>
-      <v-data-table
-        :headers="header"
-        :items="this.OrderHisList"
-        class="elevation-1"
-        hide-default-footer
-        disable-sort
-        no-data-text="주문 건이 존재하지 않습니다."
-      >
-        <template v-slot:item.date="{ item }">
-          {{item.regDati[0]+"/"+item.regDati[1]+"/"+item.regDati[2]}}
-        </template>
-        <template v-slot:item.cd="{item}">
-          {{item.cd}}
-        </template>
-        <template v-slot:item.info="{item}">
-          <v-btn text @click="getOrderDetail(item.cd)">
-          {{item.ordsDoc}}
-          </v-btn>
-        </template>
-        <template v-slot:item.pri="{item}">
-          {{item.totPri.comma()+" 원"}}
-        </template>
-        <template v-slot:item.proc="{item}">
-          {{OrderProc[item.procTy]}}
-        </template>
-      </v-data-table>
-    </v-container>
+    <v-row class="mt-4">
+      <v-col>
+        주문목록 / 배송조회 내역 총 {{ this.OrderHisList.length }} 건
+      </v-col>
+    </v-row>
+    <v-data-table
+      :headers="header"
+      :items="this.OrderHisList"
+      class="elevation- mt-3"
+      hide-default-footer
+      disable-sort
+      no-data-text="주문 건이 존재하지 않습니다."
+    >
+      <template v-slot:item.date="{ item }">
+        {{ item.regDati[0] + "/" + item.regDati[1] + "/" + item.regDati[2] }}
+      </template>
+      <template v-slot:item.cd="{item}">
+        {{ item.cd }}
+      </template>
+      <template v-slot:item.info="{item}">
+        <v-btn text @click="getOrderDetail(item.cd)">
+          {{ item.ordsDoc }}
+        </v-btn>
+      </template>
+      <template v-slot:item.pri="{item}">
+        {{ item.totPri.comma() + " 원" }}
+      </template>
+      <template v-slot:item.proc="{item}">
+        {{ OrderProcList[item.procTy] }}
+      </template>
+    </v-data-table>
   </v-container>
 </template>
 
@@ -113,47 +112,46 @@ import modiInfoPage from "../components/ModiInfoPage.vue";
 
 export default {
   components: {
-    modiInfoPage,
+    modiInfoPage
   },
   data: () => ({
     userInfoDrawer: false,
     header: [
-      { text: '주문일자', value: 'date', align: 'center'},
-      { text: '주문번호', value: 'cd', align: 'center'},
-      { text: '주문정보', value: 'info', align: 'center' },
-      { text: '결제금액', value: 'pri' , align: 'center'},
-      { text: '주문상태', value: 'proc', align: 'center' },
-    ],
+      { text: "주문일자", value: "date", align: "center" },
+      { text: "주문번호", value: "cd", align: "center" },
+      { text: "주문정보", value: "info", align: "center" },
+      { text: "결제금액", value: "pri", align: "center" },
+      { text: "주문상태", value: "proc", align: "center" }
+    ]
   }),
   computed: {
-    ...mapGetters(["getUserInfo","OrderHisList","OrderHisSummary","OrderProc"]),
+    ...mapGetters(["getUserInfo", "OrderHisList", "OrderHisSummary", "OrderProcList"])
   },
   methods: {
-    setUserInfoDrawer(){
+    setUserInfoDrawer() {
       this.userInfoDrawer = !this.userInfoDrawer;
     },
-    getHisList(flag){
+    getHisList(flag) {
       var code = "";
-      for(var codeVal in this.OrderProc){
-        if(flag.includes(this.OrderProc[codeVal]))
-            code = code.concat(codeVal+",");
+      for (var codeVal in this.OrderProcList) {
+        if (flag.includes(this.OrderProcList[codeVal]))
+          code = code.concat(codeVal + ",");
       }
-      this.$store.dispatch("getMyPageInfo",code).then((resp)=>{
-        if(!resp)
-          this.$dialog.message.error(flag+" 상태의 주문 정보 확인에 실패했습니다.");
-      }
+      this.$store.dispatch("getMyPageInfo", code).then((resp) => {
+          if (!resp)
+            this.$dialog.message.error(flag + " 상태의 주문 정보 확인에 실패했습니다.");
+        }
       );
     },
-    getOrderDetail(ordsCd){
-      console.log(ordsCd);
-      this.$store.dispatch("getOrderDetailInfo",ordsCd).then((resp)=>{
-        if(resp){
-            this.$router.push("OrderDetailInfo");
-        }else{
+    getOrderDetail(ordsCd) {
+      this.$store.dispatch("getOrderDetailInfo", ordsCd).then((resp) => {
+        if (resp) {
+          this.$router.push("/OrderDetailPage");
+        } else {
           this.$dialog.message.error("주문 상세 정보를 가져오는데 실패했습니다.");
         }
-      })
-    },
+      });
+    }
   },
   mounted() {
 

@@ -1,44 +1,74 @@
-export default{
-  Title(state){
+export default {
+  Title(state) {
     return state.Title;
   },
-  getToken(state){
+  getToken(state) {
     return state.token;
   },
-  getUserInfo(state){
+  getUserInfo(state) {
     return state.userInfo;
   },
-  Pagination(state){
+  Pagination(state) {
     return state.Pagination;
   },
-  selectMenuCd(state){
+  selectMenuCd(state) {
     return state.selectMenuCd;
   },
-  JJimList(state){
+  JJimList(state) {
     return state.JJimList;
   },
-  BasketList(state){
+  BasketList(state) {
     return state.BasketList;
   },
-  DetailInfo(state){
+  DetailInfo(state) {
     return state.DetailInfo;
   },
-  OrderList(state){
+  OrderList(state) {
     return state.OrderList;
   },
-  OrderInfo(state){
+  OrderInfo(state) {
     return state.OrderInfo;
   },
-  OrderHisList(state){
+  OrderHisList(state) {
     return state.OrderHisList;
   },
-  OrderHisSummary(state){
+  OrderHisSummary(state) {
     return state.OrderHisSummary;
   },
-  OrderProc(state){
-    return state.OrderProc;
+  OrderProcList(state) {
+    return state.OrderProcList;
   },
-  OrderDetailInfo(state){
+  OrderDetailInfo(state) {
     return state.OrderDetailInfo;
+  },
+  Role(state){
+    return state.Role;
+  },
+  EditorHTML(state){
+    return state.EditorHTML;
+  },
+  SizeList(state){
+    return state.SizeList;
+  },
+  ColorList(state){
+    return state.ColorList;
+  },
+  MenuList(state){
+    return state.MenuList;
+  },
+  CateList(state){
+    return state.CateList;
+  },
+  ProductList(state){
+    return state.ProductList;
+  },
+  ProcList(state){
+    return state.ProcList;
+  },
+  OrderMngList(state){
+    return state.OrderMngList;
+  },
+  DeliList(state){
+    return state.DeliList;
   }
-}
+};

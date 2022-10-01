@@ -1,13 +1,11 @@
 <template>
-  <v-container
-    height="100%">
-  <v-container height="100">
-    <v-row>
-      <v-col cols="3"></v-col>
-      <v-col cols="6">
-        <v-slide-group multiple align-self="center">
+  <v-container fluid>
+    <v-row align-content="space-between">
+      <v-col></v-col>
+      <v-col>
+        <v-slide-group>
           <v-slide-item
-            v-for="catalog in Catalogs"
+            v-for="catalog in MenuList"
             :key="catalog.cd"
             v-slot="{ active }"
           >
@@ -21,35 +19,39 @@
           </v-slide-item>
         </v-slide-group>
       </v-col>
-      <v-col cols="3"></v-col>
+      <v-col></v-col>
     </v-row>
-  </v-container>
+    <v-divider></v-divider>
   </v-container>
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 export default {
   data: () => ({
-    Catalogs: null,
+    Catalogs: null
   }),
-  mounted() {
-    this.$store.dispatch("getMenuList").then((resp)=>{
-      if(resp)
-        this.Catalogs = resp;
-      else
-        this.$dialog.message.error("메뉴 조회시 오류가 발생했습니다.");
-    })
+  computed: {
+    ...mapGetters(["MenuList"]),
   },
-  methods:{
-    updateList(param){
-      this.$store.dispatch("getItemList",{param:param,page:0}).then((resp)=>{
-        if(resp){
-          if(this.$route.path !="/")
+  mounted() {
+    this.$store.dispatch("getMenuList").then((resp) => {
+      if (resp){
+        this.updateList(0);
+      } else
+        this.$dialog.message.error("메뉴 조회시 오류가 발생했습니다.");
+    });
+  },
+  methods: {
+    updateList(param) {
+      this.$store.dispatch("getItemList", { param: param, page: 0 }).then((resp) => {
+        if (resp) {
+          if (this.$route.path != "/")
             this.$router.push("/");
-        }else
+        } else
           this.$dialog.message.error("상품 목록 조회에 실패했습니다.");
       });
-    },
-  },
-}
+    }
+  }
+};
 </script>
