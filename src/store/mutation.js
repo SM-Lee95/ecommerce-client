@@ -114,5 +114,7 @@ export default {
   setOrderMngList(state, payload){
     state.OrderMngList = payload;
   },
-
+  setOrderEditObjList(state, payload){
+    state.OrderEditObjList = payload;
+  },
 };

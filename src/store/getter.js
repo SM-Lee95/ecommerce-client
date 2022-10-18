@@ -70,5 +70,8 @@ export default {
   },
   DeliList(state){
     return state.DeliList;
+  },
+  OrderEditObjList(state){
+    return state.OrderEditObjList;
   }
 };

@@ -133,100 +133,7 @@
           v-model="modiDialog"
           width="85%"
         >
-            <v-card>
-              <v-card-title class="text-h6">
-                주문 상태 수정
-              </v-card-title>
-              <v-divider></v-divider>
-              <v-card-actions>
-                <v-row class="text-right">
-                  <v-col>
-                    <v-btn
-                      text
-                      @click="saveInfoProc"
-                    >
-                      주문 상태 수정
-                    </v-btn>
-                    <v-btn
-                      text
-                      @click="saveDtlProc"
-                    >
-                      개별 주문 상태 수정
-                    </v-btn>
-                    <v-btn
-                      text
-                      @click="createTrdInfo"
-                    >
-                      운송장 등록
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-card-actions>
-              <v-divider></v-divider>
-              <v-card-text>
-                  <v-select
-                    :items="ProcList"
-                    item-text="name"
-                    item-value="commonKey.commCd"
-                    label="주문상태"
-                    v-model="procTy"
-                  ></v-select>
-                <v-data-table
-                  :headers="detailHeader"
-                  :items="editObjList.orderDtlDtoList"
-                  class="elevation- mt-3"
-                  hide-default-footer
-                  show-select
-                  item-key="ordsDtlKey.listCd"
-                  v-model="selected"
-                  disable-sort
-                  no-data-text="주문 건이 존재하지 않습니다."
-                >
-                  <template v-slot:item.thumbnail="{item}">
-                    <v-img :src="item.thumbnail" max-height="100%" min-height="100%" max-width="100"></v-img>
-                  </template>
-                  <template v-slot:item.prdInfo="{ item }">
-                    <v-row no-gutters>
-                      <v-col class="text-left">
-                        {{ item.corpNm }}
-                      </v-col>
-                    </v-row>
-                    <v-row no-gutters>
-                      <v-col class="text-left">
-                        <v-btn text @click="getDetailInfo(item.prdCd)">{{ item.name }}</v-btn>
-                      </v-col>
-                    </v-row>
-                    <v-row no-gutters>
-                      <v-col class="text-left">
-                        옵션 : {{ item.color + " / " + item.size }}
-                      </v-col>
-                    </v-row>
-                  </template>
-                  <template v-slot:item.originPri="{item}">
-                    {{ item.applyPri.comma() + " 원" }}
-                  </template>
-                  <template v-slot:item.discountRate="{item}">
-                    {{ item.discountRate + " %" }}
-                  </template>
-                  <template v-slot:item.salesPri="{item}">
-                    {{ item.applyPri.comma() + " 원" }}
-                  </template>
-                  <template v-slot:item.cnt="{item}">
-                    {{ item.cnt + " 개" }}
-                  </template>
-                  <template v-slot:item.subSumPri="{item}">
-                    {{ (String(Number(item.applyPri) * Number(item.cnt))).comma() + " 원" }}
-                  </template>
-                  <template v-slot:item.proc="{item}">
-                      {{ OrderProcList[item.procTy] }}
-                  </template>
-                  <template v-slot:item.traCd="{item}">
-                    <v-btn text @click="getDeliInfo(item.traCd)">{{ item.traCd }}</v-btn>
-                  </template>
-                </v-data-table>
-              </v-card-text>
-              <v-divider></v-divider>
-            </v-card>
+          <order-mng-page-modi-dialog></order-mng-page-modi-dialog>
         </v-dialog>
       </v-col>
     </v-row>
@@ -235,55 +142,14 @@
 
 <script>
 import { mapGetters } from "vuex";
-
+import OrderMngPageModiDialog from "./OrderMngPageModiDialog";
 export default {
   name: "OrderMngPage",
+  components: {OrderMngPageModiDialog},
   methods: {
-    getDeliInfo(traCd){
-      console.log(traCd);
-    },
     editDialog(item){
-      this.editObjList = Object.assign({},item);
-      this.procTy = this.editObjList.procTy;
+      this.$store.commit("setOrderEditObjList",Object.assign({},item));
       this.modiDialog = !this.modiDialog;
-    },
-    saveDtlProc(){
-      this.$dialog.confirm({
-        title: "개별 주문 상태 수정",
-        text: this.OrderProcList[this.procTy]+" 로 선택된 품목의 주문 상태가 수정됩니다.",
-        showClose: false
-      }).then((resp) => {
-        if (!resp) return;
-        let reqData = {
-          procTy: this.procTy,
-          ordsDtlList: this.selected,
-        }
-        this.$store.dispatch("updateOrdsDtlProc", reqData).then((resp) => {
-          if (resp) this.$dialog.message.info("수정되었습니다.");
-          else this.$dialog.message.error("수정에 실패하셨습니다.");
-          this.modiDialog = false;
-          this.searchList();
-        });
-      });
-    },
-    saveInfoProc(){
-      this.$dialog.confirm({
-        title: "주문 상태 수정",
-        text: this.OrderProcList[this.procTy]+" 로 해당 주문의 모든 품목 주문 상태가 수정됩니다.",
-        showClose: false
-      }).then((resp) => {
-        if (!resp) return;
-        let reqData = {
-          procTy: this.procTy,
-          ordsCd: this.editObjList.cd,
-        }
-        this.$store.dispatch("updateOrdsInfoProc", reqData).then((resp) => {
-          if (resp) this.$dialog.message.info("수정되었습니다.");
-          else this.$dialog.message.error("수정에 실패하셨습니다.");
-          this.modiDialog = false;
-          this.searchList();
-        });
-      });
     },
     searchList(){
       let reqData = {
@@ -298,7 +164,6 @@ export default {
       });
     },
     getOrderDetail(ordsCd) {
-      console.log(ordsCd);
       this.$store.dispatch("getOrderDetailInfo", ordsCd).then((resp) => {
         if (resp) {
           this.$router.push("/OrderDetailPage");
@@ -307,38 +172,6 @@ export default {
         }
       });
     },
-    createTrdInfo(){
-      if(this.selected.length == 0){
-        this.$dialog.message.error('품목 선택 후 진행해주세요.');
-        return;
-      }
-      this.$dialog.prompt({
-        title: "운송장 등록",
-        text: "운송장 번호를 입력해주세요.",
-        showClose: false
-      }).then((resp) => {
-        if(resp == false)return;
-        if(!resp){
-          this.$dialog.message.error('입력되지 않았습니다.');
-          return;
-        }
-        if(isNaN(resp)){
-          this.$dialog.message.error('숫자만 입력해주세요.');
-          return;
-        }
-        let reqData = {
-          traCd: resp,
-          parcelCd: 1,
-          orderDtlDtoList: this.selected,
-        }
-        this.$store.dispatch("insertTraList", reqData).then((resp) => {
-          if (resp) this.$dialog.message.info("등록되었습니다.");
-          else this.$dialog.message.error("등록에 실패하셨습니다.");
-          this.modiDialog = false;
-          // this.searchList();
-        });
-      });;
-    }
   },
   data: ()=>({
     header: [
@@ -348,20 +181,9 @@ export default {
       { text: "배송주소", value: "address", align: "center" },
       { text: "연락처", value: "recvPhone", align: "center" },
       { text: "수령자", value: "recvNm", align: "center" },
-      { text: "운송장번호", value: "traCd", align: "center" },
       { text: "결제금액", value: "pri", align: "center" },
       { text: "주문상태", value: "proc", align: "center" },
       { text: "", value: "actions", align: "center" },
-    ],
-    detailHeader:[
-      { value: "thumbnail", align: "center" },
-      { text: "상품정보", value: "prdInfo", align: "start"},
-      { text: "금액", value: "originPri", align: "start"},
-      { text: "할인율", value: "discountRate", align: "center" },
-      { text: "할인금액", value: "salesPri", align: "start" },
-      { text: "수량", value: "cnt", align: "center" },
-      { text: "합계금액", value: "subSumPri", align: "start" },
-      { text: "주문상태", value: "proc", align: "center" }
     ],
     OptionList: [
       { name: "품목명", cd: "prdNm" },
@@ -374,8 +196,6 @@ export default {
     menu: false,
     modiDialog: false,
     editObjList: [],
-    procTy: 0,
-    selected: [],
     date: [(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000 - (60000*60*24*30))).toISOString().substr(0, 10),new Date(Date.now()- (new Date()).getTimezoneOffset() * 60000).toISOString().substr(0, 10)],
   }),
   computed: {

@@ -34,4 +34,5 @@ export default {
   DeliList: null, //택배회사리스트
   ProductList: null, //관리자 상품 조회 리스트
   OrderMngList: null, //관리자 주문 조회 리스트
+  OrderEditObjList: null, //주문 수정 리스트
 };
