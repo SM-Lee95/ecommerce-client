@@ -1,5 +1,83 @@
 <template>
   <v-container fluid>
+      <v-app-bar
+        color="grey"
+        fixed
+        elevation="0"
+        absolute
+      >
+        <template v-slot:img="{ props }">
+          <v-img
+            v-bind="props"
+            gradient="to top right, white, white"
+          ></v-img>
+        </template>
+        <v-app-bar-title>
+          <v-btn @click="toMain" x-large plain>로브아네(Lovane)</v-btn>
+        </v-app-bar-title>
+        <v-row class="text-right">
+          <v-col v-show="!isLogin">
+            <v-btn value="login" small text @click.stop="drawer = !drawer">
+              로그인
+            </v-btn>
+            <v-btn value="Join" small text @click="toJoinForm">
+              회원가입
+            </v-btn>
+          </v-col>
+          <v-col v-if="isLogin">
+            <v-btn
+              class="mx-2"
+              text
+              x-small
+              fab
+              @click="logout"
+            >
+              <v-icon>mdi-logout</v-icon>
+            </v-btn>
+            <v-btn
+              class="mx-2"
+              text
+              x-small
+              fab
+              @click.stop="toMyPage"
+            >
+              <v-icon>mdi-account-circle</v-icon>
+            </v-btn>
+            <v-btn
+              class="mx-2"
+              text
+              x-small
+              fab
+              @click="goBasket"
+            >
+              <v-icon dark>
+                mdi-basket
+              </v-icon>
+            </v-btn>
+            <v-btn
+              class="mx-2"
+              text
+              x-small
+              fab
+              @click="goJJim"
+            >
+              <v-icon dark>
+                mdi-heart
+              </v-icon>
+            </v-btn>
+            <v-btn
+              class="mx-2"
+              text
+              x-small
+              fab
+              @click="goAdmin"
+              v-if="isLogin && this.Role=='ADMIN'"
+            >
+              <v-icon>mdi-semantic-web</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-app-bar>
     <v-dialog
       transition="dialog-bottom-transition"
       v-model="drawer"
@@ -51,88 +129,6 @@
         </v-col>
       </v-row>
     </v-dialog>
-    <v-card>
-      <v-app-bar
-        color="grey"
-        fixed
-        elevation="0"
-        app
-      >
-        <template v-slot:img="{ props }">
-          <v-img
-            v-bind="props"
-            gradient="to top right, white, white"
-          ></v-img>
-        </template>
-        <v-app-bar-title>
-          <v-btn @click="toMain" x-large plain>로브아네(Lovane)</v-btn>
-        </v-app-bar-title>
-        <v-spacer></v-spacer>
-        <v-row class="text-right">
-          <v-col v-show="!isLogin">
-            <v-btn value="login" small text @click.stop="drawer = !drawer">
-              로그인
-            </v-btn>
-            <v-btn value="Join" small text @click="toJoinForm">
-              회원가입
-            </v-btn>
-          </v-col>
-          <v-col v-if="isLogin">
-            <v-btn
-              class="mx-2"
-              text
-              fab
-              x-small
-              @click="logout"
-            >
-              <v-icon>mdi-logout</v-icon>
-            </v-btn>
-            <v-btn
-              class="mx-2"
-              text
-              x-small
-              fab
-              @click.stop="toMyPage"
-            >
-              <v-icon>mdi-account-circle</v-icon>
-            </v-btn>
-            <v-btn
-              class="mx-2"
-              x-small
-              text
-              fab
-              @click="goBasket"
-            >
-              <v-icon dark>
-                mdi-basket
-              </v-icon>
-            </v-btn>
-            <v-btn
-              class="mx-2"
-              fab
-              text
-              x-small
-              color="pink"
-              @click="goJJim"
-            >
-              <v-icon dark>
-                mdi-heart
-              </v-icon>
-            </v-btn>
-            <v-btn
-              class="mx-2"
-              text
-              fab
-              x-small
-              @click="goAdmin"
-              v-if="isLogin && this.Role=='ADMIN'"
-            >
-              <v-icon>mdi-semantic-web</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-app-bar>
-    </v-card>
   </v-container>
 </template>
 <script>

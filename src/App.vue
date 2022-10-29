@@ -1,22 +1,22 @@
 <template>
   <v-app>
     <v-container fluid>
-      <v-row>
+      <v-row style="min-height: 56px" no-gutters>
         <v-col>
           <Header />
         </v-col>
       </v-row>
-      <v-row>
+      <v-row style="min-height: 60px" no-gutters>
         <v-col>
           <MenuBar />
         </v-col>
       </v-row>
-      <v-row style="min-height: 50%">
+      <v-row style="min-height: 950px" no-gutters>
         <v-col>
           <router-view />
         </v-col>
       </v-row>
-      <v-row>
+      <v-row style="min-height: 200px" no-gutters>
         <v-col>
           <Footer />
         </v-col>

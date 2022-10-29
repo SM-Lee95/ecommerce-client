@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="mt-3">
+  <v-container fluid>
     <v-row>
       <v-col>
         <v-toolbar flat>

@@ -246,6 +246,10 @@ export default {
   methods: {
     submit() {
       const formData = new FormData();
+      if(!this.birth){
+        this.$dialog.message.error("생일을 입력해주세요.");
+        return;
+      }
       const userInfoDto = {
         name: this.name,
         id: this.id,
