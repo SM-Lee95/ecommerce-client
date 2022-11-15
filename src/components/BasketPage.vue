@@ -23,6 +23,7 @@
             v-model="selectList"
             item-key="cd"
             no-data-text="상품이 존재하지 않습니다."
+            
           >
             <template v-slot:item.thumbnail="{item}">
               <v-img :src="item.thumbnail" max-height="100%" min-height="100%" max-width="100" @click="getDetailInfo(item.cd)">
@@ -111,7 +112,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["BasketList", "getUserInfo"])
+    ...mapGetters(["BasketList", "getUserInfo"]),
   },
   methods: {
     getDetailInfo(cd) {
@@ -139,12 +140,10 @@ export default {
       });
     },
     order() {
-      // var orderList = [];
-      // this.BasketList.forEach(function(item) {
-      //   if (item.isSelected) {
-      //     orderList.push(item);
-      //   }
-      // });
+      if(!this.selectList.length){
+        this.$dialog.message.warning("상품 선택후에 진행해주세요.");
+        return;
+      }
       this.$store.commit("setOrderList", this.selectList);
       this.$router.push("/Order");
     },

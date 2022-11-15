@@ -71,7 +71,7 @@
             v-model="phone"
             :counter="13"
             :error-messages="errors"
-            label="Phone Number"
+            label="Phone Number(010-****-****)"
             required
           ></v-text-field>
         </validation-provider>
@@ -83,7 +83,7 @@
           <v-text-field
             v-model="email"
             :error-messages="errors"
-            label="E-mail"
+            label="E-mail(****@****.com)"
             required
           ></v-text-field>
         </validation-provider>

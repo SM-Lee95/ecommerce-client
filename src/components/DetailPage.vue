@@ -238,7 +238,7 @@ export default {
     },
     addOption() {
       if (this.option == null) {
-        alert("옵션을 선택 후 시도해주세요.");
+        this.$dialog.message.warning("옵션을 선택 후 시도해주세요.");
         return;
       }
       var option = new Object();
@@ -249,7 +249,7 @@ export default {
       option.cnt = 1;
       if (this.selectOptions.find(value =>
         value.basketKey == option.basketKey)) {
-        alert("선택된 옵션과 같은 추가된 옵션이 존재합니다.");
+        this.$dialog.message.warning("선택된 옵션과 같은 추가된 옵션이 존재합니다.");
         return;
       }
       this.selectOptions.push(option);
@@ -257,7 +257,7 @@ export default {
     },
     postOrder() {
       if (this.selectOptions.length == 0) {
-        alert("옵션을 추가하고 시도해주세요.");
+        this.$dialog.message.warning("옵션을 추가하고 시도해주세요.");
         return;
       }
       this.$store.dispatch("postOrder", this.selectOptions).then(() => {

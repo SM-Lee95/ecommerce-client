@@ -180,12 +180,12 @@ export default {
       header: [
         {
           text: "",
-          value: "thumbnail"
+          value: "thumbnail",
         },
         {
           text: "상품정보(옵션)",
           align: "start",
-          value: "name"
+          value: "name",
         },
         { text: "공급사", value: "corpNm" },
         { text: "배송비", value: "deliPri" },
@@ -197,7 +197,7 @@ export default {
       etcAddress: null,
       reqMemo: "",
       phone: "",
-      name: ""
+      name: "",
     };
   },
   methods: {
@@ -213,6 +213,14 @@ export default {
     doPay() {
       if (!this.getUserInfo) {
         this.$dialog.message.warning("로그인 후에 시도해주세요.");
+        return;
+      }
+      if (!this.mainAddress||!this.postcode) {
+        this.$dialog.message.warning("주소지 작성 후에 시도해주세요.");
+        return;
+      }
+      if (!this.phone||!this.name) {
+        this.$dialog.message.warning("수령자 정보를 작성한 후에 시도해주세요.");
         return;
       }
       let OrderDto = new Object();

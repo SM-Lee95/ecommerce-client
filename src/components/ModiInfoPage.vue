@@ -38,7 +38,7 @@
                   v-model="phone"
                   :error-messages="errors"
                   :counter="13"
-                  label="Phone"
+                  label="Phone(010-****-****)"
                 ></v-text-field>
               </validation-provider>
             </v-list-item-content>
@@ -65,7 +65,7 @@
                 <v-text-field
                   v-model="email"
                   :error-messages="errors"
-                  label="Email"
+                  label="Email(****@****.com)"
                 ></v-text-field>
               </validation-provider>
             </v-list-item-content>
@@ -268,7 +268,7 @@ export default {
     savePass() {
       this.$refs.observer.validate().then((resp) => {
         if (resp == false) {
-          alert("입력값을 확인해주세요.");
+          this.$dialog.message.warning("입력값을 확인해주세요.");
           return;
         } else {
           this.$store.dispatch("updatePass", {
@@ -288,7 +288,7 @@ export default {
     },
     saveInfo() {
       if (!this.isModi) {
-        alert("변경 후 저장을 시도해주세요.");
+        this.$dialog.message.warning("변경 후 저장을 시도해주세요.");
         return;
       }
       this.$refs.observer.validate().then((resp) => {
