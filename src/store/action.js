@@ -78,7 +78,7 @@ export default {
     // param -> 메뉴 코드
     if (data.param) context.commit("setSelectMenuCd", data.param);
     data.size = 24;
-    return http.get("/prd/list/" + context.state.selectMenuCd,data).then((resp) => {
+    return http.get("/prd/list/" + context.state.selectMenuCd, {params: data}).then((resp) => {
       if (resp.data) {
         context.commit("setPagination", resp.data);
         return true;
