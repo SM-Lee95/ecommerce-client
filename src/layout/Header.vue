@@ -163,6 +163,7 @@ export default {
       }).then((resp) => {
         if (resp) {
           this.drawer = !this.drawer;
+          this.$store.dispatch("getItemList", { page: 0 });
           if (this.$route.path != "/")
             this.$router.push("/");
         } else {
@@ -175,6 +176,7 @@ export default {
     logout() {
       this.$store.commit("setUserInfo", null);
       this.$store.commit("setToken", "");
+      this.$store.dispatch("getItemList", { page: 0 });
       if (this.$route.path != "/")
         this.$router.push("/");
     },

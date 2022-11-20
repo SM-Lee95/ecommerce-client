@@ -16,8 +16,7 @@ export default {
   },
   setUserInfo(state, payload) {
     state.userInfo = payload;
-    if(payload != null)
-      state.Role = payload.roleList[0];
+    if(payload) state.Role = payload.auth;
   },
   setPagination(state, payload) {
     state.Pagination = payload;

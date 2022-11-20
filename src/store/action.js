@@ -3,9 +3,8 @@ import http from "../util/http-commons";
 export default {
   login(context, data) {
     return http.post("/login", data).then((resp) => {
-      JSON.stringify(resp);
       context.commit("setToken", resp.headers.authorization);// 토큰을 적용해준다
-      return context.dispatch("getUserInfo", data.id).then(() => {
+      return context.dispatch("getMyUserInfo", data.id).then(() => {
         return true;
       });
     }).catch((resp) => {
@@ -14,7 +13,7 @@ export default {
     });
   },
   signUp(context, data) {
-    return http.post("/user/signUp", data).then((resp) => {
+    return http.post("/user/myInfo", data).then((resp) => {
       if (resp.data.statusCode == "200") return true;
       if (resp.data.statusCode == "400") return false;
       return false;
@@ -24,15 +23,15 @@ export default {
     });
   },
   existId(context, data) {
-    return http.post("/user/existId/" + data).then((resp) => {
+    return http.get("/user/existId/" + data).then((resp) => {
       return resp;
     }).catch((resp) => {
       console.log("서버오류 \n " + resp);
       return false;
     });
   },
-  getUserInfo(context, data) {
-    return http.get("/user/info/" + data).then((resp) => {
+  getMyUserInfo(context) {
+    return http.get("/user/myInfo").then((resp) => {
       if (resp.data)
         context.commit("setUserInfo", resp.data);
       else
@@ -43,7 +42,7 @@ export default {
     });
   },
   updateInfo(context, data) {
-    return http.post("/user/info/" + context.state.userInfo.cd, data).then((resp) => {
+    return http.put("/user/myInfo", data).then((resp) => {
       if (resp.data.statusCode == "200") return true;
       if (resp.data.statusCode == "400") return false;
       return false;
@@ -53,7 +52,7 @@ export default {
     });
   },
   updatePass(context, data) {
-    return http.put("/user/pass", data).then((resp) => {
+    return http.put("/user/myInfo/pass", data).then((resp) => {
       if (resp.data.statusCode == "200") return true;
       if (resp.data.statusCode == "400") return false;
       return false;
@@ -78,8 +77,8 @@ export default {
     // page -> 요청 페이지 번호
     // param -> 메뉴 코드
     if (data.param) context.commit("setSelectMenuCd", data.param);
-    var user_cd = context.state.userInfo ? "&user_cd=" + context.state.userInfo.cd : "";
-    return http.get("/prd/list/" + context.state.selectMenuCd + "?page=" + data.page + "&size=24" + user_cd).then((resp) => {
+    data.size = 24;
+    return http.get("/prd/list/" + context.state.selectMenuCd,data).then((resp) => {
       if (resp.data) {
         context.commit("setPagination", resp.data);
         return true;
@@ -91,10 +90,7 @@ export default {
     });
   },
   getDetailInfo(context, data) {
-    var user_cd = "";
-    if (context.state.userInfo)
-      user_cd = "?user_cd=" + context.state.userInfo.cd;
-    return http.get("/prd/detail/" + data + user_cd).then((resp) => {
+    return http.get("/prd/detail/" + data).then((resp) => {
       if (resp.data) {
         context.commit("setDetailInfo", resp.data);
         return true;
@@ -106,7 +102,7 @@ export default {
     });
   },
   putLike(context, data) {
-    return http.get("/prd/like/" + data + "/" + context.state.userInfo.cd).then((resp) => {
+    return http.get("/prd/like/" + data).then((resp) => {
       if (resp.data.statusCode == "200") return true;
       if (resp.data.statusCode == "400") return false;
       return false;
@@ -116,7 +112,7 @@ export default {
     });
   },
   getJJimList(context) {
-    return http.get("/prd/jjim/list/" + context.state.userInfo.cd).then((resp) => {
+    return http.get("/prd/like/list").then((resp) => {
       if (resp.data) {
         context.commit("setJJimList", resp.data);
         return true;
@@ -128,7 +124,7 @@ export default {
     });
   },
   postBasket(context, data) {
-    return http.post("/prd/basket/" + context.state.userInfo.cd, data).then((resp) => {
+    return http.post("/prd/basket", data).then((resp) => {
       if (resp.data.statusCode == "200") return true;
       if (resp.data.statusCode == "400") return false;
       return false;
@@ -138,7 +134,7 @@ export default {
     });
   },
   getBasketList(context) {
-    return http.get("/prd/basket/list/" + context.state.userInfo.cd).then((resp) => {
+    return http.get("/prd/basket/list").then((resp) => {
       if (resp.data) {
         context.commit("setBasketList", resp.data);
         return true;
@@ -150,7 +146,7 @@ export default {
     });
   },
   delBasketInfo(context, data) {
-    return http.delete("/prd/basket/" + context.state.userInfo.cd + "/" + data.prdCd + "/" + data.listCd).then((resp) => {
+    return http.delete("/prd/basket/" + data.prdCd + "/" + data.listCd).then((resp) => {
       if (resp.data.statusCode == "200") return true;
       if (resp.data.statusCode == "400") return false;
       return false;
@@ -160,7 +156,7 @@ export default {
     });
   },
   orderComplete(context, data) {
-    return http.post("/ords/items/" + context.state.userInfo.cd, data).then((resp) => {
+    return http.post("/ords/items", data).then((resp) => {
       if (resp.data.statusCode == "200") return true;
       if (resp.data.statusCode == "400") return false;
       return false;
@@ -170,15 +166,14 @@ export default {
     });
   },
   getMyPageInfo(context, data) {
-    return http.get("/ords/list/" + context.state.userInfo.cd, {
+    return http.get("/ords/list", {
       params: {
         procTy: data
       }
     }).then((resp) => {
       if (resp.data) {
         context.commit("setOrderHisList", resp.data);
-        if (!data)
-          context.commit("setOrderHisSummary", resp.data);
+        if (!data) context.commit("setOrderHisSummary", resp.data);
         return true;
       }
       return false;
@@ -188,7 +183,7 @@ export default {
     });
   },
   getOrderDetailInfo(context, data) {
-    return http.get("/ords/detail/" + data).then((resp) => {
+    return http.get("/ords/info/" + data).then((resp) => {
       if (resp.data) {
         context.commit("setOrderDetailInfo", resp.data);
         return true;
@@ -210,7 +205,7 @@ export default {
     });
   },
   selectAllCommonCode(context){
-    return http.get("/common/all").then((resp) => {
+    return http.get("/common/code/list").then((resp) => {
       if (resp.data) {
         context.commit("setCommonList", resp.data);
         return true;
@@ -221,7 +216,7 @@ export default {
     });
   },
   insertPrdInfo(context, data){
-    return http.post("/prd/info",data).then((resp)=>{
+    return http.post("/prd/info/admin",data).then((resp)=>{
       if (resp.data.statusCode == "200") return true;
       if (resp.data.statusCode == "400") return false;
       return false;

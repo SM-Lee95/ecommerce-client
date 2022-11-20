@@ -276,12 +276,6 @@ export default {
       this.$store.dispatch("postBasket", this.selectOptions).then((resp) => {
         if (resp) {
           this.$dialog.message.success("장바구니에 추가하셨습니다.");
-          // this.$store.dispatch("getBasketList").then((resp) => {
-          //   if (resp)
-          //     this.$router.push("/Basket");
-          //   else
-          //     this.$dialog.message.warning("장바구니 조회에 실패했습니다.");
-          // });
         } else {
           this.$dialog.message.warning("장바구니 추가에 실패했습니다.");
         }

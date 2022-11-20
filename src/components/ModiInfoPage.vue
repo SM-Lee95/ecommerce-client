@@ -272,7 +272,6 @@ export default {
           return;
         } else {
           this.$store.dispatch("updatePass", {
-            id: this.getUserInfo.id,
             pwd: this.currentPwd,
             newPwd: this.newPwd
           }).then((resp) => {
@@ -299,8 +298,8 @@ export default {
           const userInfoDto = {
             phone: this.phone,
             email: this.email,
-            smsYn: this.smsYn ? 1 : 0,
-            emailYn: this.emailYn ? 1 : 0,
+            smsYn: this.smsYn ? 'Y' : 'N',
+            emailYn: this.emailYn ? 'Y' : 'N',
             postcode: this.postcode,
             mainAddress: this.mainAddress,
             etcAddress: this.etcAddress
@@ -311,7 +310,7 @@ export default {
             this.isModi = false;
             if (resp) {
               this.$dialog.message.success("정보 변경에 성공하셨습니다.");
-              this.$store.dispatch("getUserInfo", this.getUserInfo.id);
+              this.$store.dispatch("getMyUserInfo");
             } else {
               this.$dialog.message.warning("정보 변경에 실패하셨습니다. 다시 시도해주세요.");
             }
@@ -333,8 +332,8 @@ export default {
       this.mainAddress = this.getUserInfo.mainAddress;
       this.etcAddress = this.getUserInfo.etcAddress;
       if (!chkFlag) {
-        this.emailYn = this.getUserInfo.emailYn == 1;
-        this.smsYn = this.getUserInfo.smsYn == 1;
+        this.emailYn = this.getUserInfo.emailYn == 'Y';
+        this.smsYn = this.getUserInfo.smsYn == 'Y';
       }
     }
   },
