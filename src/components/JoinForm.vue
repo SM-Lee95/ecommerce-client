@@ -2,11 +2,7 @@
   <v-container class="white lighten-5" fluid>
     <validation-observer ref="observer" v-slot="{ invalid }">
       <form @submit.prevent="submit">
-        <validation-provider
-          v-slot="{ errors }"
-          name="name"
-          rules="required|max:15"
-        >
+        <validation-provider v-slot="{ errors }" name="name" rules="required|max:15">
           <v-text-field
             v-model="name"
             :counter="15"
@@ -15,11 +11,7 @@
             required
           ></v-text-field>
         </validation-provider>
-        <validation-provider
-          v-slot="{ errors }"
-          name="id"
-          rules="required|max:20|existId"
-        >
+        <validation-provider v-slot="{ errors }" name="id" rules="required|max:20|existId">
           <v-text-field
             v-model="id"
             :counter="20"
@@ -28,11 +20,7 @@
             required
           ></v-text-field>
         </validation-provider>
-        <validation-provider
-          v-slot="{ errors }"
-          name="pwd"
-          rules="required|max:20|min:8"
-        >
+        <validation-provider v-slot="{ errors }" name="pwd" rules="required|max:20|min:8">
           <v-text-field
             v-model="pwd"
             :counter="20"
@@ -72,11 +60,7 @@
             required
           ></v-text-field>
         </validation-provider>
-        <validation-provider
-          v-slot="{ errors }"
-          name="email"
-          rules="required|email"
-        >
+        <validation-provider v-slot="{ errors }" name="email" rules="required|email">
           <v-text-field
             v-model="email"
             :error-messages="errors"
@@ -85,41 +69,6 @@
           ></v-text-field>
         </validation-provider>
         <v-row>
-          <!--
-          <v-col cols="6">
-            <v-row  justify="start">
-            <v-chip
-              class="ma-2"
-              label
-            >
-              Profile
-            </v-chip>
-              <v-img :src="preview" max-width="290px" max-height="388px" alt="프로필 사진을 등록해주세요."></v-img>
-            </v-row>
-        </v-col>
-        <v-row>
-          <v-col cols="12">
-            <validation-provider
-              v-slot="{ errors }"
-              rules="fileSize"
-              name="Profile Input"
-            >
-              <v-file-input
-                @change="imgPreview"
-                label="Profile Input"
-                show-size
-                :error-messages="errors"
-                accept="image/png, image/jpeg, image/bmp"
-                placeholder="Pick an your picture"
-                filled
-                prepend-icon="mdi-camera"
-                v-model="profile_photo"
-              ></v-file-input>
-            </validation-provider>
-          </v-col>
-        </v-row>
-
-        -->
           <v-col cols="6">
             <v-row justify="center">
               <v-chip class="white" label> Birth Day </v-chip>
@@ -163,22 +112,14 @@
                 </v-row>
                 <v-row>
                   <v-col cols="12">
-                    <v-text-field
-                      dense
-                      label="ETC Address"
-                      v-model="etcAddress"
-                    ></v-text-field>
+                    <v-text-field dense label="ETC Address" v-model="etcAddress"></v-text-field>
                   </v-col>
                 </v-row>
               </v-col>
             </v-row>
             <v-row>
               <v-col>
-                <validation-provider
-                  v-slot="{ errors }"
-                  rules="required"
-                  name="checkbox"
-                >
+                <validation-provider v-slot="{ errors }" rules="required" name="checkbox">
                   <v-checkbox
                     v-model="emailYn"
                     :error-messages="errors"
@@ -186,11 +127,7 @@
                     type="checkbox"
                   ></v-checkbox>
                 </validation-provider>
-                <validation-provider
-                  v-slot="{ errors }"
-                  rules="required"
-                  name="checkbox"
-                >
+                <validation-provider v-slot="{ errors }" rules="required" name="checkbox">
                   <v-checkbox
                     v-model="phoneYn"
                     :error-messages="errors"
@@ -198,9 +135,7 @@
                     type="checkbox"
                   ></v-checkbox>
                 </validation-provider>
-                <v-btn class="mr-4" type="submit" :disabled="invalid">
-                  회원가입
-                </v-btn>
+                <v-btn class="mr-4" type="submit" :disabled="invalid"> 회원가입 </v-btn>
                 <v-btn @click="clear"> 초기화 </v-btn>
               </v-col>
             </v-row>
@@ -254,11 +189,11 @@ export default {
         "userInfoDto",
         new Blob([JSON.stringify(userInfoDto)], { type: "application/json" })
       );
-      this.$store.dispatch("signUp", formData).then((resp) => {
+      this.$store.dispatch("user/signUp", formData).then((resp) => {
         if (resp) {
           this.$dialog.message.success("회원가입에 성공하셨습니다.");
           this.$store
-            .dispatch("login", {
+            .dispatch("user/login", {
               id: this.id,
               pwd: this.pwd,
             })
@@ -266,18 +201,14 @@ export default {
               if (this.$route.path != "/") this.$router.push("/");
             });
         } else {
-          this.$dialog.message.error(
-            "회원가입에 실패하셨습니다. 다시 시도해주세요."
-          );
+          this.$dialog.message.error("회원가입에 실패하셨습니다. 다시 시도해주세요.");
         }
       });
     },
     imgPreview() {
-      if (this.profile_photo != null)
-        this.preview = URL.createObjectURL(this.profile_photo);
+      if (this.profile_photo != null) this.preview = URL.createObjectURL(this.profile_photo);
     },
     clear() {
-      console.log(this.birth);
       this.name = "";
       this.id = "";
       this.pwd = "";
@@ -295,5 +226,4 @@ export default {
   },
 };
 </script>
-<style scoped>
-</style>
+<style scoped></style>

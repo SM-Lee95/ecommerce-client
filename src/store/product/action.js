@@ -1,30 +1,16 @@
-import http from "../util/http-commons";
+import http from "../../util/http-commons";
 
 export default {
-  getMenuList(context) {
-    return http
-      .get("/cate/list")
-      .then((resp) => {
-        if (resp.data) {
-          context.commit("setMenuList", resp.data);
-          return true;
-        } else return false;
-      })
-      .catch((resp) => {
-        console.log("서버오류 \n " + resp);
-        return false;
-      });
-  },
   getItemList(context, data) {
     // page -> 요청 페이지 번호
     // param -> 메뉴 코드
-    if (data.param) context.commit("common/setSelectMenuCd", data.param);
+    if (data.param) context.commit("setSelectMenuCd", data.param);
     data.size = 24;
     return http
-      .get("/prd/list/" + context.getters["common/selectMenuCd"], { params: data })
+      .get("/prd/list/" + context.getters["selectMenuCd"], { params: data })
       .then((resp) => {
         if (resp.data) {
-          context.commit("product/setPagination", resp.data);
+          context.commit("setPagination", resp.data);
           return true;
         } else return false;
       })

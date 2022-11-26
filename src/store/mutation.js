@@ -17,4 +17,7 @@ export default {
   setMenuList(state, payload) {
     state.MenuList = payload;
   },
+  setDeliList(state, payload) {
+    state.DeliList = payload;
+  },
 };

@@ -8,9 +8,7 @@
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title
-              v-text="
-                this.getUserInfo.id + ' ( ' + this.getUserInfo.name + ' )'
-              "
+              v-text="this.UserInfo.id + ' ( ' + this.UserInfo.name + ' )'"
             ></v-list-item-title>
             <v-list-item-subtitle>ID (이름)</v-list-item-subtitle>
           </v-list-item-content>
@@ -20,9 +18,7 @@
             <v-icon color="gray darken-2"> mdi-phone </v-icon>
           </v-list-item-icon>
           <v-list-item-content v-show="!isModi">
-            <v-list-item-title
-              v-text="this.getUserInfo.phone"
-            ></v-list-item-title>
+            <v-list-item-title v-text="this.UserInfo.phone"></v-list-item-title>
             <v-list-item-subtitle>Mobile</v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-content v-show="isModi">
@@ -51,17 +47,11 @@
             <v-icon color="gray darken-2"> mdi-email </v-icon>
           </v-list-item-icon>
           <v-list-item-content v-show="!isModi">
-            <v-list-item-title
-              v-text="this.getUserInfo.email"
-            ></v-list-item-title>
+            <v-list-item-title v-text="this.UserInfo.email"></v-list-item-title>
             <v-list-item-subtitle>Mail</v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-content v-show="isModi">
-            <validation-provider
-              v-slot="{ errors }"
-              name="email"
-              rules="required|email"
-            >
+            <validation-provider v-slot="{ errors }" name="email" rules="required|email">
               <v-text-field
                 v-model="email"
                 :error-messages="errors"
@@ -78,15 +68,9 @@
             <v-icon color="gray darken-2"> mdi-map-marker </v-icon>
           </v-list-item-icon>
           <v-list-item-content v-show="!isModi">
-            <v-list-item-title
-              v-text="this.getUserInfo.postcode"
-            ></v-list-item-title>
-            <v-list-item-subtitle
-              v-text="this.getUserInfo.mainAddress"
-            ></v-list-item-subtitle>
-            <v-list-item-subtitle
-              v-text="this.getUserInfo.etcAddress"
-            ></v-list-item-subtitle>
+            <v-list-item-title v-text="this.UserInfo.postcode"></v-list-item-title>
+            <v-list-item-subtitle v-text="this.UserInfo.mainAddress"></v-list-item-subtitle>
+            <v-list-item-subtitle v-text="this.UserInfo.etcAddress"></v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-content v-show="isModi">
             <v-row>
@@ -115,11 +99,7 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-text-field
-                  dense
-                  label="ETC Address"
-                  v-model="etcAddress"
-                ></v-text-field>
+                <v-text-field dense label="ETC Address" v-model="etcAddress"></v-text-field>
               </v-col>
             </v-row>
           </v-list-item-content>
@@ -146,10 +126,7 @@
             <v-list-item-title>Email 수신 여부</v-list-item-title>
           </v-list-item-content>
           <v-list-item-action>
-            <v-checkbox
-              @change="transForm(true)"
-              v-model="emailYn"
-            ></v-checkbox>
+            <v-checkbox @change="transForm(true)" v-model="emailYn"></v-checkbox>
           </v-list-item-action>
         </v-list-item>
         <v-divider></v-divider>
@@ -173,11 +150,7 @@
               <v-col class="mt-1 ml-1 text-h6"> 비밀번호변경 </v-col>
               <v-col></v-col>
               <v-col class="text-right">
-                <v-btn
-                  small
-                  icon
-                  @click.stop="passModiDrawer = !passModiDrawer"
-                >
+                <v-btn small icon @click.stop="passModiDrawer = !passModiDrawer">
                   <v-icon color="gray darken-2">mdi-close-box</v-icon>
                 </v-btn>
               </v-col>
@@ -264,7 +237,7 @@ export default {
     confirmPwd: null,
   }),
   computed: {
-    ...mapGetters(["getUserInfo"]),
+    ...mapGetters("user", ["UserInfo"]),
   },
   methods: {
     savePass() {
@@ -274,7 +247,7 @@ export default {
           return;
         } else {
           this.$store
-            .dispatch("updatePass", {
+            .dispatch("user/updatePass", {
               pwd: this.currentPwd,
               newPwd: this.newPwd,
             })
@@ -317,15 +290,13 @@ export default {
               type: "application/json",
             })
           );
-          this.$store.dispatch("updateInfo", formData).then((resp) => {
+          this.$store.dispatch("user/updateInfo", formData).then((resp) => {
             this.isModi = false;
             if (resp) {
               this.$dialog.message.success("정보 변경에 성공하셨습니다.");
-              this.$store.dispatch("getMyUserInfo");
+              this.$store.dispatch("user/getMyUserInfo");
             } else {
-              this.$dialog.message.warning(
-                "정보 변경에 실패하셨습니다. 다시 시도해주세요."
-              );
+              this.$dialog.message.warning("정보 변경에 실패하셨습니다. 다시 시도해주세요.");
             }
           });
         }
@@ -339,14 +310,14 @@ export default {
       this.$daumPostCode();
     },
     setLocalData(chkFlag) {
-      this.email = this.getUserInfo.email;
-      this.phone = this.getUserInfo.phone;
-      this.postcode = this.getUserInfo.postcode;
-      this.mainAddress = this.getUserInfo.mainAddress;
-      this.etcAddress = this.getUserInfo.etcAddress;
+      this.email = this.UserInfo.email;
+      this.phone = this.UserInfo.phone;
+      this.postcode = this.UserInfo.postcode;
+      this.mainAddress = this.UserInfo.mainAddress;
+      this.etcAddress = this.UserInfo.etcAddress;
       if (!chkFlag) {
-        this.emailYn = this.getUserInfo.emailYn == "Y";
-        this.smsYn = this.getUserInfo.smsYn == "Y";
+        this.emailYn = this.UserInfo.emailYn == "Y";
+        this.smsYn = this.UserInfo.smsYn == "Y";
       }
     },
   },
@@ -355,5 +326,4 @@ export default {
   },
 };
 </script>
-<style scoped>
-</style>
+<style scoped></style>

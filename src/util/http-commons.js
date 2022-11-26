@@ -26,6 +26,7 @@ createAxios.interceptors.request.use(
 createAxios.interceptors.response.use(
   function (response) {
     try {
+      store.commit("user/tokenSetting", response.headers);
       return response;
     } catch (err) {
       console.error("[axios.interceptors.response] response : ", err.message);
@@ -34,7 +35,7 @@ createAxios.interceptors.response.use(
   async function (error) {
     try {
       if (error.response.status == 401) {
-        store.commit("login/removeToken");
+        store.commit("user/removeToken");
         return null; //다시 axios 요청
       }
     } catch (err) {

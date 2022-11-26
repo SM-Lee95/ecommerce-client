@@ -9,9 +9,7 @@
       </v-app-bar-title>
       <v-row class="text-right">
         <v-col v-show="!isLogin">
-          <v-btn value="login" small text @click.stop="drawer = !drawer">
-            로그인
-          </v-btn>
+          <v-btn value="login" small text @click.stop="drawer = !drawer"> 로그인 </v-btn>
           <v-btn value="Join" small text @click="toJoinForm"> 회원가입 </v-btn>
         </v-col>
         <v-col v-if="isLogin">
@@ -113,36 +111,32 @@ export default {
     },
     goLogin() {
       this.$store
-        .dispatch("login", {
+        .dispatch("user/login", {
           id: this.username,
           pwd: this.password,
         })
         .then((resp) => {
           if (resp) {
             this.drawer = !this.drawer;
-            this.$store.dispatch("getItemList", { page: 0 });
+            this.$store.dispatch("product/getItemList", { page: 0 });
             if (this.$route.path != "/") this.$router.push("/");
           } else {
-            this.$dialog.message.error(
-              "입력하신 로그인 정보가 일치하지 않습니다."
-            );
+            this.$dialog.message.error("입력하신 로그인 정보가 일치하지 않습니다.");
           }
           this.username = "";
           this.password = "";
         });
     },
     logout() {
-      this.$store.commit("login/removeToken");
-      this.$store.commit("setUserInfo", null);
-      this.$store.dispatch("getItemList", { page: 0 });
-      if (this.$route.path != "/") this.$router.push("/");
+      this.$store.dispatch("product/getItemList", { page: 0 });
+      this.$store.commit("user/removeToken");
     },
     goJJim() {
-      if (!this.getUserInfo) {
+      if (!this.UserInfo) {
         this.$dialog.message.warning("로그인 후에 시도해주세요.");
         return;
       }
-      this.$store.dispatch("getJJimList").then((resp) => {
+      this.$store.dispatch("product/getJJimList").then((resp) => {
         if (resp) {
           if (this.$route.path != "/JJim") {
             this.$router.push("/JJim");
@@ -153,11 +147,11 @@ export default {
       });
     },
     goBasket() {
-      if (!this.getUserInfo) {
+      if (!this.UserInfo) {
         this.$dialog.message.warning("로그인 후에 시도해주세요.");
         return;
       }
-      this.$store.dispatch("getBasketList").then((resp) => {
+      this.$store.dispatch("product/getBasketList").then((resp) => {
         if (resp) {
           if (this.$route.path != "/Basket") this.$router.push("/Basket");
         } else {
@@ -166,11 +160,11 @@ export default {
       });
     },
     toMyPage() {
-      if (!this.getUserInfo) {
+      if (!this.UserInfo) {
         this.$dialog.message.warning("로그인 후에 시도해주세요.");
         return;
       }
-      this.$store.dispatch("getMyPageInfo").then((resp) => {
+      this.$store.dispatch("order/getMyPageInfo").then((resp) => {
         if (resp) {
           if (this.$route.path != "/MyPage") this.$router.push("/MyPage");
         } else this.$dialog.message.error("주문 정보 확인에 실패했습니다.");
@@ -183,9 +177,9 @@ export default {
   },
   computed: {
     isLogin: function () {
-      return this.$store.getters.getToken == "" ? false : true;
+      return this.UserInfo ? true : false;
     },
-    ...mapGetters(["getUserInfo", "Role"]),
+    ...mapGetters("user", ["UserInfo", "Role"]),
   },
   watch: {
     group() {
@@ -195,5 +189,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

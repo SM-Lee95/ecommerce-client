@@ -1,12 +1,13 @@
-import http from "../util/http-commons";
+import http from "../../util/http-commons";
 
 export default {
   login(context, data) {
     return http
       .post("/login", data)
       .then((resp) => {
+        if (!resp) return false;
         context.commit("tokenSetting", resp.headers);
-        return context.dispatch("product/getMyUserInfo").then(() => {
+        return context.dispatch("getMyUserInfo").then(() => {
           return true;
         });
       })
@@ -43,8 +44,10 @@ export default {
     return http
       .get("/user/myInfo")
       .then((resp) => {
-        if (resp.data) context.commit("setUserInfo", resp.data);
-        else return false;
+        if (resp.data) {
+          context.commit("setUserInfo", resp.data);
+          return true;
+        } else return false;
       })
       .catch((resp) => {
         console.log("서버오류 \n " + resp);

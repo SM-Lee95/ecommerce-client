@@ -11,20 +11,11 @@ export default {
   OrderHisSummary(state) {
     return state.OrderHisSummary;
   },
-  OrderProcList(state) {
-    return state.OrderProcList;
-  },
   OrderDetailInfo(state) {
     return state.OrderDetailInfo;
   },
-  ProcList(state) {
-    return state.ProcList;
-  },
   OrderMngList(state) {
     return state.OrderMngList;
-  },
-  DeliList(state) {
-    return state.DeliList;
   },
   OrderEditObjList(state) {
     return state.OrderEditObjList;

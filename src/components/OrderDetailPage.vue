@@ -20,12 +20,7 @@
       no-data-text="주문 건이 존재하지 않습니다."
     >
       <template v-slot:item.thumbnail="{ item }">
-        <v-img
-          :src="item.thumbnail"
-          max-height="100%"
-          min-height="100%"
-          max-width="100"
-        ></v-img>
+        <v-img :src="item.thumbnail" max-height="100%" min-height="100%" max-width="100"></v-img>
       </template>
       <template v-slot:item.prdInfo="{ item }">
         <v-row no-gutters>
@@ -35,15 +30,11 @@
         </v-row>
         <v-row no-gutters>
           <v-col class="text-left">
-            <v-btn text @click="getDetailInfo(item.prdCd)">{{
-              item.name
-            }}</v-btn>
+            <v-btn text @click="getDetailInfo(item.prdCd)">{{ item.name }}</v-btn>
           </v-col>
         </v-row>
         <v-row no-gutters>
-          <v-col class="text-left">
-            옵션 : {{ item.color + " / " + item.size }}
-          </v-col>
+          <v-col class="text-left"> 옵션 : {{ item.color + " / " + item.size }} </v-col>
         </v-row>
       </template>
       <template v-slot:item.originPri="{ item }">
@@ -169,17 +160,15 @@ export default {
     ],
   }),
   computed: {
-    ...mapGetters(["OrderDetailInfo", "OrderProcList"]),
+    ...mapGetters("order", ["OrderDetailInfo"]),
+    ...mapGetters("common", ["OrderProcList"]),
   },
   methods: {
     getDetailInfo(cd) {
-      this.$store.dispatch("getDetailInfo", cd).then((resp) => {
+      this.$store.dispatch("product/getDetailInfo", cd).then((resp) => {
         if (resp) {
           if (this.$route.path != "/Detail") this.$router.push("/Detail");
-        } else
-          this.$dialog.message.error(
-            "상품 정보를 조회하는 중에 오류가 발생했습니다."
-          );
+        } else this.$dialog.message.error("상품 정보를 조회하는 중에 오류가 발생했습니다.");
       });
     },
     getProcAlert() {
@@ -195,5 +184,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

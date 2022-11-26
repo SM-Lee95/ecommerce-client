@@ -26,12 +26,8 @@
                 </template>
                 <v-date-picker v-model="date" no-title scrollable range>
                   <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="menu = false">
-                    Cancel
-                  </v-btn>
-                  <v-btn text color="primary" @click="$refs.menu.save(date)">
-                    OK
-                  </v-btn>
+                  <v-btn text color="primary" @click="menu = false"> Cancel </v-btn>
+                  <v-btn text color="primary" @click="$refs.menu.save(date)"> OK </v-btn>
                 </v-date-picker>
               </v-menu>
             </v-col>
@@ -80,9 +76,7 @@
           no-data-text="주문 건이 존재하지 않습니다."
         >
           <template v-slot:item.date="{ item }">
-            {{
-              item.regDati[0] + "/" + item.regDati[1] + "/" + item.regDati[2]
-            }}
+            {{ item.regDati[0] + "/" + item.regDati[1] + "/" + item.regDati[2] }}
           </template>
           <template v-slot:item.cd="{ item }">
             {{ item.cd }}
@@ -147,9 +141,7 @@ export default {
         if (resp) {
           this.$router.push("/OrderDetailPage");
         } else {
-          this.$dialog.message.error(
-            "주문 상세 정보를 가져오는데 실패했습니다."
-          );
+          this.$dialog.message.error("주문 상세 정보를 가져오는데 실패했습니다.");
         }
       });
     },
@@ -178,20 +170,15 @@ export default {
     modiDialog: false,
     editObjList: [],
     date: [
-      new Date(
-        Date.now() -
-          new Date().getTimezoneOffset() * 60000 -
-          60000 * 60 * 24 * 30
-      )
+      new Date(Date.now() - new Date().getTimezoneOffset() * 60000 - 60000 * 60 * 24 * 30)
         .toISOString()
         .substr(0, 10),
-      new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-        .toISOString()
-        .substr(0, 10),
+      new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10),
     ],
   }),
   computed: {
-    ...mapGetters(["ProcList", "OrderMngList", "OrderProcList", "DeliList"]),
+    ...mapGetters("common", ["ProcList", "OrderProcList", "DeliList"]),
+    ...mapGetters("order", ["OrderMngList"]),
     dateRangeText() {
       return this.date.join(" ~ ");
     },
@@ -199,5 +186,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -49,25 +49,18 @@
               가격 :
               {{
                 String(
-                  Number(DetailInfo.salesPri) *
-                    ((100 - Number(DetailInfo.discountRate)) / 100)
+                  Number(DetailInfo.salesPri) * ((100 - Number(DetailInfo.discountRate)) / 100)
                 ).comma()
               }}
               원
             </div>
-            <div align="right">
-              배송비 : {{ DetailInfo.deliPri.comma() }} 원
-            </div>
+            <div align="right">배송비 : {{ DetailInfo.deliPri.comma() }} 원</div>
             <div align="right">제조사 - {{ DetailInfo.corpNm }}</div>
           </v-card-text>
           <v-divider class="mx-4"></v-divider>
           <v-card-text>
             Option
-            <v-chip-group
-              v-model="option"
-              active-class="deep-purple accent-4 white--text"
-              column
-            >
+            <v-chip-group v-model="option" active-class="deep-purple accent-4 white--text" column>
               <v-chip v-for="(tag, i) in DetailInfo.detail" :key="i"
                 >{{ tag.size.name }}-{{ tag.color.name }}
               </v-chip>
@@ -77,9 +70,7 @@
           <v-card-actions>
             <v-row no-gutters>
               <v-col class="text-right mr-10">
-                <v-btn text color="deep-purple lighten-2" @click="addOption">
-                  Add
-                </v-btn>
+                <v-btn text color="deep-purple lighten-2" @click="addOption"> Add </v-btn>
               </v-col>
             </v-row>
           </v-card-actions>
@@ -92,11 +83,7 @@
                     {{ item.size + "-" + item.color }}
                   </v-col>
                   <v-col class="text-right ml-5">
-                    <v-select
-                      v-model="item.cnt"
-                      :items="items"
-                      @change="calc"
-                    ></v-select>
+                    <v-select v-model="item.cnt" :items="items" @change="calc"></v-select>
                   </v-col>
                   <v-col align-self="center" class="text-right">
                     <v-btn x-small text @click="deleteOption(i)">
@@ -111,8 +98,7 @@
               <v-row dense no-gutters>
                 <v-col class="text-left"><b>총 상품 금액</b></v-col>
                 <v-col class="text-right">
-                  총 수량 {{ this.cnt }}개 |
-                  {{ String(this.totPrice).comma() }}원
+                  총 수량 {{ this.cnt }}개 | {{ String(this.totPrice).comma() }}원
                 </v-col>
               </v-row>
             </v-list-item>
@@ -120,15 +106,7 @@
           <v-card-actions>
             <v-row no-gutters>
               <v-col class="text-right">
-                <v-btn
-                  text
-                  outlined
-                  color="lighten-2"
-                  @click="postBasket"
-                  block
-                >
-                  장바구니
-                </v-btn>
+                <v-btn text outlined color="lighten-2" @click="postBasket" block> 장바구니 </v-btn>
               </v-col>
             </v-row>
           </v-card-actions>
@@ -143,9 +121,7 @@
               <v-badge color="pink" dot> 상세정보 </v-badge>
             </v-tab>
             <v-tab>
-              <v-badge color="deep-purple accent-4" icon="mdi-vuetify">
-                반품/교환정보
-              </v-badge>
+              <v-badge color="deep-purple accent-4" icon="mdi-vuetify"> 반품/교환정보 </v-badge>
             </v-tab>
           </v-tabs>
         </v-toolbar>
@@ -183,18 +159,17 @@ export default {
       cnt: 0,
       totPrice: 0,
       selectOptions: [],
-      items: [
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-      ],
+      items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
       tab: null,
     };
   },
   computed: {
-    ...mapGetters(["DetailInfo", "getUserInfo"]),
+    ...mapGetters("product", ["DetailInfo"]),
+    ...mapGetters("user", ["UserInfo"]),
   },
   methods: {
     like(cd, love) {
-      if (!this.getUserInfo) {
+      if (!this.UserInfo) {
         this.$dialog.message.warning("로그인 후에 시도해주세요.");
         return;
       }
@@ -208,13 +183,11 @@ export default {
       });
     },
     getList(param) {
-      this.$store
-        .dispatch("getItemList", { param: param, page: 0 })
-        .then((resp) => {
-          if (resp) {
-            if (this.$route.path != "/") this.$router.push("/");
-          } else this.$dialog.message.error("상품 목록 조회에 실패했습니다.");
-        });
+      this.$store.dispatch("product/getItemList", { param: param, page: 0 }).then((resp) => {
+        if (resp) {
+          if (this.$route.path != "/") this.$router.push("/");
+        } else this.$dialog.message.error("상품 목록 조회에 실패했습니다.");
+      });
     },
     addOption() {
       if (this.option == null) {
@@ -224,16 +197,11 @@ export default {
       var option = new Object();
       option.size = this.DetailInfo.detail[this.option].size.name;
       option.color = this.DetailInfo.detail[this.option].color.name;
-      option.price =
-        (this.DetailInfo.salesPri * (100 - this.DetailInfo.discountRate)) / 100;
+      option.price = (this.DetailInfo.salesPri * (100 - this.DetailInfo.discountRate)) / 100;
       option.basketKey = this.DetailInfo.detail[this.option].productKey;
       option.cnt = 1;
-      if (
-        this.selectOptions.find((value) => value.basketKey == option.basketKey)
-      ) {
-        this.$dialog.message.warning(
-          "선택된 옵션과 같은 추가된 옵션이 존재합니다."
-        );
+      if (this.selectOptions.find((value) => value.basketKey == option.basketKey)) {
+        this.$dialog.message.warning("선택된 옵션과 같은 추가된 옵션이 존재합니다.");
         return;
       }
       this.selectOptions.push(option);
@@ -249,7 +217,7 @@ export default {
       });
     },
     postBasket() {
-      if (!this.getUserInfo) {
+      if (!this.UserInfo) {
         this.$dialog.message.warning("로그인 후에 시도해주세요.");
         return;
       }
@@ -257,7 +225,7 @@ export default {
         this.$dialog.message.warning("옵션을 추가하고 시도해주세요.");
         return;
       }
-      this.$store.dispatch("postBasket", this.selectOptions).then((resp) => {
+      this.$store.dispatch("product/postBasket", this.selectOptions).then((resp) => {
         if (resp) {
           this.$dialog.message.success("장바구니에 추가하셨습니다.");
         } else {
@@ -282,5 +250,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

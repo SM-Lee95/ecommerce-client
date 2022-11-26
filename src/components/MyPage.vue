@@ -1,12 +1,7 @@
 <template>
   <v-container fluid>
     <!-- 개인정보 수정 다이얼로그 -->
-    <v-dialog
-      v-model="userInfoDrawer"
-      max-width="600px"
-      height="100%"
-      scrollable
-    >
+    <v-dialog v-model="userInfoDrawer" max-width="600px" height="100%" scrollable>
       <v-row class="white">
         <v-col>
           <v-row class="mt-1" justify="space-between">
@@ -34,14 +29,12 @@
       <v-col cols="2"></v-col>
       <v-col align-self="center" cols="7">
         <v-row>
-          <v-col cols="3" class="text-h5">{{ getUserInfo.name }}</v-col>
-          <v-col cols="6" class="text-h6"> ({{ getUserInfo.id }}) </v-col>
+          <v-col cols="3" class="text-h5">{{ UserInfo.name }}</v-col>
+          <v-col cols="6" class="text-h6"> ({{ UserInfo.id }}) </v-col>
         </v-row>
       </v-col>
       <v-col cols="3">
-        <v-btn class="mx-2" text @click.stop="setUserInfoDrawer">
-          회원정보 확인/변경
-        </v-btn>
+        <v-btn class="mx-2" text @click.stop="setUserInfoDrawer"> 회원정보 확인/변경 </v-btn>
       </v-col>
     </v-row>
     <!--요약 화면-->
@@ -59,9 +52,7 @@
     </v-row>
     <v-divider></v-divider>
     <v-row class="mt-4">
-      <v-col>
-        주문목록 / 배송조회 내역 총 {{ this.OrderHisList.length }} 건
-      </v-col>
+      <v-col> 주문목록 / 배송조회 내역 총 {{ this.OrderHisList.length }} 건 </v-col>
     </v-row>
     <v-data-table
       :headers="header"
@@ -111,12 +102,9 @@ export default {
     ],
   }),
   computed: {
-    ...mapGetters([
-      "getUserInfo",
-      "OrderHisList",
-      "OrderHisSummary",
-      "OrderProcList",
-    ]),
+    ...mapGetters("order", ["OrderHisList", "OrderHisSummary"]),
+    ...mapGetters("user", ["UserInfo"]),
+    ...mapGetters("common", ["OrderProcList"]),
   },
   methods: {
     setUserInfoDrawer() {
@@ -125,14 +113,10 @@ export default {
     getHisList(flag) {
       var code = "";
       for (var codeVal in this.OrderProcList) {
-        if (flag.includes(this.OrderProcList[codeVal]))
-          code = code.concat(codeVal + ",");
+        if (flag.includes(this.OrderProcList[codeVal])) code = code.concat(codeVal + ",");
       }
-      this.$store.dispatch("getMyPageInfo", code).then((resp) => {
-        if (!resp)
-          this.$dialog.message.error(
-            flag + " 상태의 주문 정보 확인에 실패했습니다."
-          );
+      this.$store.dispatch("order/getMyPageInfo", code).then((resp) => {
+        if (!resp) this.$dialog.message.error(flag + " 상태의 주문 정보 확인에 실패했습니다.");
       });
     },
     getOrderDetail(ordsCd) {
@@ -140,9 +124,7 @@ export default {
         if (resp) {
           this.$router.push("/OrderDetailPage");
         } else {
-          this.$dialog.message.error(
-            "주문 상세 정보를 가져오는데 실패했습니다."
-          );
+          this.$dialog.message.error("주문 상세 정보를 가져오는데 실패했습니다.");
         }
       });
     },
@@ -150,5 +132,4 @@ export default {
   mounted() {},
 };
 </script>
-<style scoped>
-</style>
+<style scoped></style>

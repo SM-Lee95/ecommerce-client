@@ -42,9 +42,7 @@
             </v-row>
             <v-row no-gutters>
               <v-col class="text-left">
-                <v-btn text @click="getDetailInfo(item.prdCd)">{{
-                  item.name
-                }}</v-btn>
+                <v-btn text @click="getDetailInfo(item.prdCd)">{{ item.name }}</v-btn>
               </v-col>
             </v-row>
             <v-row no-gutters>
@@ -64,24 +62,16 @@
             {{ item.applyPri.comma() + " 원" }}
           </template>
           <template v-slot:item.deliCnt="{ item }">
-            <v-text-field
-              v-model="item.deliCnt"
-              type="number"
-              single-line
-            ></v-text-field>
+            <v-text-field v-model="item.deliCnt" type="number" single-line></v-text-field>
           </template>
           <template v-slot:item.subSumPri="{ item }">
-            {{
-              String(Number(item.applyPri) * Number(item.cnt)).comma() + " 원"
-            }}
+            {{ String(Number(item.applyPri) * Number(item.cnt)).comma() + " 원" }}
           </template>
           <template v-slot:item.proc="{ item }">
             {{ OrderProcList[item.procTy] }}
           </template>
           <template v-slot:item.traCd="{ item }">
-            <v-btn text @click="getDeliInfo(item.traCd)">{{
-              item.traCd
-            }}</v-btn>
+            <v-btn text @click="getDeliInfo(item.traCd)">{{ item.traCd }}</v-btn>
           </template>
         </v-data-table>
       </v-card-text>
@@ -115,8 +105,7 @@ export default {
         .confirm({
           title: "주문 상태 수정",
           text:
-            this.OrderProcList[this.procTy] +
-            " 로 해당 주문의 모든 품목 주문 상태가 수정됩니다.",
+            this.OrderProcList[this.procTy] + " 로 해당 주문의 모든 품목 주문 상태가 수정됩니다.",
           showClose: false,
         })
         .then((resp) => {
@@ -136,9 +125,7 @@ export default {
       this.$dialog
         .confirm({
           title: "개별 주문 상태 수정",
-          text:
-            this.OrderProcList[this.procTy] +
-            " 상태로 선택된 품목의 주문 상태가 수정됩니다.",
+          text: this.OrderProcList[this.procTy] + " 상태로 선택된 품목의 주문 상태가 수정됩니다.",
           showClose: false,
         })
         .then((resp) => {
@@ -162,14 +149,10 @@ export default {
       }
       let isErr = this.selected.filter((vo) => {
         if (!vo.deliCnt || isNaN(vo.deliCnt)) {
-          this.$dialog.message.error(
-            "선택된 주문의 배송수량을 숫자로 전부 입력해주세요."
-          );
+          this.$dialog.message.error("선택된 주문의 배송수량을 숫자로 전부 입력해주세요.");
           return true;
         } else if (vo.cnt < vo.deliCnt) {
-          this.$dialog.message.error(
-            "선택된 주문 수량보다 크지않은 배송수량을 입력해주세요."
-          );
+          this.$dialog.message.error("선택된 주문 수량보다 크지않은 배송수량을 입력해주세요.");
           return true;
         }
         return false;
@@ -204,25 +187,20 @@ export default {
         });
     },
     getDeliInfo(traCd) {
-      window.open(
-        "http://nplus.doortodoor.co.kr/web/detail.jsp?slipno=" + traCd,
-        ""
-      );
+      window.open("http://nplus.doortodoor.co.kr/web/detail.jsp?slipno=" + traCd, "");
     },
     getDetailInfo(cd) {
-      this.$store.dispatch("getDetailInfo", cd).then((resp) => {
+      this.$store.dispatch("product/getDetailInfo", cd).then((resp) => {
         if (resp) {
           if (this.$route.path != "/Detail") this.$router.push("/Detail");
-        } else
-          this.$dialog.message.error(
-            "상품 정보를 조회하는 중에 오류가 발생했습니다."
-          );
+        } else this.$dialog.message.error("상품 정보를 조회하는 중에 오류가 발생했습니다.");
       });
     },
     updateDeliCnt() {},
   },
   computed: {
-    ...mapGetters(["ProcList", "OrderProcList", "OrderEditObjList"]),
+    ...mapGetters("order", ["OrderEditObjList"]),
+    ...mapGetters("common", ["ProcList", "OrderProcList"]),
     dateRangeText() {
       return this.date.join(" ~ ");
     },
@@ -230,5 +208,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

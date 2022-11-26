@@ -2,12 +2,7 @@
   <v-container fluid style="min-height: 950px">
     <v-row dense>
       <v-col v-for="(product, index) in JJimList" :key="product.cd" :cols="2">
-        <v-card
-          elevation="0"
-          flat
-          height="100%"
-          @click="getDetailInfo(product.cd)"
-        >
+        <v-card elevation="0" flat height="100%" @click="getDetailInfo(product.cd)">
           <v-img
             :src="product.thumbnail"
             class="white--text align-end"
@@ -36,21 +31,17 @@
             <v-row>
               <v-col>
                 <v-row class="text-caption" no-gutters>
-                  <v-col class="text-left">{{
-                    product.discountRate + " %"
-                  }}</v-col>
+                  <v-col class="text-left">{{ product.discountRate + " %" }}</v-col>
                 </v-row>
                 <v-row class="text-caption" no-gutters>
-                  <v-col
-                    class="text-right text-decoration-line-through text-caption"
-                    >{{ product.salesPri.comma() + " 원" }}</v-col
-                  >
+                  <v-col class="text-right text-decoration-line-through text-caption">{{
+                    product.salesPri.comma() + " 원"
+                  }}</v-col>
                 </v-row>
                 <v-row class="text-caption" no-gutters>
                   <v-col class="text-right">{{
                     String(
-                      Number(product.salesPri) *
-                        ((100 - Number(product.discountRate)) / 100)
+                      Number(product.salesPri) * ((100 - Number(product.discountRate)) / 100)
                     ).comma() + " 원"
                   }}</v-col>
                 </v-row>
@@ -73,21 +64,19 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["JJimList", "getUserInfo"]),
+    ...mapGetters("product", ["JJimList"]),
+    ...mapGetters("user", ["UserInfo"]),
   },
   methods: {
     getDetailInfo(cd) {
-      this.$store.dispatch("getDetailInfo", cd).then((resp) => {
+      this.$store.dispatch("product/getDetailInfo", cd).then((resp) => {
         if (resp) {
           if (this.$route.path != "/Detail") this.$router.push("/Detail");
-        } else
-          this.$dialog.message.error(
-            "상품 정보를 조회하는 중에 오류가 발생했습니다."
-          );
+        } else this.$dialog.message.error("상품 정보를 조회하는 중에 오류가 발생했습니다.");
       });
     },
     like(index, cd, love) {
-      if (!this.getUserInfo) {
+      if (!this.UserInfo) {
         this.$dialog.message.warning("로그인 후에 시도해주세요.");
         return;
       }
@@ -104,5 +93,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

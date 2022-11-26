@@ -20,7 +20,11 @@ export default {
       .get("/common/code/list")
       .then((resp) => {
         if (resp.data) {
-          context.commit("setCommonList", resp.data);
+          context.commit("setSizeList", resp.data.sizeList);
+          context.commit("setColorList", resp.data.colorList);
+          context.commit("setCateList", resp.data.cateList);
+          context.commit("setProcList", resp.data.procList);
+          context.commit("setDeliList", resp.data.deliList);
           return true;
         }
         return false;

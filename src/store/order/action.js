@@ -1,6 +1,26 @@
-import http from "../util/http-commons";
+import http from "../../util/http-commons";
 
 export default {
+  getMyPageInfo(context, data) {
+    return http
+      .get("/ords/list", {
+        params: {
+          procTy: data,
+        },
+      })
+      .then((resp) => {
+        if (resp.data) {
+          context.commit("setOrderHisList", resp.data);
+          if (!data) context.commit("setOrderHisSummary", resp.data);
+          return true;
+        }
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
   orderComplete(context, data) {
     return http
       .post("/ords/items", data)
