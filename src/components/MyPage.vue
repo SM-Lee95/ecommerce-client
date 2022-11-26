@@ -10,16 +10,10 @@
       <v-row class="white">
         <v-col>
           <v-row class="mt-1" justify="space-between">
-            <v-col class="ml-2 mt-1 text-h6">
-              개인정보수정
-            </v-col>
+            <v-col class="ml-2 mt-1 text-h6"> 개인정보수정 </v-col>
             <v-col></v-col>
             <v-col class="text-right">
-              <v-btn
-                icon
-                @click.stop="setUserInfoDrawer"
-                right
-              >
+              <v-btn icon @click.stop="setUserInfoDrawer" right>
                 <v-icon>mdi-close-box</v-icon>
               </v-btn>
             </v-col>
@@ -34,26 +28,18 @@
       </v-row>
     </v-dialog>
     <v-row>
-      <v-col class="text-h4">
-        MyPage
-      </v-col>
+      <v-col class="text-h4"> MyPage </v-col>
     </v-row>
     <v-row>
       <v-col cols="2"></v-col>
       <v-col align-self="center" cols="7">
         <v-row>
           <v-col cols="3" class="text-h5">{{ getUserInfo.name }}</v-col>
-          <v-col cols="6" class="text-h6">
-            ({{ getUserInfo.id }})
-          </v-col>
+          <v-col cols="6" class="text-h6"> ({{ getUserInfo.id }}) </v-col>
         </v-row>
       </v-col>
       <v-col cols="3">
-        <v-btn
-          class="mx-2"
-          text
-          @click.stop="setUserInfoDrawer"
-        >
+        <v-btn class="mx-2" text @click.stop="setUserInfoDrawer">
           회원정보 확인/변경
         </v-btn>
       </v-col>
@@ -88,18 +74,18 @@
       <template v-slot:item.date="{ item }">
         {{ item.regDati[0] + "/" + item.regDati[1] + "/" + item.regDati[2] }}
       </template>
-      <template v-slot:item.cd="{item}">
+      <template v-slot:item.cd="{ item }">
         {{ item.cd }}
       </template>
-      <template v-slot:item.info="{item}">
+      <template v-slot:item.info="{ item }">
         <v-btn text @click="getOrderDetail(item.cd)">
           {{ item.ordsDoc }}
         </v-btn>
       </template>
-      <template v-slot:item.pri="{item}">
+      <template v-slot:item.pri="{ item }">
         {{ item.totPri.comma() + " 원" }}
       </template>
-      <template v-slot:item.proc="{item}">
+      <template v-slot:item.proc="{ item }">
         {{ OrderProcList[item.procTy] }}
       </template>
     </v-data-table>
@@ -112,7 +98,7 @@ import modiInfoPage from "../components/ModiInfoPage.vue";
 
 export default {
   components: {
-    modiInfoPage
+    modiInfoPage,
   },
   data: () => ({
     userInfoDrawer: false,
@@ -121,11 +107,16 @@ export default {
       { text: "주문번호", value: "cd", align: "center" },
       { text: "주문정보", value: "info", align: "center" },
       { text: "결제금액", value: "pri", align: "center" },
-      { text: "주문상태", value: "proc", align: "center" }
-    ]
+      { text: "주문상태", value: "proc", align: "center" },
+    ],
   }),
   computed: {
-    ...mapGetters(["getUserInfo", "OrderHisList", "OrderHisSummary", "OrderProcList"])
+    ...mapGetters([
+      "getUserInfo",
+      "OrderHisList",
+      "OrderHisSummary",
+      "OrderProcList",
+    ]),
   },
   methods: {
     setUserInfoDrawer() {
@@ -138,26 +129,26 @@ export default {
           code = code.concat(codeVal + ",");
       }
       this.$store.dispatch("getMyPageInfo", code).then((resp) => {
-          if (!resp)
-            this.$dialog.message.error(flag + " 상태의 주문 정보 확인에 실패했습니다.");
-        }
-      );
+        if (!resp)
+          this.$dialog.message.error(
+            flag + " 상태의 주문 정보 확인에 실패했습니다."
+          );
+      });
     },
     getOrderDetail(ordsCd) {
       this.$store.dispatch("getOrderDetailInfo", ordsCd).then((resp) => {
         if (resp) {
           this.$router.push("/OrderDetailPage");
         } else {
-          this.$dialog.message.error("주문 상세 정보를 가져오는데 실패했습니다.");
+          this.$dialog.message.error(
+            "주문 상세 정보를 가져오는데 실패했습니다."
+          );
         }
       });
-    }
+    },
   },
-  mounted() {
-
-  }
+  mounted() {},
 };
 </script>
 <style scoped>
-
 </style>

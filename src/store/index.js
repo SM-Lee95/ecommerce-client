@@ -1,17 +1,14 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
-import state from "./state.js";
-import mutations from "./mutation.js";
-import actions from "./action.js";
-import getters from "./getter.js";
+import user from "./module/user.js";
+import product from "./module/product.js";
+import order from "./module/order.js";
+import common from "./module/common.js";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  plugins: [createPersistedState()],
-  state,
-  getters,
-  mutations,
-  actions
+  modules: { user: user, product: product, order: order, common: common },
+  plugins: [createPersistedState(user)],
 });

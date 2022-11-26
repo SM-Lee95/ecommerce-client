@@ -1,30 +1,25 @@
 <template>
   <v-container fluid>
-    <validation-observer
-      ref="observer"
-      v-slot="{ invalid }"
-    >
-    <v-row>
-      <v-col class="text-left text-h5">
-        상품 등록
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <validation-provider
-          v-slot="{ errors }"
-          name="카테고리"
-          rules="required"
-        >
-        <v-select
-          :items="CateList"
-          item-text="name"
-          item-value="cd"
-          label="카테고리"
-          v-model="cateCd"
-          :error-messages="errors"
-        ></v-select>
-        </validation-provider>
+    <validation-observer ref="observer" v-slot="{ invalid }">
+      <v-row>
+        <v-col class="text-left text-h5"> 상품 등록 </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <validation-provider
+            v-slot="{ errors }"
+            name="카테고리"
+            rules="required"
+          >
+            <v-select
+              :items="CateList"
+              item-text="name"
+              item-value="cd"
+              label="카테고리"
+              v-model="cateCd"
+              :error-messages="errors"
+            ></v-select>
+          </validation-provider>
           <validation-provider
             v-slot="{ errors }"
             name="상품명"
@@ -115,40 +110,36 @@
               required
             ></v-text-field>
           </validation-provider>
-        <validation-provider
-          v-slot="{ errors }"
-          name="색상"
-          rules="required"
-        >
-          <v-select
-            :items="ColorList"
-            item-text="name"
-            item-value="commonKey.commCd"
-            v-model="colorCdList"
-            label="색상"
-            chips
-            multiple
-            :error-messages="errors"
-          ></v-select>
-        </validation-provider>
+          <validation-provider v-slot="{ errors }" name="색상" rules="required">
+            <v-select
+              :items="ColorList"
+              item-text="name"
+              item-value="commonKey.commCd"
+              v-model="colorCdList"
+              label="색상"
+              chips
+              multiple
+              :error-messages="errors"
+            ></v-select>
+          </validation-provider>
           <validation-provider
             v-slot="{ errors }"
             name="사이즈"
             rules="required"
           >
-          <v-select
-            :items="SizeList"
-            item-text="name"
-            item-value="commonKey.commCd"
-            v-model="sizeCdList"
-            chips
-            multiple
-            label="사이즈"
-            :error-messages="errors"
-          ></v-select>
+            <v-select
+              :items="SizeList"
+              item-text="name"
+              item-value="commonKey.commCd"
+              v-model="sizeCdList"
+              chips
+              multiple
+              label="사이즈"
+              :error-messages="errors"
+            ></v-select>
           </validation-provider>
-      </v-col>
-    </v-row>
+        </v-col>
+      </v-row>
       <v-row>
         <v-col cols="6">
           <validation-provider
@@ -173,35 +164,30 @@
           <v-img :src="previewImg"></v-img>
         </v-col>
       </v-row>
-    <v-row>
-      <v-col>
-        <CKEditor4></CKEditor4>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-btn
-          :disabled="invalid||modiEditor"
-          @click="insertPrd"
-        >
-          등록
-        </v-btn>
-        <v-btn @click="clear(invalid)">
-          초기화
-        </v-btn>
-    </v-col>
-    </v-row>
+      <v-row>
+        <v-col>
+          <CKEditor4></CKEditor4>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-btn :disabled="invalid || modiEditor" @click="insertPrd">
+            등록
+          </v-btn>
+          <v-btn @click="clear(invalid)"> 초기화 </v-btn>
+        </v-col>
+      </v-row>
     </validation-observer>
   </v-container>
 </template>
 
 <script>
-import CKEditor4 from "./CKEditor4"
-import {mapGetters} from "vuex";
+import CKEditor4 from "./CKEditor4";
+import { mapGetters } from "vuex";
 export default {
   name: "CreatePrdPage",
-  components:{
-    CKEditor4
+  components: {
+    CKEditor4,
   },
   data: () => ({
     name: "",
@@ -220,7 +206,7 @@ export default {
   }),
   methods: {
     insertPrd() {
-      if(this.cateCd == 1){
+      if (this.cateCd == 1) {
         this.$dialog.message.warning("카테고리를 전체로 선택할 수 없습니다.");
         return;
       }
@@ -238,60 +224,62 @@ export default {
       prdObj.sizeCdList = this.sizeCdList;
       prdObj.description = this.EditorHTML;
       formData.append("thumbnailImg", this.thumbnailImg);
-      formData.append("prdRegiInfo", new Blob([JSON.stringify(prdObj)], { type: "application/json" }));
+      formData.append(
+        "prdRegiInfo",
+        new Blob([JSON.stringify(prdObj)], { type: "application/json" })
+      );
       this.$store.dispatch("insertPrdInfo", formData).then((resp) => {
         if (resp) {
           this.$dialog.message.success("상품 등록에 성공하셨습니다.");
           this.clear();
         } else {
-          this.$dialog.message.error("상품 등록에 실패하셨습니다. 다시 시도해주세요.");
+          this.$dialog.message.error(
+            "상품 등록에 실패하셨습니다. 다시 시도해주세요."
+          );
         }
       });
     },
     clear(invalid) {
-      if(invalid){
-
+      if (invalid) {
         console.log(invalid);
         return;
-      }else{
+      } else {
         console.log(invalid);
-        if(!invalid)
-          return;
+        if (!invalid) return;
       }
-        this.name= "";
-        this.corpNm= "";
-        this.buyPri= "";
-        this.salesPri= "";
-        this.deliPri= "2500";
-        this.discountRate= "0";
-        this.stockCnt= "1";
-        this.thumbnailImg= null;
-        this.previewImg= null;
-        this.cateCd= null;
-        this.colorCdList= null;
-        this.sizeCdList= null;
-        this.$store.commit("setEditorHTML","");
+      this.name = "";
+      this.corpNm = "";
+      this.buyPri = "";
+      this.salesPri = "";
+      this.deliPri = "2500";
+      this.discountRate = "0";
+      this.stockCnt = "1";
+      this.thumbnailImg = null;
+      this.previewImg = null;
+      this.cateCd = null;
+      this.colorCdList = null;
+      this.sizeCdList = null;
+      this.$store.commit("setEditorHTML", "");
     },
     imgPreview() {
       if (this.thumbnailImg != null)
         this.previewImg = URL.createObjectURL(this.thumbnailImg);
     },
   },
-  computed:{
-    ...mapGetters(["EditorHTML","SizeList","ColorList","CateList"]),
+  computed: {
+    ...mapGetters(["EditorHTML", "SizeList", "ColorList", "CateList"]),
   },
   mounted() {
     this.$store.commit("setEditorHTML", "");
   },
-  watch:{
-    EditorHTML: function(val){
-      if(val) this.modiEditor = false;
+  watch: {
+    EditorHTML: function (val) {
+      if (val) this.modiEditor = false;
       else this.modiEditor = true;
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
-
 </style>

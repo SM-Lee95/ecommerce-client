@@ -34,9 +34,7 @@
           ></v-text-field>
         </v-col>
         <v-col cols="1">
-          <v-btn text @click="searchList">
-            검색
-          </v-btn>
+          <v-btn text @click="searchList"> 검색 </v-btn>
         </v-col>
       </v-row>
     </v-toolbar>
@@ -49,59 +47,50 @@
       item-key="cd"
       no-data-text="주문 건이 존재하지 않습니다."
     >
-      <template v-slot:item.thumbnail="{item}">
-        <v-img :src="item.thumbnail" max-height="100%" min-height="100%" max-width="100"></v-img>
+      <template v-slot:item.thumbnail="{ item }">
+        <v-img
+          :src="item.thumbnail"
+          max-height="100%"
+          min-height="100%"
+          max-width="100"
+        ></v-img>
       </template>
-      <template v-slot:item.totStockCnt="{item}">
+      <template v-slot:item.totStockCnt="{ item }">
         {{ item.totStockCnt + " 개" }}
       </template>
       <template v-slot:item.prdNm="{ item }">
-            <v-btn text @click="getDetailInfo(item.cd)">{{ item.name }}</v-btn>
+        <v-btn text @click="getDetailInfo(item.cd)">{{ item.name }}</v-btn>
       </template>
-      <template v-slot:item.buyPri="{item}">
+      <template v-slot:item.buyPri="{ item }">
         {{ item.buyPri.comma() + " 원" }}
       </template>
-      <template v-slot:item.deliPri="{item}">
+      <template v-slot:item.deliPri="{ item }">
         {{ item.deliPri.comma() + " 원" }}
       </template>
-      <template v-slot:item.salesPri="{item}">
+      <template v-slot:item.salesPri="{ item }">
         {{ item.salesPri.comma() + " 원" }}
       </template>
-      <template v-slot:item.discountPri="{item}">
-        {{ String(Number(item.salesPri) * ((100 - Number(item.discountRate)) / 100)).comma() + " 원" }}
+      <template v-slot:item.discountPri="{ item }">
+        {{
+          String(
+            Number(item.salesPri) * ((100 - Number(item.discountRate)) / 100)
+          ).comma() + " 원"
+        }}
       </template>
-      <template v-slot:item.discountRate="{item}">
+      <template v-slot:item.discountRate="{ item }">
         {{ item.discountRate + " %" }}
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon
-          small
-          class="mr-2"
-          @click="editDialog(item)"
-        >
+        <v-icon small class="mr-2" @click="editDialog(item)">
           mdi-pencil
         </v-icon>
-        <v-icon
-          small
-          @click="deleteItem(item)"
-        >
-          mdi-delete
-        </v-icon>
+        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
     </v-data-table>
-    <v-dialog
-      v-model="modiDialog"
-      width="1000"
-      :retain-focus="false"
-    >
-      <validation-observer
-        ref="observer"
-        v-slot="{ invalid }"
-      >
+    <v-dialog v-model="modiDialog" width="1000" :retain-focus="false">
+      <validation-observer ref="observer" v-slot="{ invalid }">
         <v-card>
-          <v-card-title class="text-h6">
-            상품 정보 수정
-          </v-card-title>
+          <v-card-title class="text-h6"> 상품 정보 수정 </v-card-title>
           <v-divider></v-divider>
           <v-card-text>
             <validation-provider
@@ -201,13 +190,7 @@
           <v-divider></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn
-              text
-              @click="saveInfo"
-              :disabled="invalid"
-            >
-              수정
-            </v-btn>
+            <v-btn text @click="saveInfo" :disabled="invalid"> 수정 </v-btn>
           </v-card-actions>
         </v-card>
       </validation-observer>
@@ -217,12 +200,12 @@
 
 <script>
 import { mapGetters } from "vuex";
-import CKEditor4 from "./CKEditor4"
+import CKEditor4 from "./CKEditor4";
 
 export default {
   name: "SelectPrdPage",
-  components:{
-    CKEditor4
+  components: {
+    CKEditor4,
   },
   data: () => ({
     header: [
@@ -235,12 +218,12 @@ export default {
       { text: "할인금액", value: "discountPri", align: "start" },
       { text: "배송비", value: "deliPri", align: "start" },
       { text: "재고수량", value: "totStockCnt", align: "center" },
-      { text: "수정/삭제", value: "actions", align: "start" }
+      { text: "수정/삭제", value: "actions", align: "start" },
     ],
     selected: [],
     OptionList: [
       { name: "품목명", cd: "prdNm" },
-      { name: "공급사명", cd: "corpNm" }
+      { name: "공급사명", cd: "corpNm" },
     ],
     cateCd: 1,
     optionCd: "prdNm",
@@ -250,54 +233,58 @@ export default {
     modiEditor: false,
   }),
   computed: {
-    ...mapGetters(["CateList", "ProductList","EditorHTML"])
+    ...mapGetters(["CateList", "ProductList", "EditorHTML"]),
   },
-  mounted() {
-
-  },
+  mounted() {},
   methods: {
     saveInfo() {
-      this.$dialog.confirm({
-        title: "상품 수정",
-        text: "해당 품목을 수정하시겠습니까?",
-        showClose: false
-      }).then((resp) => {
-        if (!resp) return;
-        if(this.modiEditor) this.editObj.description = this.EditorHTML;
-        this.$store.dispatch("updatePrdInfo", this.editObj).then((resp) => {
-          if (resp) this.$dialog.message.info("수정되었습니다.");
-          else this.$dialog.message.error("수정에 실패하셨습니다.");
-          this.modiDialog = false;
-          this.searchList();
+      this.$dialog
+        .confirm({
+          title: "상품 수정",
+          text: "해당 품목을 수정하시겠습니까?",
+          showClose: false,
+        })
+        .then((resp) => {
+          if (!resp) return;
+          if (this.modiEditor) this.editObj.description = this.EditorHTML;
+          this.$store.dispatch("updatePrdInfo", this.editObj).then((resp) => {
+            if (resp) this.$dialog.message.info("수정되었습니다.");
+            else this.$dialog.message.error("수정에 실패하셨습니다.");
+            this.modiDialog = false;
+            this.searchList();
+          });
         });
-      });
     },
     editDialog(item) {
       this.editObj = Object.assign({}, item);
-      this.$store.commit("setEditorHTML",this.editObj.description);
+      this.$store.commit("setEditorHTML", this.editObj.description);
       this.modiDialog = !this.modiDialog;
     },
     deleteItem(obj) {
-      this.$dialog.confirm({
-        title: "상품 삭제",
-        text: "해당 품목을 삭제하시겠습니까?",
-        showClose: false
-      }).then((resp) => {
-        if (!resp) return;
-        this.$store.dispatch("deletePrdInfo", obj.cd).then((resp) => {
-          if (resp) {
-            this.$dialog.message.info("삭제되었습니다.");
-            this.$store.commit("setProductList",this.ProductList.filter((value)=>value!=obj));
-          }
-          else this.$dialog.message.error("삭제에 실패하셨습니다.");
+      this.$dialog
+        .confirm({
+          title: "상품 삭제",
+          text: "해당 품목을 삭제하시겠습니까?",
+          showClose: false,
+        })
+        .then((resp) => {
+          if (!resp) return;
+          this.$store.dispatch("deletePrdInfo", obj.cd).then((resp) => {
+            if (resp) {
+              this.$dialog.message.info("삭제되었습니다.");
+              this.$store.commit(
+                "setProductList",
+                this.ProductList.filter((value) => value != obj)
+              );
+            } else this.$dialog.message.error("삭제에 실패하셨습니다.");
+          });
         });
-      });
     },
     searchList() {
       let reqData = {
         cateCd: this.cateCd,
         optionCd: this.optionCd,
-        searchValue: this.searchValue
+        searchValue: this.searchValue,
       };
       this.$store.dispatch("selectPrdList", reqData).then((resp) => {
         if (!resp) this.$dialog.message.warning("조회 중 에러가 발생했습니다.");
@@ -306,24 +293,22 @@ export default {
     getDetailInfo(cd) {
       this.$store.dispatch("getDetailInfo", cd).then((resp) => {
         if (resp) {
-          if (this.$route.path != "/Detail")
-            this.$router.push("/Detail");
+          if (this.$route.path != "/Detail") this.$router.push("/Detail");
         } else
-          this.$dialog.message.error("상품 정보를 조회하는 중에 오류가 발생했습니다.");
+          this.$dialog.message.error(
+            "상품 정보를 조회하는 중에 오류가 발생했습니다."
+          );
       });
     },
   },
-  watch:{
-    EditorHTML: function(val){
-      if(val==this.editObj.description)
-        this.modiEditor = false;
-      else
-        this.modiEditor = true;
-    }
-  }
+  watch: {
+    EditorHTML: function (val) {
+      if (val == this.editObj.description) this.modiEditor = false;
+      else this.modiEditor = true;
+    },
+  },
 };
 </script>
 
 <style scoped>
-
 </style>

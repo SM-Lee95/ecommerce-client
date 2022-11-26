@@ -1,9 +1,6 @@
 <template>
   <v-container class="white lighten-5" fluid>
-    <validation-observer
-      ref="observer"
-      v-slot="{ invalid }"
-    >
+    <validation-observer ref="observer" v-slot="{ invalid }">
       <form @submit.prevent="submit">
         <validation-provider
           v-slot="{ errors }"
@@ -63,9 +60,9 @@
           v-slot="{ errors }"
           name="phone"
           :rules="{
-          required: true,
-          regex: [/^\d{2,3}-\d{3,4}-\d{4}$/]
-        }"
+            required: true,
+            regex: [/^\d{2,3}-\d{3,4}-\d{4}$/],
+          }"
         >
           <v-text-field
             v-model="phone"
@@ -125,12 +122,7 @@
         -->
           <v-col cols="6">
             <v-row justify="center">
-              <v-chip
-                class="white"
-                label
-              >
-                Birth Day
-              </v-chip>
+              <v-chip class="white" label> Birth Day </v-chip>
               <v-date-picker
                 v-model="birth"
                 year-icon="mdi-calendar-blank"
@@ -144,38 +136,38 @@
               <v-col>
                 <label>Address</label>
                 <v-row>
-                  <v-col
-                    cols="6"
-                  >
-                    <v-text-field dense
-                                  label="Postcode"
-                                  hide-details="auto"
-                                  required
-                                  v-model="postcode"
-                                  readonly
-                                  @click="daumPostCode"
+                  <v-col cols="6">
+                    <v-text-field
+                      dense
+                      label="Postcode"
+                      hide-details="auto"
+                      required
+                      v-model="postcode"
+                      readonly
+                      @click="daumPostCode"
                     ></v-text-field>
                   </v-col>
                 </v-row>
                 <v-row>
-                  <v-col
-                    cols="12"
-                  >
-                    <v-text-field dense
-                                  label="Main Address"
-                                  hide-details="auto"
-                                  required
-                                  readonly
-                                  v-model="mainAddress"
-                                  @click="daumPostCode"
+                  <v-col cols="12">
+                    <v-text-field
+                      dense
+                      label="Main Address"
+                      hide-details="auto"
+                      required
+                      readonly
+                      v-model="mainAddress"
+                      @click="daumPostCode"
                     ></v-text-field>
                   </v-col>
                 </v-row>
                 <v-row>
-                  <v-col
-                    cols="12"
-                  >
-                    <v-text-field dense label="ETC Address" v-model="etcAddress"></v-text-field>
+                  <v-col cols="12">
+                    <v-text-field
+                      dense
+                      label="ETC Address"
+                      v-model="etcAddress"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-col>
@@ -206,16 +198,10 @@
                     type="checkbox"
                   ></v-checkbox>
                 </validation-provider>
-                <v-btn
-                  class="mr-4"
-                  type="submit"
-                  :disabled="invalid"
-                >
+                <v-btn class="mr-4" type="submit" :disabled="invalid">
                   회원가입
                 </v-btn>
-                <v-btn @click="clear">
-                  초기화
-                </v-btn>
+                <v-btn @click="clear"> 초기화 </v-btn>
               </v-col>
             </v-row>
           </v-col>
@@ -239,14 +225,14 @@ export default {
     postcode: "",
     mainAddress: "",
     etcAddress: "",
-    birth: null
+    birth: null,
     //profile_photo: null,
     //preview: null,
   }),
   methods: {
     submit() {
       const formData = new FormData();
-      if(!this.birth){
+      if (!this.birth) {
         this.$dialog.message.error("생일을 입력해주세요.");
         return;
       }
@@ -256,27 +242,33 @@ export default {
         pwd: this.pwd,
         phone: this.phone,
         email: this.email,
-        smsYn: this.phoneYn ? 'Y' : 'N',
-        emailYn: this.emailYn ? 'Y' : 'N',
+        smsYn: this.phoneYn ? "Y" : "N",
+        emailYn: this.emailYn ? "Y" : "N",
         postcode: this.postcode,
         mainAddress: this.mainAddress,
         etcAddress: this.etcAddress,
-        birth: this.birth
+        birth: this.birth,
       };
       //formData.append("file",this.profile_photo);
-      formData.append("userInfoDto", new Blob([JSON.stringify(userInfoDto)], { type: "application/json" }));
+      formData.append(
+        "userInfoDto",
+        new Blob([JSON.stringify(userInfoDto)], { type: "application/json" })
+      );
       this.$store.dispatch("signUp", formData).then((resp) => {
         if (resp) {
           this.$dialog.message.success("회원가입에 성공하셨습니다.");
-          this.$store.dispatch("login", {
-            id: this.id,
-            pwd: this.pwd
-          }).then(() => {
-            if (this.$route.path != "/")
-              this.$router.push("/");
-          });
+          this.$store
+            .dispatch("login", {
+              id: this.id,
+              pwd: this.pwd,
+            })
+            .then(() => {
+              if (this.$route.path != "/") this.$router.push("/");
+            });
         } else {
-          this.$dialog.message.error("회원가입에 실패하셨습니다. 다시 시도해주세요.");
+          this.$dialog.message.error(
+            "회원가입에 실패하셨습니다. 다시 시도해주세요."
+          );
         }
       });
     },
@@ -299,10 +291,9 @@ export default {
     },
     daumPostCode() {
       this.$daumPostCode();
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
-
 </style>

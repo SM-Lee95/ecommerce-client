@@ -24,25 +24,12 @@
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker
-                  v-model="date"
-                  no-title
-                  scrollable
-                  range
-                >
+                <v-date-picker v-model="date" no-title scrollable range>
                   <v-spacer></v-spacer>
-                  <v-btn
-                    text
-                    color="primary"
-                    @click="menu = false"
-                  >
+                  <v-btn text color="primary" @click="menu = false">
                     Cancel
                   </v-btn>
-                  <v-btn
-                    text
-                    color="primary"
-                    @click="$refs.menu.save(date)"
-                  >
+                  <v-btn text color="primary" @click="$refs.menu.save(date)">
                     OK
                   </v-btn>
                 </v-date-picker>
@@ -80,9 +67,7 @@
               ></v-text-field>
             </v-col>
             <v-col cols="1">
-              <v-btn text @click="searchList">
-                검색
-              </v-btn>
+              <v-btn text @click="searchList"> 검색 </v-btn>
             </v-col>
           </v-row>
         </v-toolbar>
@@ -95,44 +80,38 @@
           no-data-text="주문 건이 존재하지 않습니다."
         >
           <template v-slot:item.date="{ item }">
-            {{ item.regDati[0] + "/" + item.regDati[1] + "/" + item.regDati[2] }}
+            {{
+              item.regDati[0] + "/" + item.regDati[1] + "/" + item.regDati[2]
+            }}
           </template>
-          <template v-slot:item.cd="{item}">
+          <template v-slot:item.cd="{ item }">
             {{ item.cd }}
           </template>
-          <template v-slot:item.info="{item}">
+          <template v-slot:item.info="{ item }">
             <v-btn text @click="getOrderDetail(item.cd)">
               {{ item.ordsDoc }}
             </v-btn>
           </template>
-          <template v-slot:item.pri="{item}">
+          <template v-slot:item.pri="{ item }">
             {{ item.totPri.comma() + " 원" }}
           </template>
-          <template v-slot:item.proc="{item}">
+          <template v-slot:item.proc="{ item }">
             {{ OrderProcList[item.procTy] }}
           </template>
-          <template v-slot:item.address="{item}">
+          <template v-slot:item.address="{ item }">
             ({{ item.postcode }})
             {{ item.mainAddress }}
             {{ item.etcAddress }}
           </template>
           <template v-slot:item.actions="{ item }">
-            <v-icon
-              small
-              @click="editDialog(item)"
-            >
-              mdi-pencil
-            </v-icon>
+            <v-icon small @click="editDialog(item)"> mdi-pencil </v-icon>
           </template>
         </v-data-table>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <v-dialog
-          v-model="modiDialog"
-          width="85%"
-        >
+        <v-dialog v-model="modiDialog" width="85%">
           <order-mng-page-modi-dialog></order-mng-page-modi-dialog>
         </v-dialog>
       </v-col>
@@ -145,13 +124,13 @@ import { mapGetters } from "vuex";
 import OrderMngPageModiDialog from "./OrderMngPageModiDialog";
 export default {
   name: "OrderMngPage",
-  components: {OrderMngPageModiDialog},
+  components: { OrderMngPageModiDialog },
   methods: {
-    editDialog(item){
-      this.$store.commit("setOrderEditObjList",Object.assign({},item));
+    editDialog(item) {
+      this.$store.commit("setOrderEditObjList", Object.assign({}, item));
       this.modiDialog = !this.modiDialog;
     },
-    searchList(){
+    searchList() {
       let reqData = {
         procCd: this.procCd,
         optionCd: this.optionCd,
@@ -168,12 +147,14 @@ export default {
         if (resp) {
           this.$router.push("/OrderDetailPage");
         } else {
-          this.$dialog.message.error("주문 상세 정보를 가져오는데 실패했습니다.");
+          this.$dialog.message.error(
+            "주문 상세 정보를 가져오는데 실패했습니다."
+          );
         }
       });
     },
   },
-  data: ()=>({
+  data: () => ({
     header: [
       { text: "주문일자", value: "date", align: "center" },
       { text: "주문번호", value: "cd", align: "center" },
@@ -196,17 +177,27 @@ export default {
     menu: false,
     modiDialog: false,
     editObjList: [],
-    date: [(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000 - (60000*60*24*30))).toISOString().substr(0, 10),new Date(Date.now()- (new Date()).getTimezoneOffset() * 60000).toISOString().substr(0, 10)],
+    date: [
+      new Date(
+        Date.now() -
+          new Date().getTimezoneOffset() * 60000 -
+          60000 * 60 * 24 * 30
+      )
+        .toISOString()
+        .substr(0, 10),
+      new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString()
+        .substr(0, 10),
+    ],
   }),
   computed: {
-    ...mapGetters(["ProcList","OrderMngList","OrderProcList","DeliList"]),
-    dateRangeText () {
-      return this.date.join(' ~ ')
+    ...mapGetters(["ProcList", "OrderMngList", "OrderProcList", "DeliList"]),
+    dateRangeText() {
+      return this.date.join(" ~ ");
     },
   },
 };
 </script>
 
 <style scoped>
-
 </style>

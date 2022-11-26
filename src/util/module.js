@@ -1,5 +1,5 @@
 const methods = {
-  daumPostCode: function() {
+  daumPostCode: function () {
     this.isModi = true;
     var width = 500; //팝업의 너비
     var height = 600; //팝업의 높이
@@ -41,15 +41,15 @@ const methods = {
         }
         // 우편번호를 입력한다.
         this.postcode = data.zonecode;
-      }
+      },
     }).open({
-      left: (window.screen.width / 2) - (width / 2),
-      top: (window.screen.height / 2) - (height / 2)
+      left: window.screen.width / 2 - width / 2,
+      top: window.screen.height / 2 - height / 2,
     });
   },
 };
 export default {
   install(Vue) {
     Vue.prototype.$daumPostCode = methods.daumPostCode;
-  }
+  },
 };

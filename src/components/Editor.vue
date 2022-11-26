@@ -1,55 +1,109 @@
 <template>
   <v-container fluid class="editor">
-    <editor-menu-bar v-if="swMenubar" :editor="editor" v-slot="{ commands, isActive }">
+    <editor-menu-bar
+      v-if="swMenubar"
+      :editor="editor"
+      v-slot="{ commands, isActive }"
+    >
       <v-row class="menubar">
         <v-col>
-          <v-btn icon class="menubar__button" :class="{ 'is-active': isActive.bold() }" @click.prevent="commands.bold">
+          <v-btn
+            icon
+            class="menubar__button"
+            :class="{ 'is-active': isActive.bold() }"
+            @click.prevent="commands.bold"
+          >
             <v-icon>mdi-format-bold</v-icon>
           </v-btn>
-          <v-btn icon class="menubar__button" :class="{ 'is-active': isActive.italic() }"
-                 @click.prevent="commands.italic">
+          <v-btn
+            icon
+            class="menubar__button"
+            :class="{ 'is-active': isActive.italic() }"
+            @click.prevent="commands.italic"
+          >
             <v-icon>mdi-format-italic</v-icon>
           </v-btn>
-          <v-btn icon class="menubar__button" :class="{ 'is-active': isActive.strike() }"
-                 @click.prevent="commands.strike">
+          <v-btn
+            icon
+            class="menubar__button"
+            :class="{ 'is-active': isActive.strike() }"
+            @click.prevent="commands.strike"
+          >
             <v-icon>mdi-format-strikethrough</v-icon>
           </v-btn>
-          <v-btn icon class="menubar__button" :class="{ 'is-active': isActive.underline() }"
-                 @click.prevent="commands.underline">
+          <v-btn
+            icon
+            class="menubar__button"
+            :class="{ 'is-active': isActive.underline() }"
+            @click.prevent="commands.underline"
+          >
             <v-icon>mdi-format-underline</v-icon>
           </v-btn>
-          <v-btn icon class="menubar__button" :class="{ 'is-active': isActive.code() }" @click.prevent="commands.code">
+          <v-btn
+            icon
+            class="menubar__button"
+            :class="{ 'is-active': isActive.code() }"
+            @click.prevent="commands.code"
+          >
             <v-icon>mdi-xml</v-icon>
           </v-btn>
-          <v-btn icon class="menubar__button" :class="{ 'is-active': isActive.paragraph() }"
-                 @click.prevent="commands.paragraph">
+          <v-btn
+            icon
+            class="menubar__button"
+            :class="{ 'is-active': isActive.paragraph() }"
+            @click.prevent="commands.paragraph"
+          >
             <v-icon>mdi-format-paragraph</v-icon>
           </v-btn>
 
-          <v-btn icon class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 1 }) }"
-                 @click.prevent="commands.heading({ level: 1 })">
+          <v-btn
+            icon
+            class="menubar__button"
+            :class="{ 'is-active': isActive.heading({ level: 1 }) }"
+            @click.prevent="commands.heading({ level: 1 })"
+          >
             H1
           </v-btn>
 
-          <v-btn icon class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 2 }) }"
-                 @click.prevent="commands.heading({ level: 2 })">
+          <v-btn
+            icon
+            class="menubar__button"
+            :class="{ 'is-active': isActive.heading({ level: 2 }) }"
+            @click.prevent="commands.heading({ level: 2 })"
+          >
             H2
           </v-btn>
 
-          <v-btn icon class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 3 }) }"
-                 @click.prevent="commands.heading({ level: 3 })">
+          <v-btn
+            icon
+            class="menubar__button"
+            :class="{ 'is-active': isActive.heading({ level: 3 }) }"
+            @click.prevent="commands.heading({ level: 3 })"
+          >
             H3
           </v-btn>
-          <v-btn icon class="menubar__button" :class="{ 'is-active': isActive.bullet_list() }"
-                 @click.prevent="commands.bullet_list">
+          <v-btn
+            icon
+            class="menubar__button"
+            :class="{ 'is-active': isActive.bullet_list() }"
+            @click.prevent="commands.bullet_list"
+          >
             <v-icon>mdi-format-list-bulleted</v-icon>
           </v-btn>
-          <v-btn icon class="menubar__button" :class="{ 'is-active': isActive.ordered_list() }"
-                 @click.prevent="commands.ordered_list">
+          <v-btn
+            icon
+            class="menubar__button"
+            :class="{ 'is-active': isActive.ordered_list() }"
+            @click.prevent="commands.ordered_list"
+          >
             <v-icon>mdi-format-list-numbered</v-icon>
           </v-btn>
-          <v-btn icon class="menubar__button" :class="{ 'is-active': isActive.blockquote() }"
-                 @click.prevent="commands.blockquote">
+          <v-btn
+            icon
+            class="menubar__button"
+            :class="{ 'is-active': isActive.blockquote() }"
+            @click.prevent="commands.blockquote"
+          >
             <v-icon>mdi-format-quote-open</v-icon>
           </v-btn>
           <v-btn icon class="menubar__button" @click.prevent="commands.undo">
@@ -58,17 +112,19 @@
           <v-btn icon class="menubar__button" @click.prevent="commands.redo">
             <v-icon>mdi-redo</v-icon>
           </v-btn>
-          <v-btn icon class="menubar__button" :class="{ 'is-active': isActive.image() }">
+          <v-btn
+            icon
+            class="menubar__button"
+            :class="{ 'is-active': isActive.image() }"
+          >
             <v-icon>mdi-image</v-icon>
           </v-btn>
-          <v-btn text @click="save()">
-            save
-          </v-btn>
+          <v-btn text @click="save()"> save </v-btn>
         </v-col>
       </v-row>
     </editor-menu-bar>
-    <editor-content class="editor__content mt-2" :editor="editor"/>
-    <v-row style="max-width: 80%;">
+    <editor-content class="editor__content mt-2" :editor="editor" />
+    <v-row style="max-width: 80%">
       <v-col v-html="this.look"></v-col>
     </v-row>
   </v-container>
@@ -95,69 +151,109 @@ import {
   Strike,
   Underline,
   History,
-  Image
+  Image,
 } from "tiptap-extensions";
 import { mapGetters } from "vuex";
 
 export default {
   components: {
     EditorContent,
-    EditorMenuBar
+    EditorMenuBar,
   },
   data() {
     return {
       swMenubar: true,
       linkMenuIsActive: true,
-      editor:  new Editor({
+      editor: new Editor({
         editable: true,
-        extensions: [new Blockquote(), new BulletList(), new CodeBlock(), new HardBreak(), new Heading({ levels: [1, 2, 3] }), new Link({
-          rel: "",
-          target: "_blank"
-        }), new HorizontalRule(), new ListItem(), new OrderedList(), new TodoItem(), new TodoList(), new Bold(), new Code(), new Italic(), new Strike(), new Underline(), new History(), new Image()],
+        extensions: [
+          new Blockquote(),
+          new BulletList(),
+          new CodeBlock(),
+          new HardBreak(),
+          new Heading({ levels: [1, 2, 3] }),
+          new Link({
+            rel: "",
+            target: "_blank",
+          }),
+          new HorizontalRule(),
+          new ListItem(),
+          new OrderedList(),
+          new TodoItem(),
+          new TodoList(),
+          new Bold(),
+          new Code(),
+          new Italic(),
+          new Strike(),
+          new Underline(),
+          new History(),
+          new Image(),
+        ],
         content: "",
-        onUpdate: function(editor){
+        onUpdate: function (editor) {
           let html = editor.getHTML();
-          if(html.includes('<img src="data:image')){ //변경 안된 이미지 파일 존재여부
-            let subStr = html.substring(html.indexOf('<img src="data:image')+10); //data:image 부터 base64 encoding된 부분까지 가져오기
+          if (html.includes('<img src="data:image')) {
+            //변경 안된 이미지 파일 존재여부
+            let subStr = html.substring(
+              html.indexOf('<img src="data:image') + 10
+            ); //data:image 부터 base64 encoding된 부분까지 가져오기
             subStr = subStr.substring(0, subStr.indexOf('">'));
-            let file =this.dataURLtoFile(subStr,new Date().YYYYMMDDHHMMSS()+"."+subStr.substring(subStr.indexOf("data:image")+11,subStr.indexOf("base64")-1));
-            this.fileTransfer(file,html.replace('<img src="data:image','<img class="" src="data:image'),subStr);
+            let file = this.dataURLtoFile(
+              subStr,
+              new Date().YYYYMMDDHHMMSS() +
+                "." +
+                subStr.substring(
+                  subStr.indexOf("data:image") + 11,
+                  subStr.indexOf("base64") - 1
+                )
+            );
+            this.fileTransfer(
+              file,
+              html.replace(
+                '<img src="data:image',
+                '<img class="" src="data:image'
+              ),
+              subStr
+            );
           }
         },
       }),
       look: "",
     };
   },
-  computed:{
+  computed: {
     ...mapGetters(["EditorHTML"]),
   },
   mounted() {
-    this.editor.fileTransfer = (file, html, subStr)=>{
+    this.editor.fileTransfer = (file, html, subStr) => {
       const formData = new FormData();
       formData.append("image", file);
-      this.$store.dispatch("insertPrdImg",formData).then((resp)=>{
-        this.editor.setContent(html.replace(subStr,resp));
+      this.$store.dispatch("insertPrdImg", formData).then((resp) => {
+        this.editor.setContent(html.replace(subStr, resp));
       });
     };
-    this.editor.dataURLtoFile = function(dataurl, fileName){
-      var arr = dataurl.split(',');
-      var mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-      while(n--) u8arr[n] = bstr.charCodeAt(n);
-      return new File([u8arr], fileName, {type:mime});
+    this.editor.dataURLtoFile = function (dataurl, fileName) {
+      var arr = dataurl.split(",");
+      var mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+      while (n--) u8arr[n] = bstr.charCodeAt(n);
+      return new File([u8arr], fileName, { type: mime });
     };
-    this.$store.commit("setEditorHTML","");
+    this.$store.commit("setEditorHTML", "");
   },
   beforeDestroy() {
     this.editor.destroy();
   },
   methods: {
-    save: function(){
-      this.$store.commit("setEditorHTML",this.editor.getHTML());
+    save: function () {
+      this.$store.commit("setEditorHTML", this.editor.getHTML());
       this.$dialog.message.info("저장완료");
       this.editor.destroy();
       this.look = this.EditorHTML;
-    }
-  }
+    },
+  },
 };
 </script>
 

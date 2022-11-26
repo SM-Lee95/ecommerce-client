@@ -26,32 +26,31 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from "vuex";
 export default {
   data: () => ({
-    Catalogs: null
+    Catalogs: null,
   }),
   computed: {
     ...mapGetters(["MenuList"]),
   },
   mounted() {
     this.$store.dispatch("getMenuList").then((resp) => {
-      if (resp){
+      if (resp) {
         this.updateList(0);
-      } else
-        this.$dialog.message.error("메뉴 조회시 오류가 발생했습니다.");
+      } else this.$dialog.message.error("메뉴 조회시 오류가 발생했습니다.");
     });
   },
   methods: {
     updateList(param) {
-      this.$store.dispatch("getItemList", { param: param, page: 0 }).then((resp) => {
-        if (resp) {
-          if (this.$route.path != "/")
-            this.$router.push("/");
-        } else
-          this.$dialog.message.error("상품 목록 조회에 실패했습니다.");
-      });
-    }
-  }
+      this.$store
+        .dispatch("getItemList", { param: param, page: 0 })
+        .then((resp) => {
+          if (resp) {
+            if (this.$route.path != "/") this.$router.push("/");
+          } else this.$dialog.message.error("상품 목록 조회에 실패했습니다.");
+        });
+    },
+  },
 };
 </script>

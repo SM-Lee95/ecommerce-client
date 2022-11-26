@@ -16,6 +16,7 @@
     "tiptap-extensions": "^1.35.2",
     "vee-validate": "^3.4.14",
     "vue": "^2.6.11",
+    "vue-cookies": "^1.8.2",
     "vue-dialog": "0.0.3",
     "vue-router": "^3.2.0",
     "vuetify": "^2.4.0",

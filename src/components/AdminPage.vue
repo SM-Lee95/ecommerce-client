@@ -4,44 +4,28 @@
       <v-col cols="2">
         <v-navigation-drawer floating class="grey lighten-3">
           <v-list>
-            <v-list-item
-              link
-              @click="goProductMng"
-              dense
-            >
+            <v-list-item link @click="goProductMng" dense>
               <v-list-item-icon>
                 <v-icon>mdi-hanger</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title>
-                  Product
-                </v-list-item-title>
+                <v-list-item-title> Product </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item
-              link
-              @click="goOrderMng"
-              dense>
+            <v-list-item link @click="goOrderMng" dense>
               <v-list-item-icon>
                 <v-icon>mdi-view-dashboard</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title>
-                  Order
-                </v-list-item-title>
+                <v-list-item-title> Order </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item
-              link
-              @click="goUserMng"
-              dense>
+            <v-list-item link @click="goUserMng" dense>
               <v-list-item-icon>
                 <v-icon>mdi-account-box</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title>
-                  User
-                </v-list-item-title>
+                <v-list-item-title> User </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -70,10 +54,9 @@ export default {
       if (this.$route.path != "/Admin/UserMng")
         this.$router.push("/Admin/UserMng");
     },
-  }
+  },
 };
 </script>
 
 <style scoped>
-
 </style>
