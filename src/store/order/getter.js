@@ -20,4 +20,16 @@ export default {
   OrderEditObjList(state) {
     return state.OrderEditObjList;
   },
+  OrderCancelInfo(state) {
+    return state.OrderCancelInfo;
+  },
+  OrderUpdateOptionInfo(state) {
+    return state.OrderUpdateOptionInfo;
+  },
+  ReturnRequestInfo(state) {
+    return state.ReturnRequestInfo;
+  },
+  ExchangeRequestInfo(state) {
+    return state.ExchangeRequestInfo;
+  },
 };

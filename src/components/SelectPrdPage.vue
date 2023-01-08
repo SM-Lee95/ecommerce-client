@@ -43,9 +43,11 @@
       :items="ProductList"
       class="elevation-0 mt-2"
       show-select
+      hide-default-footer
       v-model="selected"
       item-key="cd"
-      no-data-text="주문 건이 존재하지 않습니다."
+      :items-per-page="-1"
+      no-data-text="상품이 존재하지 않습니다."
     >
       <template v-slot:item.thumbnail="{ item }">
         <v-img
@@ -200,7 +202,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import CKEditor4 from "./CKEditor4";
+import CKEditor4 from "./editor/CKEditor4";
 
 export default {
   name: "SelectPrdPage",
@@ -233,7 +235,8 @@ export default {
     modiEditor: false,
   }),
   computed: {
-    ...mapGetters(["CateList", "ProductList", "EditorHTML"]),
+    ...mapGetters("product", ["ProductList"]),
+    ...mapGetters("common", ["CateList", "EditorHTML"]),
   },
   mounted() {},
   methods: {
@@ -247,17 +250,19 @@ export default {
         .then((resp) => {
           if (!resp) return;
           if (this.modiEditor) this.editObj.description = this.EditorHTML;
-          this.$store.dispatch("updatePrdInfo", this.editObj).then((resp) => {
-            if (resp) this.$dialog.message.info("수정되었습니다.");
-            else this.$dialog.message.error("수정에 실패하셨습니다.");
-            this.modiDialog = false;
-            this.searchList();
-          });
+          this.$store
+            .dispatch("product/updatePrdInfo", this.editObj)
+            .then((resp) => {
+              if (resp) this.$dialog.message.info("수정되었습니다.");
+              else this.$dialog.message.error("수정에 실패하셨습니다.");
+              this.modiDialog = false;
+              this.searchList();
+            });
         });
     },
     editDialog(item) {
       this.editObj = Object.assign({}, item);
-      this.$store.commit("setEditorHTML", this.editObj.description);
+      this.$store.commit("common/setEditorHTML", this.editObj.description);
       this.modiDialog = !this.modiDialog;
     },
     deleteItem(obj) {
@@ -269,7 +274,7 @@ export default {
         })
         .then((resp) => {
           if (!resp) return;
-          this.$store.dispatch("deletePrdInfo", obj.cd).then((resp) => {
+          this.$store.dispatch("product/deletePrdInfo", obj.cd).then((resp) => {
             if (resp) {
               this.$dialog.message.info("삭제되었습니다.");
               this.$store.commit(
@@ -286,12 +291,12 @@ export default {
         optionCd: this.optionCd,
         searchValue: this.searchValue,
       };
-      this.$store.dispatch("selectPrdList", reqData).then((resp) => {
+      this.$store.dispatch("product/selectPrdList", reqData).then((resp) => {
         if (!resp) this.$dialog.message.warning("조회 중 에러가 발생했습니다.");
       });
     },
     getDetailInfo(cd) {
-      this.$store.dispatch("getDetailInfo", cd).then((resp) => {
+      this.$store.dispatch("product/getDetailInfo", cd).then((resp) => {
         if (resp) {
           if (this.$route.path != "/Detail") this.$router.push("/Detail");
         } else

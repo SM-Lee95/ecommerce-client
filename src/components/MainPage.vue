@@ -88,7 +88,7 @@ export default {
         this.$dialog.message.warning("로그인 후에 시도해주세요.");
         return;
       }
-      this.$store.dispatch("putLike", cd).then((resp) => {
+      this.$store.dispatch("product/putLike", cd).then((resp) => {
         if (resp) {
           this.$dialog.message.success("Success");
           this.$store.state.Pagination.content[index].love = !love;

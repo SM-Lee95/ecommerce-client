@@ -19,7 +19,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import axios from "../util/http-commons.js";
+import axios from "../../util/http-commons.js";
 export default {
   name: "CKEditor4",
   data() {
@@ -34,11 +34,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["EditorHTML"]),
+    ...mapGetters("common",["EditorHTML"]),
   },
   methods: {
     save() {
-      this.$store.commit("setEditorHTML", this.editorData);
+      this.$store.commit("common/setEditorHTML", this.editorData);
     },
   },
   mounted() {

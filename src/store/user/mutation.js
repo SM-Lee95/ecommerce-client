@@ -17,4 +17,7 @@ export default {
     state.userInfo = null;
     location.reload();
   },
+  setUserList(state, payload) {
+    state.UserList = payload;
+  },
 };

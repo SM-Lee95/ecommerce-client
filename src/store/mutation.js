@@ -20,4 +20,7 @@ export default {
   setDeliList(state, payload) {
     state.DeliList = payload;
   },
+  setBankList(state, payload) {
+    state.BankList = payload;
+  },
 };

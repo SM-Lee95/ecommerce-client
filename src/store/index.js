@@ -10,5 +10,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: { user: user, product: product, order: order, common: common },
-  plugins: [createPersistedState(user)],
+  plugins: [
+    createPersistedState({
+      paths: ["user"],
+    }),
+  ],
 });

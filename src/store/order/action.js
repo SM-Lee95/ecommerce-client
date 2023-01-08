@@ -103,4 +103,63 @@ export default {
         return false;
       });
   },
+  updateOrderInfo(context, data) {
+    return http
+      .put("/ords/info", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
+        if (resp.data.statusCode == "400") return false;
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  selectItemOptionInfo(context, data) {
+    return http
+      .get("/ords/option/info", data)
+      .then((resp) => {
+        if (resp.data) {
+          resp.data = resp.data.filter((vo) => {
+            //동일옵션 삭제
+            if (vo.productKey.listCd == data.params.prdListCd) return false;
+            return true;
+          });
+          context.commit("setOrderUpdateOptionInfo", resp.data);
+          return true;
+        }
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  updateOrdsProductOption(context, data) {
+    return http
+      .put("/ords/option/info", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
+        if (resp.data.statusCode == "400") return false;
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  deleteOrdsInfo(context, data) {
+    return http
+      .delete("/ords/info", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
+        if (resp.data.statusCode == "400") return false;
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
 };

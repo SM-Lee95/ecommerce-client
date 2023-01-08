@@ -44,6 +44,7 @@ export default {
     state.OrderHisSummary["교환신청"] = payload.filter((obj) => obj.procTy == "7").length; //교환신청
     state.OrderHisSummary["물품회수"] = payload.filter((obj) => obj.procTy == "8").length; //물품회수
     state.OrderHisSummary["환불완료"] = payload.filter((obj) => obj.procTy == "9").length; //환불완료
+    state.OrderHisSummary["주문취소"] = payload.filter((obj) => obj.procTy == "10").length; //주문취소
   },
   setOrderDetailInfo(state, payload) {
     state.OrderDetailInfo = payload;
@@ -53,5 +54,17 @@ export default {
   },
   setOrderEditObjList(state, payload) {
     state.OrderEditObjList = payload;
+  },
+  setOrderCancelInfo(state, payload) {
+    state.OrderCancelInfo = payload;
+  },
+  setOrderUpdateOptionInfo(state, payload) {
+    state.OrderUpdateOptionInfo = payload;
+  },
+  setReturnRequestInfo(state, payload) {
+    state.ReturnRequestInfo = payload;
+  },
+  setExchangeRequestInfo(state, payload) {
+    state.ExchangeRequestInfo = payload;
   },
 };

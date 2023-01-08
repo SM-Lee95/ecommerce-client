@@ -80,4 +80,18 @@ export default {
         return false;
       });
   },
+  selectUserList(context, data) {
+    return http
+      .get("/user/list/admin", data)
+      .then((resp) => {
+        if (resp.data) {
+          context.commit("setUserList", resp.data);
+          return true;
+        } else return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
 };

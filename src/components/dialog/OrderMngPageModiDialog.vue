@@ -8,7 +8,6 @@
           <v-col>
             <v-btn text @click="saveInfoProc"> 주문 상태 수정 </v-btn>
             <v-btn text @click="saveDtlProc"> 개별 주문 상태 수정 </v-btn>
-            <v-btn text @click="updateDeliCnt"> 배송 수량 변경 </v-btn>
             <v-btn text @click="createTrdInfo"> 운송장 등록 </v-btn>
           </v-col>
         </v-row>
@@ -114,7 +113,7 @@ export default {
             procTy: this.procTy,
             ordsCd: this.OrderEditObjList.cd,
           };
-          this.$store.dispatch("updateOrdsInfoProc", reqData).then((resp) => {
+          this.$store.dispatch("order/updateOrdsInfoProc", reqData).then((resp) => {
             if (resp) this.$dialog.message.info("수정되었습니다.");
             else this.$dialog.message.error("수정에 실패하셨습니다.");
             this.modiDialog = false;
@@ -134,7 +133,7 @@ export default {
             procTy: this.procTy,
             ordsDtlList: this.selected,
           };
-          this.$store.dispatch("updateOrdsDtlProc", reqData).then((resp) => {
+          this.$store.dispatch("order/updateOrdsDtlProc", reqData).then((resp) => {
             if (resp) this.$dialog.message.info("수정되었습니다.");
             else this.$dialog.message.error("수정에 실패하셨습니다.");
             this.modiDialog = false;
@@ -149,6 +148,7 @@ export default {
       }
       let isErr = this.selected.filter((vo) => {
         if (!vo.deliCnt || isNaN(vo.deliCnt)) {
+          console.log(vo.deliCnt);
           this.$dialog.message.error("선택된 주문의 배송수량을 숫자로 전부 입력해주세요.");
           return true;
         } else if (vo.cnt < vo.deliCnt) {
@@ -179,7 +179,7 @@ export default {
             parcelCd: 1,
             orderDtlDtoList: this.selected,
           };
-          this.$store.dispatch("insertTraList", reqData).then((resp) => {
+          this.$store.dispatch("order/insertTraList", reqData).then((resp) => {
             if (resp) this.$dialog.message.info("등록되었습니다.");
             else this.$dialog.message.error("등록에 실패하셨습니다.");
             this.modiDialog = false;
@@ -187,7 +187,7 @@ export default {
         });
     },
     getDeliInfo(traCd) {
-      window.open("http://nplus.doortodoor.co.kr/web/detail.jsp?slipno=" + traCd, "");
+      this.$deliInfoPopup(traCd);
     },
     getDetailInfo(cd) {
       this.$store.dispatch("product/getDetailInfo", cd).then((resp) => {
@@ -196,15 +196,12 @@ export default {
         } else this.$dialog.message.error("상품 정보를 조회하는 중에 오류가 발생했습니다.");
       });
     },
-    updateDeliCnt() {},
   },
   computed: {
     ...mapGetters("order", ["OrderEditObjList"]),
     ...mapGetters("common", ["ProcList", "OrderProcList"]),
-    dateRangeText() {
-      return this.date.join(" ~ ");
-    },
   },
+
 };
 </script>
 

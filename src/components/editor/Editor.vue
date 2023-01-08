@@ -222,7 +222,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["EditorHTML"]),
+    ...mapGetters("common", ["EditorHTML"]),
   },
   mounted() {
     this.editor.fileTransfer = (file, html, subStr) => {
@@ -241,14 +241,14 @@ export default {
       while (n--) u8arr[n] = bstr.charCodeAt(n);
       return new File([u8arr], fileName, { type: mime });
     };
-    this.$store.commit("setEditorHTML", "");
+    this.$store.commit("common/setEditorHTML", "");
   },
   beforeDestroy() {
     this.editor.destroy();
   },
   methods: {
     save: function () {
-      this.$store.commit("setEditorHTML", this.editor.getHTML());
+      this.$store.commit("common/setEditorHTML", this.editor.getHTML());
       this.$dialog.message.info("저장완료");
       this.editor.destroy();
       this.look = this.EditorHTML;

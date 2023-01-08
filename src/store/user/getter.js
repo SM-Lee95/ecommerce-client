@@ -13,4 +13,7 @@ export default {
       refresh: VueCookies.get("RefreshToken"),
     };
   },
+  UserList(state) {
+    return state.UserList;
+  },
 };

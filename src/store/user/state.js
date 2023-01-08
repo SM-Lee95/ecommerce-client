@@ -3,4 +3,5 @@ export default {
   Role: null,
   accessToken: null,
   refreshToken: null,
+  UserList: [],
 };

@@ -201,7 +201,7 @@ export default {
       OrderDto.totDeliPri = this.OrderInfo.totDeliPri;
       OrderDto.totCnt = this.OrderInfo.totCnt;
       OrderDto.reqMemo = this.reqMemo;
-      this.$store.dispatch("orderComplete", OrderDto).then((resp) => {
+      this.$store.dispatch("order/orderComplete", OrderDto).then((resp) => {
         if (resp)
           this.$dialog.message.success("주문 완료되었습니다. 안내드린 계좌번호로 입금해주세요.");
         else this.$dialog.message.error("주문에 실패하셨습니다. 확인 후 재시도 바랍니다.");

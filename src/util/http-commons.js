@@ -34,7 +34,7 @@ createAxios.interceptors.response.use(
   },
   async function (error) {
     try {
-      if (error.response.status == 401) {
+      if (error.response.status == 401||error.response.status == 403) {
         store.commit("user/removeToken");
         return null; //다시 axios 요청
       }

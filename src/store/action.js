@@ -17,7 +17,7 @@ export default {
   },
   selectAllCommonCode(context) {
     return http
-      .get("/common/code/list")
+      .get("/common/code/all")
       .then((resp) => {
         if (resp.data) {
           context.commit("setSizeList", resp.data.sizeList);
@@ -25,6 +25,7 @@ export default {
           context.commit("setCateList", resp.data.cateList);
           context.commit("setProcList", resp.data.procList);
           context.commit("setDeliList", resp.data.deliList);
+          context.commit("setBankList", resp.data.bankList);
           return true;
         }
         return false;

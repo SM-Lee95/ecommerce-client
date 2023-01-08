@@ -182,7 +182,7 @@
 </template>
 
 <script>
-import CKEditor4 from "./CKEditor4";
+import CKEditor4 from "./editor/CKEditor4";
 import { mapGetters } from "vuex";
 export default {
   name: "CreatePrdPage",
@@ -228,7 +228,7 @@ export default {
         "prdRegiInfo",
         new Blob([JSON.stringify(prdObj)], { type: "application/json" })
       );
-      this.$store.dispatch("insertPrdInfo", formData).then((resp) => {
+      this.$store.dispatch("product/insertPrdInfo", formData).then((resp) => {
         if (resp) {
           this.$dialog.message.success("상품 등록에 성공하셨습니다.");
           this.clear();
@@ -239,14 +239,7 @@ export default {
         }
       });
     },
-    clear(invalid) {
-      if (invalid) {
-        console.log(invalid);
-        return;
-      } else {
-        console.log(invalid);
-        if (!invalid) return;
-      }
+    clear() {
       this.name = "";
       this.corpNm = "";
       this.buyPri = "";
@@ -259,7 +252,7 @@ export default {
       this.cateCd = null;
       this.colorCdList = null;
       this.sizeCdList = null;
-      this.$store.commit("setEditorHTML", "");
+      this.$store.commit("common/setEditorHTML", "");
     },
     imgPreview() {
       if (this.thumbnailImg != null)
@@ -267,10 +260,10 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["EditorHTML", "SizeList", "ColorList", "CateList"]),
+    ...mapGetters("common",["EditorHTML", "SizeList", "ColorList", "CateList"]),
   },
   mounted() {
-    this.$store.commit("setEditorHTML", "");
+    this.$store.commit("common/setEditorHTML", "");
   },
   watch: {
     EditorHTML: function (val) {

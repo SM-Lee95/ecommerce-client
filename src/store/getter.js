@@ -23,4 +23,7 @@ export default {
   DeliList(state) {
     return state.DeliList;
   },
+  BankList(state){
+    return state.BankList;
+  }
 };

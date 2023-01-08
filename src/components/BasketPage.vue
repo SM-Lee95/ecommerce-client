@@ -18,7 +18,7 @@
           hide-default-footer
           v-model="selectList"
           item-key="cd"
-          no-data-text="상품이 존재하지 않습니다."
+          no-data-text="장바구니에 상품이 존재하지 않습니다."
         >
           <template v-slot:item.thumbnail="{ item }">
             <v-img
@@ -125,7 +125,7 @@ export default {
         this.$dialog.message.warning("로그인 후에 시도해주세요.");
         return;
       }
-      this.$store.dispatch("putLike", cd).then((resp) => {
+      this.$store.dispatch("product/putLike", cd).then((resp) => {
         if (resp) {
           this.$dialog.message.success("Success");
           this.$store.state.BasketList[index].love = !love;
@@ -139,7 +139,7 @@ export default {
         this.$dialog.message.warning("상품 선택후에 진행해주세요.");
         return;
       }
-      this.$store.commit("setOrderList", this.selectList);
+      this.$store.commit("order/setOrderList", this.selectList);
       this.$router.push("/Order");
     },
     deleteItem(productCd) {
@@ -147,7 +147,7 @@ export default {
         this.$dialog.message.warning("로그인 후에 시도해주세요.");
         return;
       }
-      this.$store.dispatch("delBasketInfo", { prdCd: productCd, listCd: 0 }).then((resp) => {
+      this.$store.dispatch("product/delBasketInfo", { prdCd: productCd, listCd: 0 }).then((resp) => {
         if (resp) {
           this.$dialog.message.success("Success");
           this.$store.dispatch("product/getBasketList");
@@ -159,7 +159,7 @@ export default {
         this.$dialog.message.warning("로그인 후에 시도해주세요.");
         return;
       }
-      this.$store.dispatch("delBasketInfo", productKey).then((resp) => {
+      this.$store.dispatch("product/delBasketInfo", productKey).then((resp) => {
         if (resp) {
           this.$dialog.message.success("Success");
           this.$store.dispatch("product/getBasketList");

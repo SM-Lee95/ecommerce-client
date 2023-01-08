@@ -85,7 +85,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import modiInfoPage from "../components/ModiInfoPage.vue";
+import modiInfoPage from "./dialog/ModiInfoPage.vue";
 
 export default {
   components: {
@@ -120,7 +120,7 @@ export default {
       });
     },
     getOrderDetail(ordsCd) {
-      this.$store.dispatch("getOrderDetailInfo", ordsCd).then((resp) => {
+      this.$store.dispatch("order/getOrderDetailInfo", ordsCd).then((resp) => {
         if (resp) {
           this.$router.push("/OrderDetailPage");
         } else {

@@ -47,9 +47,16 @@ const methods = {
       top: window.screen.height / 2 - height / 2,
     });
   },
+  deliInfoPopup: function(traCd) {
+    window.open(
+      "http://nplus.doortodoor.co.kr/web/detail.jsp?slipno=" + traCd,
+      ""
+    );
+  },
 };
 export default {
   install(Vue) {
     Vue.prototype.$daumPostCode = methods.daumPostCode;
+    Vue.prototype.$deliInfoPopup =  methods.deliInfoPopup;
   },
 };

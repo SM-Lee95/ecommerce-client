@@ -26,8 +26,12 @@
                 </template>
                 <v-date-picker v-model="date" no-title scrollable range>
                   <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="menu = false"> Cancel </v-btn>
-                  <v-btn text color="primary" @click="$refs.menu.save(date)"> OK </v-btn>
+                  <v-btn text color="primary" @click="menu = false">
+                    Cancel
+                  </v-btn>
+                  <v-btn text color="primary" @click="$refs.menu.save(date)">
+                    OK
+                  </v-btn>
                 </v-date-picker>
               </v-menu>
             </v-col>
@@ -72,11 +76,13 @@
           :items="OrderMngList"
           class="elevation- mt-3"
           hide-default-footer
-          disable-sort
           no-data-text="주문 건이 존재하지 않습니다."
+          :items-per-page="-1"
         >
           <template v-slot:item.date="{ item }">
-            {{ item.regDati[0] + "/" + item.regDati[1] + "/" + item.regDati[2] }}
+            {{
+              item.regDati[0] + "/" + item.regDati[1] + "/" + item.regDati[2]
+            }}
           </template>
           <template v-slot:item.cd="{ item }">
             {{ item.cd }}
@@ -115,13 +121,13 @@
 
 <script>
 import { mapGetters } from "vuex";
-import OrderMngPageModiDialog from "./OrderMngPageModiDialog";
+import OrderMngPageModiDialog from "./dialog/OrderMngPageModiDialog";
 export default {
   name: "OrderMngPage",
   components: { OrderMngPageModiDialog },
   methods: {
     editDialog(item) {
-      this.$store.commit("setOrderEditObjList", Object.assign({}, item));
+      this.$store.commit("order/setOrderEditObjList", Object.assign({}, item));
       this.modiDialog = !this.modiDialog;
     },
     searchList() {
@@ -132,16 +138,18 @@ export default {
         beforeDati: this.date[0],
         afterDati: this.date[1],
       };
-      this.$store.dispatch("selectOrderMngList", reqData).then((resp) => {
+      this.$store.dispatch("order/selectOrderMngList", reqData).then((resp) => {
         if (!resp) this.$dialog.message.warning("조회 중 에러가 발생했습니다.");
       });
     },
     getOrderDetail(ordsCd) {
-      this.$store.dispatch("getOrderDetailInfo", ordsCd).then((resp) => {
+      this.$store.dispatch("order/getOrderDetailInfo", ordsCd).then((resp) => {
         if (resp) {
           this.$router.push("/OrderDetailPage");
         } else {
-          this.$dialog.message.error("주문 상세 정보를 가져오는데 실패했습니다.");
+          this.$dialog.message.error(
+            "주문 상세 정보를 가져오는데 실패했습니다."
+          );
         }
       });
     },
@@ -170,10 +178,18 @@ export default {
     modiDialog: false,
     editObjList: [],
     date: [
-      new Date(Date.now() - new Date().getTimezoneOffset() * 60000 - 60000 * 60 * 24 * 30)
+      new Date(
+        Date.now() -
+          new Date().getTimezoneOffset() * 60000 -
+          60000 * 60 * 24 * 360
+      )
         .toISOString()
         .substr(0, 10),
-      new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10),
+      new Date(
+        Date.now() - new Date().getTimezoneOffset() * 60000 + 60000 * 60 * 24
+      )
+        .toISOString()
+        .substr(0, 10),
     ],
   }),
   computed: {
