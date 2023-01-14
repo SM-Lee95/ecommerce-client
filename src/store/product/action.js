@@ -150,7 +150,6 @@ export default {
       })
       .then((resp) => {
         if (resp.data) {
-          console.log(resp.data);
           context.commit("setProductList", resp.data);
           return true;
         }

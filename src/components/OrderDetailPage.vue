@@ -2,34 +2,17 @@
   <v-container fluid>
     <v-row no-gutters>
       <v-col class="text-h6 font-weight-bold">주문 상세 정보</v-col>
-      <v-col class="text-right"
-        >주문 상태 :
-        <b>{{ OrderProcList[this.OrderDetailInfo[0].procTy] }}</b></v-col
-      >
+      <v-col class="text-right">주문 상태 :
+        <b>{{ OrderProcList[this.OrderDetailInfo[0].repProcTy] }}</b></v-col>
     </v-row>
     <v-row no-gutters>
-      <v-col class="text-left"
-        >주문 번호 : <b>{{ this.OrderDetailInfo[0].ordsCd }}</b></v-col
-      >
-      <v-col class="text-right"
-        >일자 : <b>{{ this.OrderDetailInfo[0].regDati }}</b></v-col
-      >
+      <v-col class="text-left">주문 번호 : <b>{{ this.OrderDetailInfo[0].ordsCd }}</b></v-col>
+      <v-col class="text-right">일자 : <b>{{ this.OrderDetailInfo[0].regDati }}</b></v-col>
     </v-row>
-    <v-data-table
-      :headers="header"
-      :items="this.OrderDetailInfo"
-      class="elevation-0 mt-2"
-      hide-default-footer
-      disable-sort
-      no-data-text="주문 건이 존재하지 않습니다."
-    >
+    <v-data-table :headers="header" :items="this.OrderDetailInfo" class="elevation-0 mt-2" hide-default-footer
+      disable-sort no-data-text="주문 건이 존재하지 않습니다.">
       <template v-slot:item.thumbnail="{ item }">
-        <v-img
-          :src="item.thumbnail"
-          max-height="100%"
-          min-height="100%"
-          max-width="100"
-        ></v-img>
+        <v-img :src="item.thumbnail" max-height="100%" min-height="100%" max-width="100"></v-img>
       </template>
       <template v-slot:item.prdInfo="{ item }">
         <v-row no-gutters>
@@ -67,43 +50,35 @@
       </template>
       <template v-slot:item.proc="{ item }">
         <v-row no-gutters>
-          <v-col
-            :cols="item.procTy < 2 || item.procTy == 4 ? 6 : 12"
-            align-self="center"
-          >
+          <v-col align-self="center">
             <v-btn text @click="getProcAlert(item)">
-              {{ OrderProcList[item.procTy]
-              }}{{ item.traCd ? "(" + item.traCd + ")" : "" }}
+              {{ OrderProcList[item.procTy] }}
+              {{ (item.procTy == '2' || item.procTy == '3' || item.procTy == '4') && item.traCd ? "(" + item.traCd + ")"
+              : "" }}
             </v-btn>
           </v-col>
+        </v-row>
+      </template>
+      <template v-slot:item.action="{ item }">
+        <v-row no-gutters>
           <v-col cols="6" v-if="item.procTy < 2">
-            <v-row no-gutters
-              ><v-col>
+            <v-row no-gutters v-if="item.listCd >= 0"><v-col>
                 <v-btn text @click="cancelOrder(item)">주문취소</v-btn>
-              </v-col></v-row
-            >
-            <v-row no-gutters
-              ><v-col>
+              </v-col></v-row>
+            <v-row no-gutters><v-col>
                 <v-btn text @click="updateOption(item)">옵션변경</v-btn>
-              </v-col></v-row
-            >
+              </v-col></v-row>
           </v-col>
           <v-col cols="6" v-if="item.procTy == 4">
-            <v-row no-gutters
-              ><v-col>
+            <v-row no-gutters><v-col>
                 <v-btn text @click="confirmPurchase(item)">구매확정</v-btn>
-              </v-col></v-row
-            >
-            <v-row no-gutters
-              ><v-col>
+              </v-col></v-row>
+            <v-row no-gutters v-if="item.listCd >= 0"><v-col>
                 <v-btn text @click="exchangeRequest(item)">교환요청</v-btn>
-              </v-col></v-row
-            >
-            <v-row no-gutters
-              ><v-col>
+              </v-col></v-row>
+            <v-row no-gutters><v-col>
                 <v-btn text @click="returnRequest(item)">반품요청</v-btn>
-              </v-col></v-row
-            >
+              </v-col></v-row>
           </v-col>
         </v-row>
       </template>
@@ -115,19 +90,10 @@
           <v-row>
             <v-col class="text-h6" cols="7"> 배송지 정보 </v-col>
             <v-col cols="5" v-if="OrderDetailInfo[0].repProcTy < 2">
-              <v-btn v-if="!updateFlag" text @click="updateOrderInfo"
-                >주문정보수정</v-btn
-              >
-              <v-btn
-                text
-                @click="updateComplete(OrderDetailInfo[0].ordsCd)"
-                v-if="updateFlag"
-                :disabled="invalid"
-                >변경완료</v-btn
-              >
-              <v-btn text @click="updateCancel" v-if="updateFlag"
-                >변경취소</v-btn
-              >
+              <v-btn v-if="!updateFlag" text @click="updateOrderInfo">주문정보수정</v-btn>
+              <v-btn text @click="updateComplete(OrderDetailInfo[0].ordsCd)" v-if="updateFlag"
+                :disabled="invalid">변경완료</v-btn>
+              <v-btn text @click="updateCancel" v-if="updateFlag">변경취소</v-btn>
             </v-col>
           </v-row>
           <v-row>
@@ -139,18 +105,8 @@
                     {{ OrderDetailInfo[0].recvNm }}
                   </v-list-item-subtitle>
                   <v-list-item-subtitle v-if="updateFlag">
-                    <validation-provider
-                      v-slot="{ errors }"
-                      name="name"
-                      rules="required|max:15"
-                    >
-                      <v-text-field
-                        flat
-                        dense
-                        v-model="name"
-                        :counter="15"
-                        :error-messages="errors"
-                      ></v-text-field>
+                    <validation-provider v-slot="{ errors }" name="name" rules="required|max:15">
+                      <v-text-field flat dense v-model="name" :counter="15" :error-messages="errors"></v-text-field>
                     </validation-provider>
                   </v-list-item-subtitle>
                 </v-list-item>
@@ -160,21 +116,11 @@
                     {{ OrderDetailInfo[0].recvPhone }}
                   </v-list-item-subtitle>
                   <v-list-item-subtitle v-if="updateFlag">
-                    <validation-provider
-                      v-slot="{ errors }"
-                      name="(010-****-****)"
-                      :rules="{
-                        required: true,
-                        regex: [/^\d{2,3}-\d{3,4}-\d{4}$/],
-                      }"
-                    >
-                      <v-text-field
-                        flat
-                        dense
-                        :counter="13"
-                        :error-messages="errors"
-                        v-model="phone"
-                      ></v-text-field>
+                    <validation-provider v-slot="{ errors }" name="(010-****-****)" :rules="{
+                      required: true,
+                      regex: [/^\d{2,3}-\d{3,4}-\d{4}$/],
+                    }">
+                      <v-text-field flat dense :counter="13" :error-messages="errors" v-model="phone"></v-text-field>
                     </validation-provider>
                   </v-list-item-subtitle>
                 </v-list-item>
@@ -186,25 +132,9 @@
                     {{ OrderDetailInfo[0].etcAddress }}<br />
                   </v-list-item-subtitle>
                   <v-list-item-subtitle v-if="updateFlag">
-                    <v-text-field
-                      flat
-                      dense
-                      v-model="postcode"
-                      readonly
-                      @click="daumPostCode"
-                    ></v-text-field>
-                    <v-text-field
-                      flat
-                      dense
-                      v-model="mainAddress"
-                      readonly
-                      @click="daumPostCode"
-                    ></v-text-field>
-                    <v-text-field
-                      flat
-                      dense
-                      v-model="etcAddress"
-                    ></v-text-field>
+                    <v-text-field flat dense v-model="postcode" readonly @click="daumPostCode"></v-text-field>
+                    <v-text-field flat dense v-model="mainAddress" readonly @click="daumPostCode"></v-text-field>
+                    <v-text-field flat dense v-model="etcAddress"></v-text-field>
                   </v-list-item-subtitle>
                 </v-list-item>
                 <v-list-item>
@@ -213,20 +143,10 @@
                     {{ OrderDetailInfo[0].reqMemo }}<br />
                   </v-list-item-subtitle>
                   <v-list-item-subtitle v-if="updateFlag">
-                    <validation-provider
-                      v-slot="{ errors }"
-                      name="배송 메시지"
-                      :rules="{
-                        required: false,
-                      }"
-                    >
-                      <v-text-field
-                        flat
-                        dense
-                        :counter="50"
-                        :error-messages="errors"
-                        v-model="reqMemo"
-                      ></v-text-field>
+                    <validation-provider v-slot="{ errors }" name="배송 메시지" :rules="{
+                      required: false,
+                    }">
+                      <v-text-field flat dense :counter="50" :error-messages="errors" v-model="reqMemo"></v-text-field>
                     </validation-provider>
                   </v-list-item-subtitle>
                 </v-list-item>
@@ -263,10 +183,10 @@
                   <v-list-item-subtitle> 총 합계 </v-list-item-subtitle>
                   <v-list-item-subtitle>
                     {{
-                      String(
-                        Number(OrderDetailInfo[0].totDeliPri) +
-                          Number(OrderDetailInfo[0].totPri)
-                      ).comma()
+  String(
+    Number(OrderDetailInfo[0].totDeliPri) +
+  Number(OrderDetailInfo[0].totPri)
+).comma()
                     }}
                     원
                   </v-list-item-subtitle>
@@ -277,25 +197,16 @@
         </v-col>
       </v-row>
     </validation-observer>
-    <v-dialog v-model="optionDialog"
-      ><order-option-update-dialog
-        v-on:close="close('optionDialog')"
-      ></order-option-update-dialog>
+    <v-dialog v-model="optionDialog"><order-option-update-dialog
+        v-on:close="close('optionDialog')"></order-option-update-dialog>
     </v-dialog>
-    <v-dialog v-model="cancelDialog"
-      ><order-cancel-dialog
-        v-on:close="close('cancelDialog')"
-      ></order-cancel-dialog>
+    <v-dialog v-model="cancelDialog"><order-cancel-dialog v-on:close="close('cancelDialog')"></order-cancel-dialog>
     </v-dialog>
     <v-dialog v-model="exchangeDialog">
-      <exchange-request-dialog
-        v-on:close="close('exchangeDialog')"
-      ></exchange-request-dialog>
+      <exchange-request-dialog v-on:close="close('exchangeDialog')"></exchange-request-dialog>
     </v-dialog>
     <v-dialog v-model="returnDialog">
-      <return-request-dialog
-        v-on:close="close('returnDialog')"
-      ></return-request-dialog>
+      <return-request-dialog v-on:close="close('returnDialog')"></return-request-dialog>
     </v-dialog>
   </v-container>
 </template>
@@ -325,6 +236,7 @@ export default {
       { text: "수량", value: "cnt", align: "center" },
       { text: "합계금액", value: "subSumPri", align: "start" },
       { text: "주문상태", value: "proc", align: "center" },
+      { text: "", value: "action", align: "center" },
     ],
     postcode: "",
     mainAddress: "",
@@ -340,7 +252,7 @@ export default {
   }),
   computed: {
     ...mapGetters("order", ["OrderDetailInfo"]),
-    ...mapGetters("common", ["OrderProcList"]),
+    ...mapGetters("common", ["OrderProcList", "BankList"]),
   },
   methods: {
     getDetailInfo(cd) {
@@ -377,6 +289,26 @@ export default {
         });
       } else if (item.procTy == 3 || item.procTy == 4) {
         this.$deliInfoPopup(item.traCd);
+      } else if (item.procTy == 10) {
+        let text = "<b>주문이 취소되었습니다.</b>";
+        if (item.returnAccount) {
+          text += "<br/>환불 계좌 : " + item.returnAccount;
+          text += "<br/>예금주 : " + item.accountHolder;
+          text += "<br/>은행 : " + this.BankList.filter(vo => vo.commonKey.commCd == item.returnBank)[0].name;
+          text += "<br/>환불 금액 : " + item.returnPri.comma() + "원";
+          text += "<br/><b class='red--text'>한 주문의 마지막 아이템 취소 건에 배송비가 합산 환불됩니다.</b>"
+        }
+        this.$dialog.info({
+          title: "주문취소",
+          text: text,
+          showClose: false,
+        })
+      } else if (item.procTy == 8){
+        this.$dialog.info({
+          title: "물품 회수",
+          text: "물품 회수가 완료됐습니다. <br/>반품 건은 환불이 진행되고 교환 건은 배송이 진행됩니다.",
+          showClose: false,
+        })
       }
     },
     cancelOrder(item) {
@@ -446,15 +378,46 @@ export default {
       this.reqMemo = "";
     },
     returnRequest(item) {
-      this.$store.commit("order/setReturnRequestInfo", item);
+      this.$store.commit("order/setOrderCancelInfo", item);
       this.returnDialog = true;
     },
     exchangeRequest(item) {
-      this.$store.commit("order/setExchangeRequestInfo", item);
-      this.exchangeDialog = true;
+      this.$store
+        .dispatch("order/selectItemOptionInfo", {
+          params: {
+            ordsCd: item.ordsCd,
+            listCd: item.listCd,
+            prdCd: item.prdCd,
+            prdListCd: item.prdListCd,
+          },
+        })
+        .then((resp) => {
+          if (resp) this.exchangeDialog = true;
+          else this.$dialog.error("상품 옵션을 가져오는데 문제가 발생했습니다.");
+        });
     },
     confirmPurchase(item) {
-      console.log(item);
+      this.$dialog
+        .confirm({
+          title: "주문 확정",
+          text: "해당 품목 주문을 확정하시겠습니까?",
+          showClose: false,
+        })
+        .then((resp) => {
+          if (!resp) return;
+          let reqData = {
+            ordsCd: item.ordsCd,
+            listCd: item.listCd,
+          };
+          this.$store.dispatch("order/updateConfirmPurchase", reqData).then((resp) => {
+            if (resp) {
+              this.$dialog.message.info("주문 확정이 완료되었습니다.");
+              this.$store.dispatch("order/getOrderDetailInfo", item.ordsCd);
+            } else {
+              this.$dialog.message.error("주문 확정에 실패하였습니다.");
+            }
+          });
+        });
     },
     close(vo) {
       this[vo] = false;
@@ -463,4 +426,6 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

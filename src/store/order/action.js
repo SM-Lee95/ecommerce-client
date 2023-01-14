@@ -154,8 +154,47 @@ export default {
       .delete("/ords/info", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        if (resp.data.statusCode == "400") return false;
+        else if (resp.data.statusCode == "400") return false;
+        else return resp.data.message;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
         return false;
+      });
+  },
+  updateConfirmPurchase(context, data) {
+    return http
+      .put("/ords/confirm", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
+        else if (resp.data.statusCode == "400") return false;
+        else return resp.data.message;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  updateExchangeRequest(context, data) {
+    return http
+      .put("/ords/exchange", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
+        else if (resp.data.statusCode == "400") return false;
+        else return resp.data.message;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  updateReturnRequest(context, data) {
+    return http
+      .delete("/ords/returnRequest", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
+        else if (resp.data.statusCode == "400") return false;
+        else return resp.data.message;
       })
       .catch((resp) => {
         console.log("서버오류 \n " + resp);

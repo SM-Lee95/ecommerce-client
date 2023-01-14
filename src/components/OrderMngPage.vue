@@ -127,6 +127,9 @@ export default {
   components: { OrderMngPageModiDialog },
   methods: {
     editDialog(item) {
+      item.orderDtlDtoList.forEach(vo=>{
+        vo.deliCnt = vo.remainCnt;
+      });
       this.$store.commit("order/setOrderEditObjList", Object.assign({}, item));
       this.modiDialog = !this.modiDialog;
     },

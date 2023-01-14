@@ -113,7 +113,6 @@ export default {
   },
   methods: {
     getDetailInfo(cd) {
-      console.log(this.BasketList);
       this.$store.dispatch("product/getDetailInfo", cd).then((resp) => {
         if (resp) {
           if (this.$route.path != "/Detail") this.$router.push("/Detail");

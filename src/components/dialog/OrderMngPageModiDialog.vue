@@ -6,8 +6,8 @@
       <v-card-actions>
         <v-row class="text-right">
           <v-col>
-            <v-btn text @click="saveInfoProc"> 주문 상태 수정 </v-btn>
-            <v-btn text @click="saveDtlProc"> 개별 주문 상태 수정 </v-btn>
+            <v-btn text @click="saveInfoProc"> 주문별 상태 수정 </v-btn>
+            <v-btn text @click="saveDtlProc"> 아이템별 주문 상태 수정 </v-btn>
             <v-btn text @click="createTrdInfo"> 운송장 등록 </v-btn>
           </v-col>
         </v-row>
@@ -104,7 +104,7 @@ export default {
         .confirm({
           title: "주문 상태 수정",
           text:
-            this.OrderProcList[this.procTy] + " 로 해당 주문의 모든 품목 주문 상태가 수정됩니다.",
+            this.OrderProcList[this.procTy] + " 로 해당 주문의 주문 상태가 수정됩니다.",
           showClose: false,
         })
         .then((resp) => {
@@ -137,7 +137,6 @@ export default {
             if (resp) this.$dialog.message.info("수정되었습니다.");
             else this.$dialog.message.error("수정에 실패하셨습니다.");
             this.modiDialog = false;
-            this.searchList();
           });
         });
     },
@@ -147,12 +146,14 @@ export default {
         return;
       }
       let isErr = this.selected.filter((vo) => {
-        if (!vo.deliCnt || isNaN(vo.deliCnt)) {
-          console.log(vo.deliCnt);
+        if (!vo.deliCnt) {
+          this.$dialog.message.error("0보다 큰 숫자를 입력해주세요.");
+          return true;
+        } else if (isNaN(vo.deliCnt)){
           this.$dialog.message.error("선택된 주문의 배송수량을 숫자로 전부 입력해주세요.");
           return true;
-        } else if (vo.cnt < vo.deliCnt) {
-          this.$dialog.message.error("선택된 주문 수량보다 크지않은 배송수량을 입력해주세요.");
+        } else if (vo.remainCnt < vo.deliCnt) {
+          this.$dialog.message.error("선택된 주문 아이템의 남은 배송 수량보다 크지않은 배송수량을 입력해주세요.");
           return true;
         }
         return false;

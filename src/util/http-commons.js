@@ -18,7 +18,7 @@ createAxios.interceptors.request.use(
     return config;
   },
   function (error) {
-    console.log("axios request error : ", error);
+    console.log("Axios Request Error : ", error);
     return Promise.reject(error);
   }
 );

@@ -91,7 +91,7 @@ export default {
       this.$store.dispatch("product/putLike", cd).then((resp) => {
         if (resp) {
           this.$dialog.message.success("Success");
-          this.$store.state.Pagination.content[index].love = !love;
+          this.Pagination.content[index].love = !love;
         } else {
           this.$dialog.message.warning("Fail");
         }
