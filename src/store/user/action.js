@@ -71,6 +71,7 @@ export default {
     return http
       .put("/user/myInfo/pass", data)
       .then((resp) => {
+        console.log(resp);
         if (resp.data.statusCode == "200") return true;
         if (resp.data.statusCode == "400") return false;
         return false;

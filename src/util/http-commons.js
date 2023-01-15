@@ -34,9 +34,11 @@ createAxios.interceptors.response.use(
   },
   async function (error) {
     try {
-      if (error.response.status == 401||error.response.status == 403) {
+      if (error.response.status == 401||error.response.status == 403) { //UNAUTHORIZED , FORBIDDEN
         store.commit("user/removeToken");
-        return null; //다시 axios 요청
+        return null;
+      }else if(error.response.status == 400){ //로그인 실패(BAD_REQUEST)
+        return null;
       }
     } catch (err) {
       console.error("[axios.interceptors.response] error : ", err.message);

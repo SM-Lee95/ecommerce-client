@@ -25,11 +25,6 @@ const routes = [
     component: Main,
   },
   {
-    path: "/Main",
-    name: "Main",
-    component: Main,
-  },
-  {
     path: "/JoinForm",
     name: "JoinForm",
     component: JoinForm,

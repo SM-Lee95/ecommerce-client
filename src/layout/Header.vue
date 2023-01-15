@@ -107,7 +107,7 @@ export default {
       if (this.$route.path != "/JoinForm") this.$router.push("/JoinForm");
     },
     toMain() {
-      if (this.$route.path != "/Main") this.$router.push("/Main");
+      if (this.$route.path != "/") this.$router.push("/");
     },
     goLogin() {
       this.$store

@@ -15,7 +15,7 @@ export default {
     VueCookies.remove("AccessToken");
     VueCookies.remove("RefreshToken");
     state.userInfo = null;
-    location.reload();
+    location.replace("/");
   },
   setUserList(state, payload) {
     state.UserList = payload;
