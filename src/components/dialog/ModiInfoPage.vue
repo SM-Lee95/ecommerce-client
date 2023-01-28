@@ -46,18 +46,9 @@
           <v-list-item-icon>
             <v-icon color="gray darken-2"> mdi-email </v-icon>
           </v-list-item-icon>
-          <v-list-item-content v-show="!isModi">
+          <v-list-item-content>
             <v-list-item-title v-text="this.UserInfo.email"></v-list-item-title>
             <v-list-item-subtitle>Mail</v-list-item-subtitle>
-          </v-list-item-content>
-          <v-list-item-content v-show="isModi">
-            <validation-provider v-slot="{ errors }" name="email" rules="required|email">
-              <v-text-field
-                v-model="email"
-                :error-messages="errors"
-                label="Email(****@****.com)"
-              ></v-text-field>
-            </validation-provider>
           </v-list-item-content>
           <v-list-item-icon>
             <v-icon @click="transForm">mdi-lead-pencil</v-icon>
@@ -68,9 +59,15 @@
             <v-icon color="gray darken-2"> mdi-map-marker </v-icon>
           </v-list-item-icon>
           <v-list-item-content v-show="!isModi">
-            <v-list-item-title v-text="this.UserInfo.postcode"></v-list-item-title>
-            <v-list-item-subtitle v-text="this.UserInfo.mainAddress"></v-list-item-subtitle>
-            <v-list-item-subtitle v-text="this.UserInfo.etcAddress"></v-list-item-subtitle>
+            <v-list-item-title
+              v-text="this.UserInfo.postcode"
+            ></v-list-item-title>
+            <v-list-item-subtitle
+              v-text="this.UserInfo.mainAddress"
+            ></v-list-item-subtitle>
+            <v-list-item-subtitle
+              v-text="this.UserInfo.etcAddress"
+            ></v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-content v-show="isModi">
             <v-row>
@@ -99,7 +96,11 @@
             </v-row>
             <v-row>
               <v-col>
-                <v-text-field dense label="ETC Address" v-model="etcAddress"></v-text-field>
+                <v-text-field
+                  dense
+                  label="ETC Address"
+                  v-model="etcAddress"
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-list-item-content>
@@ -126,7 +127,10 @@
             <v-list-item-title>Email 수신 여부</v-list-item-title>
           </v-list-item-content>
           <v-list-item-action>
-            <v-checkbox @change="transForm(true)" v-model="emailYn"></v-checkbox>
+            <v-checkbox
+              @change="transForm(true)"
+              v-model="emailYn"
+            ></v-checkbox>
           </v-list-item-action>
         </v-list-item>
         <v-divider></v-divider>
@@ -150,7 +154,11 @@
               <v-col class="mt-1 ml-1 text-h6"> 비밀번호변경 </v-col>
               <v-col></v-col>
               <v-col class="text-right">
-                <v-btn small icon @click.stop="passModiDrawer = !passModiDrawer">
+                <v-btn
+                  small
+                  icon
+                  @click.stop="passModiDrawer = !passModiDrawer"
+                >
                   <v-icon color="gray darken-2">mdi-close-box</v-icon>
                 </v-btn>
               </v-col>
@@ -224,7 +232,6 @@ import { mapGetters } from "vuex";
 export default {
   data: () => ({
     isModi: false,
-    email: "",
     phone: "",
     postcode: "",
     mainAddress: "",
@@ -276,7 +283,7 @@ export default {
         } else {
           const userInfoDto = {
             phone: this.phone,
-            email: this.email,
+            email: this.UserInfo.email,
             smsYn: this.smsYn ? "Y" : "N",
             emailYn: this.emailYn ? "Y" : "N",
             postcode: this.postcode,
@@ -294,9 +301,16 @@ export default {
             this.isModi = false;
             if (resp) {
               this.$dialog.message.success("정보 변경에 성공하셨습니다.");
-              this.$store.dispatch("user/getMyUserInfo");
+              this.$store.dispatch("user/getMyUserInfo").then((resp) => {
+                if (!resp)
+                  this.$dialog.message.error(
+                    "정보를 가져오는데 에러가 발생했습니다."
+                  );
+              });
             } else {
-              this.$dialog.message.warning("정보 변경에 실패하셨습니다. 다시 시도해주세요.");
+              this.$dialog.message.warning(
+                "정보 변경에 실패하셨습니다. 다시 시도해주세요."
+              );
             }
           });
         }

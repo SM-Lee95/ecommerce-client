@@ -9,7 +9,7 @@ export default {
     return http
       .get("/prd/list/" + context.getters["selectMenuCd"], { params: data })
       .then((resp) => {
-        if (resp.data) {
+        if (!resp.data.statusCode) {
           context.commit("setPagination", resp.data);
           return true;
         } else return false;
@@ -23,7 +23,7 @@ export default {
     return http
       .get("/prd/detail/" + data)
       .then((resp) => {
-        if (resp.data) {
+        if (!resp.data.statusCode) {
           context.commit("setDetailInfo", resp.data);
           return true;
         }
@@ -39,7 +39,6 @@ export default {
       .get("/prd/like/" + data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        if (resp.data.statusCode == "400") return false;
         return false;
       })
       .catch((resp) => {
@@ -51,7 +50,7 @@ export default {
     return http
       .get("/prd/like/list")
       .then((resp) => {
-        if (resp.data) {
+        if (!resp.data.statusCode) {
           context.commit("setJJimList", resp.data);
           return true;
         }
@@ -67,7 +66,6 @@ export default {
       .post("/prd/basket", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        if (resp.data.statusCode == "400") return false;
         return false;
       })
       .catch((resp) => {
@@ -79,7 +77,7 @@ export default {
     return http
       .get("/prd/basket/list")
       .then((resp) => {
-        if (resp.data) {
+        if (!resp.data.statusCode) {
           context.commit("setBasketList", resp.data);
           return true;
         }
@@ -95,7 +93,6 @@ export default {
       .delete("/prd/basket/" + data.prdCd + "/" + data.listCd)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        if (resp.data.statusCode == "400") return false;
         return false;
       })
       .catch((resp) => {
@@ -108,7 +105,6 @@ export default {
       .post("/ords/items", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        if (resp.data.statusCode == "400") return false;
         return false;
       })
       .catch((resp) => {
@@ -135,7 +131,6 @@ export default {
       .post("/prd/info/admin", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        if (resp.data.statusCode == "400") return false;
         return false;
       })
       .catch((resp) => {
@@ -149,7 +144,7 @@ export default {
         params: data,
       })
       .then((resp) => {
-        if (resp.data) {
+        if (!resp.data.statusCode) {
           context.commit("setProductList", resp.data);
           return true;
         }
@@ -169,7 +164,6 @@ export default {
       })
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        if (resp.data.statusCode == "400") return false;
         return false;
       })
       .catch((resp) => {
@@ -182,7 +176,6 @@ export default {
       .put("/prd/info/admin", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        if (resp.data.statusCode == "400") return false;
         return false;
       })
       .catch((resp) => {

@@ -2,8 +2,8 @@
   <v-container fluid>
     <v-row no-gutters>
       <v-col cols="2" class="grey lighten-3">
-        <v-list  class="grey lighten-3">
-          <v-list-item link @click="goProductMng" dense>
+        <v-list class="grey lighten-3">
+          <v-list-item link @click="goProductMng" dense small>
             <v-list-item-icon>
               <v-icon>mdi-hanger</v-icon>
             </v-list-item-icon>

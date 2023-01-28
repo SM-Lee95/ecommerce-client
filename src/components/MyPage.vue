@@ -63,7 +63,7 @@
       no-data-text="주문 건이 존재하지 않습니다."
     >
       <template v-slot:item.date="{ item }">
-        {{ item.regDati[0] + "/" + item.regDati[1] + "/" + item.regDati[2] }}
+        {{ item.regDati.substr(2, 8) }}
       </template>
       <template v-slot:item.cd="{ item }">
         {{ item.cd }}

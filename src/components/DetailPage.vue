@@ -176,7 +176,7 @@ export default {
       this.$store.dispatch("product/putLike", cd).then((resp) => {
         if (resp) {
           this.$dialog.message.success("Success");
-          this.$store.state.DetailInfo.love = !love;
+          this.DetailInfo.love = !love;
         } else {
           this.$dialog.message.warning("Fail");
         }
@@ -228,6 +228,8 @@ export default {
       this.$store.dispatch("product/postBasket", this.selectOptions).then((resp) => {
         if (resp) {
           this.$dialog.message.success("장바구니에 추가하셨습니다.");
+          this.selectOptions = [];
+          this.calc();
         } else {
           this.$dialog.message.warning("장바구니 추가에 실패했습니다.");
         }
@@ -235,6 +237,7 @@ export default {
     },
     deleteOption(index) {
       this.selectOptions.splice(index, 1);
+      this.calc();
     },
     calc() {
       var val = 0;

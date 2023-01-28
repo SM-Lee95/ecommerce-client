@@ -7,8 +7,8 @@ export default {
       .then((resp) => {
         if (!resp) return false;
         context.commit("tokenSetting", resp.headers);
-        return context.dispatch("getMyUserInfo").then(() => {
-          return true;
+        return context.dispatch("getMyUserInfo").then((resp) => {
+          return resp;
         });
       })
       .catch((resp) => {
@@ -21,7 +21,6 @@ export default {
       .post("/user/myInfo", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        if (resp.data.statusCode == "400") return false;
         return false;
       })
       .catch((resp) => {
@@ -44,7 +43,7 @@ export default {
     return http
       .get("/user/myInfo")
       .then((resp) => {
-        if (resp.data) {
+        if (!resp.data.statusCode) {
           context.commit("setUserInfo", resp.data);
           return true;
         } else return false;
@@ -59,7 +58,6 @@ export default {
       .put("/user/myInfo", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        if (resp.data.statusCode == "400") return false;
         return false;
       })
       .catch((resp) => {
@@ -71,9 +69,19 @@ export default {
     return http
       .put("/user/myInfo/pass", data)
       .then((resp) => {
-        console.log(resp);
         if (resp.data.statusCode == "200") return true;
-        if (resp.data.statusCode == "400") return false;
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  updateEmailPass(context, data) {
+    return http
+      .put("/user/email/pass", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
         return false;
       })
       .catch((resp) => {
@@ -85,7 +93,7 @@ export default {
     return http
       .get("/user/list/admin", data)
       .then((resp) => {
-        if (resp.data) {
+        if (!resp.data.statusCode) {
           context.commit("setUserList", resp.data);
           return true;
         } else return false;
@@ -95,4 +103,38 @@ export default {
         return false;
       });
   },
+  emailAuth(context, data) {
+    return http
+      .post("/mailing/emailAuth", data)
+      .then((resp) => {
+        return resp;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  emailPass(context, data) {
+    return http
+      .post("/mailing/emailPass", data)
+      .then((resp) => {
+        return resp;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  compAuth(context, data) {
+    return http
+      .get("/mailing/comp/" + data)
+      .then((resp) => {
+        return resp;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  
 };

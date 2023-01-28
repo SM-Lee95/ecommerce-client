@@ -23,4 +23,7 @@ export default {
   setBankList(state, payload) {
     state.BankList = payload;
   },
+  setMailAuthTy(state, payload){
+    state.MailAuthTy = payload;
+  }
 };

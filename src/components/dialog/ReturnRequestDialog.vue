@@ -86,8 +86,6 @@ export default {
                 this.clear();
                 this.$store.dispatch("order/getOrderDetailInfo", this.OrderCancelInfo.ordsCd);
                 this.$emit("close");
-              } else if (resp == false) {
-                this.$dialog.message.error("반품 요청에 실패하셨습니다.");
               } else {
                 this.$dialog.message.error(
                   "반품 요청에 실패하셨습니다. 사유 : " + resp

@@ -9,7 +9,7 @@ export default {
         },
       })
       .then((resp) => {
-        if (resp.data) {
+        if (!resp.data.statusCode) {
           context.commit("setOrderHisList", resp.data);
           if (!data) context.commit("setOrderHisSummary", resp.data);
           return true;
@@ -26,7 +26,6 @@ export default {
       .post("/ords/items", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        if (resp.data.statusCode == "400") return false;
         return false;
       })
       .catch((resp) => {
@@ -38,7 +37,7 @@ export default {
     return http
       .get("/ords/info/" + data)
       .then((resp) => {
-        if (resp.data) {
+        if (!resp.data.statusCode) {
           context.commit("setOrderDetailInfo", resp.data);
           return true;
         }
@@ -54,7 +53,6 @@ export default {
       .post("/tra/list/admin", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        if (resp.data.statusCode == "400") return false;
         return false;
       })
       .catch((resp) => {
@@ -67,7 +65,6 @@ export default {
       .put("/ords/list/" + data.procTy + "/admin", data.ordsDtlList)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        if (resp.data.statusCode == "400") return false;
         return false;
       })
       .catch((resp) => {
@@ -80,7 +77,6 @@ export default {
       .put("/ords/info/" + data.procTy + "/admin", data.ordsCd)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        if (resp.data.statusCode == "400") return false;
         return false;
       })
       .catch((resp) => {
@@ -92,7 +88,7 @@ export default {
     return http
       .get("/ords/list/admin", { params: data })
       .then((resp) => {
-        if (resp.data) {
+        if (!resp.data.statusCode) {
           context.commit("setOrderMngList", resp.data);
           return true;
         }
@@ -108,7 +104,6 @@ export default {
       .put("/ords/info", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        if (resp.data.statusCode == "400") return false;
         return false;
       })
       .catch((resp) => {
@@ -120,7 +115,7 @@ export default {
     return http
       .get("/ords/option/info", data)
       .then((resp) => {
-        if (resp.data) {
+        if (!resp.data.statusCode) {
           resp.data = resp.data.filter((vo) => {
             //동일옵션 삭제
             if (vo.productKey.listCd == data.params.prdListCd) return false;
@@ -141,7 +136,6 @@ export default {
       .put("/ords/option/info", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        if (resp.data.statusCode == "400") return false;
         return false;
       })
       .catch((resp) => {
@@ -154,7 +148,6 @@ export default {
       .delete("/ords/info", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        else if (resp.data.statusCode == "400") return false;
         else return resp.data.message;
       })
       .catch((resp) => {
@@ -167,7 +160,6 @@ export default {
       .put("/ords/confirm", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        else if (resp.data.statusCode == "400") return false;
         else return resp.data.message;
       })
       .catch((resp) => {
@@ -180,7 +172,6 @@ export default {
       .put("/ords/exchange", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        else if (resp.data.statusCode == "400") return false;
         else return resp.data.message;
       })
       .catch((resp) => {
@@ -193,7 +184,6 @@ export default {
       .delete("/ords/returnRequest", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
-        else if (resp.data.statusCode == "400") return false;
         else return resp.data.message;
       })
       .catch((resp) => {

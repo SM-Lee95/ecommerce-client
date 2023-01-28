@@ -80,9 +80,7 @@
           :items-per-page="-1"
         >
           <template v-slot:item.date="{ item }">
-            {{
-              item.regDati[0] + "/" + item.regDati[1] + "/" + item.regDati[2]
-            }}
+            {{ item.regDati.substr(2, 8) }}
           </template>
           <template v-slot:item.cd="{ item }">
             {{ item.cd }}
@@ -127,7 +125,7 @@ export default {
   components: { OrderMngPageModiDialog },
   methods: {
     editDialog(item) {
-      item.orderDtlDtoList.forEach(vo=>{
+      item.orderDtlDtoList.forEach((vo) => {
         vo.deliCnt = vo.remainCnt;
       });
       this.$store.commit("order/setOrderEditObjList", Object.assign({}, item));

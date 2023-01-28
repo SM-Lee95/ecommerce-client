@@ -25,5 +25,8 @@ export default {
   },
   BankList(state){
     return state.BankList;
+  },
+  MailAuthTy(state){
+    return state.MailAuthTy;
   }
 };

@@ -9,7 +9,7 @@
       <v-col class="text-left">주문 번호 : <b>{{ this.OrderDetailInfo[0].ordsCd }}</b></v-col>
       <v-col class="text-right">일자 : <b>{{ this.OrderDetailInfo[0].regDati }}</b></v-col>
     </v-row>
-    <v-data-table :headers="header" :items="this.OrderDetailInfo" class="elevation-0 mt-2" hide-default-footer
+    <v-data-table :headers="header" :items="this.OrderDetailInfo" class="elevation-0 mt-2" hide-default-footer 
       disable-sort no-data-text="주문 건이 존재하지 않습니다.">
       <template v-slot:item.thumbnail="{ item }">
         <v-img :src="item.thumbnail" max-height="100%" min-height="100%" max-width="100"></v-img>
@@ -410,7 +410,7 @@ export default {
             listCd: item.listCd,
           };
           this.$store.dispatch("order/updateConfirmPurchase", reqData).then((resp) => {
-            if (resp) {
+            if (resp == true) {
               this.$dialog.message.info("주문 확정이 완료되었습니다.");
               this.$store.dispatch("order/getOrderDetailInfo", item.ordsCd);
             } else {

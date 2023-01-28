@@ -72,7 +72,7 @@ export default {
           this.$store
             .dispatch("order/updateExchangeRequest", reqData)
             .then((resp) => {
-              if (resp) {
+              if (resp == true) {
                 this.$dialog.message.info("교환 요청 완료됐습니다..");
                 this.$store.dispatch(
                   "order/getOrderDetailInfo",

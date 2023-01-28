@@ -9,7 +9,9 @@
       </v-app-bar-title>
       <v-row class="text-right">
         <v-col v-show="!isLogin">
-          <v-btn value="login" small text @click.stop="drawer = !drawer"> 로그인 </v-btn>
+          <v-btn value="login" small text @click.stop="drawer = !drawer">
+            로그인
+          </v-btn>
           <v-btn value="Join" small text @click="toJoinForm"> 회원가입 </v-btn>
         </v-col>
         <v-col v-if="isLogin">
@@ -38,68 +40,108 @@
         </v-col>
       </v-row>
     </v-app-bar>
-    <v-dialog
-      transition="dialog-bottom-transition"
-      v-model="drawer"
-      persistent
-      max-width="600px"
-      height="1000px"
-    >
-      <v-row class="white" no-gutters>
-        <v-col>
-          <v-row class="mt-1" justify="space-between">
-            <v-col class="text-h6 ml-4"> 로그인 </v-col>
-            <v-col></v-col>
-            <v-col class="text-right">
-              <v-btn icon @click.stop="drawer = !drawer">
-                <v-icon>mdi-close-outline</v-icon>
-              </v-btn>
-            </v-col>
-          </v-row>
-          <v-divider></v-divider>
-          <v-row class="ml-1 mr-1 mt-1">
+    <v-dialog v-model="drawer" height="100%" width="800px">
+      <validation-observer ref="observer" v-slot="{ invalid }">
+        <form @submit.prevent="submit">
+          <v-row class="white" no-gutters>
             <v-col>
-              <v-text-field
-                label="아이디"
-                :rules="rules"
-                prepend-inner-icon="mdi-account-heart-outline"
-                v-model="username"
-              ></v-text-field>
-              <v-text-field
-                class="mx-auto"
-                label="비밀번호"
-                :rules="rules"
-                prepend-inner-icon="mdi-lock"
-                v-model="password"
-                :type="'password'"
-              >
-              </v-text-field>
+              <v-row class="mt-1" justify="space-between">
+                <v-col class="text-h6 ml-4"> 로그인 </v-col>
+                <v-col></v-col>
+                <v-col class="text-right">
+                  <v-btn icon @click.stop="drawer = !drawer">
+                    <v-icon>mdi-close-outline</v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-divider></v-divider>
+              <v-row class="ml-1 mr-1 mt-1">
+                <v-col>
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="아이디"
+                    rules="required"
+                  >
+                    <v-text-field
+                      label="아이디"
+                      prepend-inner-icon="mdi-account-heart-outline"
+                      v-model="username"
+                      :error-messages="errors"
+                    ></v-text-field>
+                  </validation-provider>
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="비밀번호"
+                    rules="required"
+                  >
+                    <v-text-field
+                      class="mx-auto"
+                      label="비밀번호"
+                      prepend-inner-icon="mdi-lock"
+                      v-model="password"
+                      :error-messages="errors"
+                      :type="'password'"
+                    >
+                    </v-text-field>
+                  </validation-provider>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-btn
+                    block
+                    text
+                    elevation="0"
+                    @click="goLogin"
+                    :disabled="invalid"
+                    >로그인
+                  </v-btn>
+                  <v-btn block text elevation="0" @click="searchPass"
+                    >비밀번호찾기
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col>
-              <v-btn block text elevation="1" @click="goLogin">로그인 </v-btn>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
+        </form>
+      </validation-observer>
+      <v-dialog
+        transition="dialog-bottom-transition"
+        v-model="mailAuthDrawer"
+        width="800px"
+        height="100%"
+      >
+        <mail-auth-dialog v-on:complete="mailAuthComplete"></mail-auth-dialog>
+      </v-dialog>
+      <v-dialog
+        transition="dialog-bottom-transition"
+        v-model="newPassDrawer"
+        width="800px"
+        height="100%"
+      >
+        <new-pass-dialog v-on:close="close('newPassDrawer')" :id="newPassId"></new-pass-dialog>
+      </v-dialog>
     </v-dialog>
   </v-container>
 </template>
 <script>
 import { mapGetters } from "vuex";
-
+import MailAuthDialog from "../components/dialog/MailAuthDialog.vue";
+import NewPassDialog from "../components/dialog/NewPassDialog.vue";
 export default {
+  components: {
+    MailAuthDialog,
+    NewPassDialog,
+  },
   data() {
     return {
       username: "",
       password: "",
       drawer: false,
+      mailAuthDrawer: false,
+      newPassDrawer: false,
       group: null,
-      rules: [
-        (value) => !!value || "Required.",
-        (value) => (value && value.length >= 3) || "Min 3 characters",
-      ],
+      newPassId: null,
     };
   },
   methods: {
@@ -121,7 +163,9 @@ export default {
             this.$store.dispatch("product/getItemList", { page: 0 });
             if (this.$route.path != "/") this.$router.push("/");
           } else {
-            this.$dialog.message.error("입력하신 로그인 정보가 일치하지 않습니다.");
+            this.$dialog.message.error(
+              "입력하신 로그인 정보가 일치하지 않습니다."
+            );
           }
           this.username = "";
           this.password = "";
@@ -173,6 +217,21 @@ export default {
     goAdmin() {
       if (this.$route.path != "/Admin/ProductMng/SelectPrd")
         this.$router.push("/Admin/ProductMng/SelectPrd");
+    },
+    searchPass() {
+      this.$store.commit("common/setMailAuthTy", 1);
+      this.mailAuthDrawer = true;
+    },
+    mailAuthComplete(vo) {
+      this.close("mailAuthDrawer");
+      this.newPassId = vo.id;
+      this.newPassDrawer = true;
+      console.log(vo.id);
+      console.log(vo.email);
+      
+    },
+    close(name) {
+      this[name] = false;
     },
   },
   computed: {

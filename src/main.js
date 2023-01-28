@@ -3,9 +3,16 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
-import { ValidationObserver, ValidationProvider, setInteractionMode, extend } from "vee-validate";
+import {
+  ValidationObserver,
+  ValidationProvider,
+  setInteractionMode,
+  extend,
+  localize,
+} from "vee-validate";
 import * as rules from "vee-validate/dist/rules";
 import VeeValidate from "vee-validate";
+import ko from "vee-validate/dist/locale/ko.json";
 import module from "./util/module";
 import VuetifyDialog from "vuetify-dialog";
 import CKEditor from "ckeditor4-vue";
@@ -34,7 +41,10 @@ extend("fileSize", {
 Vue.component("ValidationProvider", ValidationProvider);
 Vue.component("ValidationObserver", ValidationObserver);
 setInteractionMode("eager");
-
+localize({
+  ko,
+});
+localize("ko"); // 한국어 사용
 /** Registration */
 Vue.config.productionTip = false;
 Vue.use(module);
@@ -62,7 +72,6 @@ Date.prototype.YYYYMMDDHHMMSS = function () {
   var ss = this.getSeconds();
   return yyyy + MM + dd + hh + mm + ss;
 };
-
 new Vue({
   router,
   store,
