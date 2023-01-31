@@ -14,6 +14,7 @@ import OrderMng from "../components/OrderMngPage.vue";
 import UserMng from "../components/UserMngPage.vue";
 import CreatePrd from "../components/CreatePrdPage.vue";
 import SelectPrd from "../components/SelectPrdPage.vue";
+import CommonMngPage from "../components/CommonMngPage.vue";
 import VueCookies from "vue-cookies";
 
 Vue.use(VueRouter);
@@ -85,6 +86,10 @@ const routes = [
       {
         path: "UserMng",
         component: UserMng,
+      },
+      {
+        path: "CommonMng",
+        component: CommonMngPage,
       },
     ],
   },

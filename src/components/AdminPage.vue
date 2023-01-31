@@ -27,6 +27,14 @@
               <v-list-item-title> User </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <v-list-item link @click="goCommonMng" dense>
+            <v-list-item-icon>
+              <v-icon>mdi-barcode</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Common </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </v-list>
       </v-col>
       <v-col cols="10">
@@ -51,6 +59,10 @@ export default {
     goUserMng() {
       if (this.$route.path != "/Admin/UserMng")
         this.$router.push("/Admin/UserMng");
+    },
+    goCommonMng() {
+      if (this.$route.path != "/Admin/CommonMng")
+        this.$router.push("/Admin/CommonMng");
     },
   },
 };
