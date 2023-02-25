@@ -17,4 +17,10 @@ export default {
   ProductList(state) {
     return state.ProductList;
   },
+  EditProduct(state){
+    return state.EditProduct;
+  },
+  EditProductDetail(state){
+    return state.EditProductDetail;
+  }
 };

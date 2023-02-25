@@ -35,10 +35,13 @@ createAxios.interceptors.response.use(
   },
   async function (error) {
     try {
-      if (error.response.status == 401||error.response.status == 403) { //UNAUTHORIZED , FORBIDDEN
+      console.log(error);
+      if (error.response.status == 401 || error.response.status == 403) {
+        //UNAUTHORIZED , FORBIDDEN
         store.commit("user/removeToken");
         return null;
-      }else if(error.response.status == 400){ //로그인 실패(BAD_REQUEST)
+      } else if (error.response.status == 400) {
+        //로그인 실패(BAD_REQUEST)
         return null;
       }
     } catch (err) {

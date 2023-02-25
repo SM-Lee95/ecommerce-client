@@ -58,7 +58,8 @@ Vue.use(VueCookies);
 Vue.$cookies.config("7d");
 /** Object prototype */
 String.prototype.comma = function () {
-  return String(this).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
+  return String(Math.ceil(Number(this)/100)*100).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
+  // return String(this).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
 };
 String.prototype.uncomma = function () {
   return String(this).replace(/[^\d]+/g, "");

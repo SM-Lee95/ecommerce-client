@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid fill-height style="align-items: inherit;">
     <v-row no-gutters>
       <v-col cols="2" class="grey lighten-3">
         <v-list class="grey lighten-3">

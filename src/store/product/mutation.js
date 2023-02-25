@@ -30,4 +30,10 @@ export default {
   setProductList(state, payload) {
     state.ProductList = payload;
   },
+  setEditProduct(state, payload){
+    state.EditProduct = payload;
+  },
+  setEditProductDetail(state, payload){
+    state.EditProductDetail = payload;
+  }
 };

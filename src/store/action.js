@@ -39,7 +39,6 @@ export default {
     return http
       .get("/common/code/list", param)
       .then((resp) => {
-        console.log(resp);
         if (resp.data) {
           if (resp.data[0].commonKey.cdFlag == 1)
             context.commit("setColorList", resp.data);

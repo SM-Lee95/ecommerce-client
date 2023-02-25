@@ -226,8 +226,6 @@ export default {
       this.close("mailAuthDrawer");
       this.newPassId = vo.id;
       this.newPassDrawer = true;
-      console.log(vo.id);
-      console.log(vo.email);
       
     },
     close(name) {

@@ -183,4 +183,79 @@ export default {
         return false;
       });
   },
+  insertExcelProduct(context, data) {
+    return http
+      .post("/prd/info/admin/excel", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  toggleStatFlag(context, data) {
+    return http
+      .put("/prd/info/admin/statFlag", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  selectProductDetailInfoForUpdate(context, data) {
+    return http
+      .get("/prd/detail/admin/" + data)
+      .then((resp) => {
+        if (!resp.data.statusCode) {
+          context.commit("setEditProductDetail", resp.data);
+          return true;
+        }
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  insertProductOption(context, data) {
+    return http
+      .post("/prd/detail/admin/option", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  updateProductDetailStatFlag(context, data) {
+    return http
+      .put("/prd/detail/admin/statFlag", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  updateProductDetailStockCnt(context, data) {
+    return http
+      .put("/prd/detail/admin/stockCnt", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
 };

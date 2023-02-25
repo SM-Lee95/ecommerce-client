@@ -5,4 +5,6 @@ export default {
   DetailInfo: null, //상세 내역
   BasketList: [], //장바구니
   ProductList: [], //관리자 상품 조회 리스트
+  EditProduct: null, //상품 정보 수정 객체
+  EditProductDetail: null, //상품 상세 정보 수정 객체
 };

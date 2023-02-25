@@ -90,7 +90,7 @@ export default {
   name: "ExcelTableDialog.vue",
   data: () => ({
     header: [
-      { text: "상품명", value: "prdNm", align: "center" },
+      { text: "상품명", value: "name", align: "center" },
       { text: "재고수량", value: "stockCnt", align: "center" },
       { text: "판매가", value: "salesPri", align: "center" },
       { text: "할인가", value: "discountPri", align: "center" },
@@ -153,6 +153,9 @@ export default {
           vo.discountRate = Math.round(
             ((vo.salesPri - vo.discountPri) / vo.salesPri) * 100
           );
+          if (vo.name.length > 50) {
+            vo.name = vo.name.substring(0, 49);
+          }
           return vo;
         });
       };

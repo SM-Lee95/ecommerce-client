@@ -73,9 +73,6 @@ export default {
     ...mapGetters("common", ["SizeList", "ColorList"]),
   },
   methods: {
-    deleteItem(item) {
-      console.log(item);
-    },
     selectSizeCode() {
       this.$store
         .dispatch("common/selectCommonCode", {

@@ -1,16 +1,45 @@
 <template>
   <v-container fluid>
-    <v-row align-content="space-between">
-      <v-col></v-col>
-      <v-col>
-        <v-slide-group>
-          <v-slide-item v-for="catalog in MenuList" :key="catalog.cd" v-slot="{ active }">
-            <v-btn @click="updateList(catalog.cd)" v-text="catalog.name" :input-value="active" text>
+    <v-row>
+      <v-col class="text-center">
+        <v-menu
+          v-for="catalog in MenuList"
+          :key="catalog.cd"
+          open-on-hover
+          offset-y
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              @click="updateList(catalog.cd)"
+              v-bind="attrs"
+              class="button mr-6"
+              text
+              v-on="on"
+              v-if="catalog.children && catalog.children.length != '0'"
+              >{{ catalog.name }}
             </v-btn>
-          </v-slide-item>
-        </v-slide-group>
+            <v-btn
+              @click="updateList(catalog.cd)"
+              text
+              class="button mr-6"
+              v-if="!catalog.children || catalog.children.length == 0"
+              >{{ catalog.name }}
+            </v-btn>
+          </template>
+          <v-list flat rounded elevation="0">
+            <v-list-item
+              v-for="subCatalog in catalog.children"
+              :key="subCatalog.cd"
+              :value="subCatalog"
+              no-gu
+            >
+              <v-btn class="caption" text @click="updateList(subCatalog.cd)">{{
+                subCatalog.name
+              }}</v-btn>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </v-col>
-      <v-col></v-col>
     </v-row>
     <v-divider></v-divider>
   </v-container>
@@ -34,11 +63,13 @@ export default {
   },
   methods: {
     updateList(param) {
-      this.$store.dispatch("product/getItemList", { param: param, page: 0 }).then((resp) => {
-        if (resp) {
-          if (this.$route.path != "/") this.$router.push("/");
-        } else this.$dialog.message.error("상품 목록 조회에 실패했습니다.");
-      });
+      this.$store
+        .dispatch("product/getItemList", { param: param, page: 0 })
+        .then((resp) => {
+          if (resp) {
+            if (this.$route.path != "/") this.$router.push("/");
+          } else this.$dialog.message.error("상품 목록 조회에 실패했습니다.");
+        });
     },
   },
 };
