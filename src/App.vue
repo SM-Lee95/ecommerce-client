@@ -1,14 +1,9 @@
 <template>
   <v-app>
     <v-container fluid>
-      <v-row style="min-height: 56px" no-gutters>
+      <v-row style="min-height: 250px" no-gutters>
         <v-col>
           <Header />
-        </v-col>
-      </v-row>
-      <v-row style="min-height: 60px" no-gutters>
-        <v-col>
-          <MenuBar />
         </v-col>
       </v-row>
       <v-row style="min-height: 950px" no-gutters>
@@ -28,14 +23,12 @@
 <script>
 import Footer from "./layout/Footer.vue";
 import Header from "./layout/Header.vue";
-import MenuBar from "./layout/MenuBar.vue";
 
 export default {
   name: "App",
   components: {
     Footer,
     Header,
-    MenuBar,
   },
   data: () => ({
     //

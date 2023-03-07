@@ -35,5 +35,8 @@ export default {
   },
   setEditProductDetail(state, payload){
     state.EditProductDetail = payload;
+  },
+  setQnaDetailInfo(state, payload){
+    state.QnaDetailInfo = payload;
   }
 };

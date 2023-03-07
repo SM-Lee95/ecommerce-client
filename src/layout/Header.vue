@@ -1,20 +1,26 @@
 <template>
   <v-container fluid>
-    <v-app-bar color="grey" fixed elevation="0" absolute>
-      <template v-slot:img="{ props }">
-        <v-img v-bind="props" gradient="to top right, white, white"></v-img>
-      </template>
-      <v-app-bar-title>
-        <v-btn @click="toMain" x-large plain>로브아네(Lovane)</v-btn>
-      </v-app-bar-title>
+    <v-app-bar
+      color="white"
+      fixed
+      elevation="0"
+      absolute
+      flat
+      prominent
+      height="200px"
+    >
       <v-row class="text-right">
-        <v-col v-show="!isLogin">
+        <v-col cols="5"></v-col>
+        <v-col cols="3" align-self="center">
+          <v-img position="center center" height="200px" width="200px" @click="toMain" src="../assets/lovane.png" ></v-img>
+        </v-col>
+        <v-col v-show="!isLogin" cols="4">
           <v-btn value="login" small text @click.stop="drawer = !drawer">
             로그인
           </v-btn>
           <v-btn value="Join" small text @click="toJoinForm"> 회원가입 </v-btn>
         </v-col>
-        <v-col v-if="isLogin">
+        <v-col v-if="isLogin" cols="4">
           <v-btn class="mx-2" text x-small fab @click="logout">
             <v-icon>mdi-logout</v-icon>
           </v-btn>
@@ -39,6 +45,7 @@
           </v-btn>
         </v-col>
       </v-row>
+      <template v-slot:extension><MenuBar /></template>
     </v-app-bar>
     <v-dialog v-model="drawer" height="100%" width="800px">
       <validation-observer ref="observer" v-slot="{ invalid }">
@@ -119,7 +126,10 @@
         width="800px"
         height="100%"
       >
-        <new-pass-dialog v-on:close="close('newPassDrawer')" :id="newPassId"></new-pass-dialog>
+        <new-pass-dialog
+          v-on:close="close('newPassDrawer')"
+          :id="newPassId"
+        ></new-pass-dialog>
       </v-dialog>
     </v-dialog>
   </v-container>
@@ -128,10 +138,12 @@
 import { mapGetters } from "vuex";
 import MailAuthDialog from "../components/dialog/MailAuthDialog.vue";
 import NewPassDialog from "../components/dialog/NewPassDialog.vue";
+import MenuBar from "./MenuBar.vue";
 export default {
   components: {
     MailAuthDialog,
     NewPassDialog,
+    MenuBar,
   },
   data() {
     return {
@@ -226,7 +238,6 @@ export default {
       this.close("mailAuthDrawer");
       this.newPassId = vo.id;
       this.newPassDrawer = true;
-      
     },
     close(name) {
       this[name] = false;

@@ -22,5 +22,8 @@ export default {
   },
   EditProductDetail(state){
     return state.EditProductDetail;
+  },
+  QnaDetailInfo(state){
+    return state.QnaDetailInfo;
   }
 };

@@ -258,4 +258,19 @@ export default {
         return false;
       });
   },
+  selectMyQnaInfoList(context, data) {
+    return http
+      .get("/prd/myInfo/qna/" + data)
+      .then((resp) => {
+        if (!resp.data.statusCode) {
+          context.commit("setQnaDetailInfo", resp.data);
+          return true;
+        }
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
 };
