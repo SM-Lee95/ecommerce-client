@@ -3,7 +3,7 @@ import store from "../store";
 import VueCookies from "vue-cookies";
 
 const createAxios = axios.create({
-  // baseURL: "https://port-0-lovane-1jx7m2gldfst07l.gksl2.cloudtype.app/",
+  // baseURL: "http://192.168.50.127:8081/",
   baseURL: "http://localhost:8081/",
   headers: {
     "Content-type": "application/json",
