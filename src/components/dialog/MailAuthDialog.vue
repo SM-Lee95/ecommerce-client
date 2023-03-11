@@ -109,7 +109,7 @@ export default {
         return;
       } else {
         this.$store.dispatch("user/compAuth", this.authId).then((resp) => {
-          if (resp.data.statusCode == "200" && resp.data.message) {
+          if (resp.data.statusCode == "200" && resp.data.message == "true") {
             this.$dialog.message.success("인증에 성공하셨습니다.");
             this.$emit("complete", { email: this.email, id: this.id });
           } else {
