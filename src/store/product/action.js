@@ -258,14 +258,27 @@ export default {
         return false;
       });
   },
-  selectMyQnaInfoList(context, data) {
+  selectMyQnaInfoList(context) {
     return http
-      .get("/prd/myInfo/qna/" + data)
+      .get("/question/myInfo")
       .then((resp) => {
+        console.log(resp);
         if (!resp.data.statusCode) {
           context.commit("setQnaDetailInfo", resp.data);
           return true;
         }
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  insertQuestionInfo(context, data) {
+    return http
+      .post("/question/info", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
         return false;
       })
       .catch((resp) => {

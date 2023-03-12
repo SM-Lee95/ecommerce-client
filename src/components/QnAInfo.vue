@@ -10,7 +10,7 @@
       <v-col>
         <v-data-table
           :headers="header"
-          :items="DetailInfo.questionList"
+          :items="DetailInfo.questionLists"
           disable-sort
           class="elevation-0 mt-2"
           item-key="cd"
@@ -19,21 +19,27 @@
           <template v-slot:item.answerYn="{ item }">
             {{ item.answerYn == "Y" ? "완료" : "답변필요" }}
           </template>
-          <template v-slot:item.title="{ item }">
+          <template v-slot:item.question="{ item }">
             <v-btn
               @click="qnaInfoDialogView(item)"
               :disabled="
-                item.secretYn == 'N' || UserInfo.cd == item.userCd
-                  ? true
-                  : false
+                (item.secretYn == 'N' || UserInfo.cd == item.userCd) && item.answerYn == 'Y'
+                  ? false
+                  : true
               "
+              text
               >{{
-                UserInfo.cd == item.userCd ? item.title : "비밀글입니다."
+                item.secretYn == "N" || UserInfo.cd == item.userCd
+                  ? item.question
+                  : "비밀글입니다."
               }}</v-btn
             >
           </template>
-          <template v-slot:item.regMan="{ item }">
-            {{ item.regMan.name }}
+          <template v-slot:item.userId="{ item }">
+            {{ item.userId.substring(0, 2) + "****" }}
+          </template>
+          <template v-slot:item.regDati="{ item }">
+            {{ item.regDati.substring(0, 10) }}
           </template>
         </v-data-table>
       </v-col>
@@ -42,7 +48,7 @@
       <qn-a-info-dialog></qn-a-info-dialog>
     </v-dialog>
     <v-dialog v-model="qnaWriteDialogFlag">
-      <qn-a-write-dialog></qn-a-write-dialog>
+      <qn-a-write-dialog v-on:close="qnaWriteDialogView"></qn-a-write-dialog>
     </v-dialog>
   </v-container>
 </template>
@@ -59,8 +65,8 @@ export default {
     return {
       header: [
         { text: "답변상태", value: "answerYn", align: "center" },
-        { text: "제목", value: "title", align: "start" },
-        { text: "작성자", value: "regMan", align: "center" },
+        { text: "문의", value: "question", align: "start" },
+        { text: "작성자", value: "userId", align: "center" },
         { text: "작성일자", value: "regDati", align: "center" },
       ],
       qnaInfoDialogFlag: false,
@@ -76,10 +82,9 @@ export default {
       if (item) {
         let body = new Array();
         body.push(item);
-        this.$store.commit("setQnaDetailInfo", body);
-      } else {
-        this.qnaInfoDialogFlag = !this.qnaInfoDialogFlag;
+        this.$store.commit("product/setQnaDetailInfo", body);
       }
+      this.qnaInfoDialogFlag = !this.qnaInfoDialogFlag;
     },
     qnaWriteDialogView() {
       if (!this.UserInfo) {

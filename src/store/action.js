@@ -64,4 +64,31 @@ export default {
         return false;
       });
   },
+  selectQuestionList(context, param) {
+    return http
+      .get("/question/info/admin", param)
+      .then((resp) => {
+        if (resp.data) {
+          context.commit("setQnaList", resp.data);
+          return true;
+        }
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  updateAnswerInfo(context, param) {
+    return http
+      .put("/question/answer/admin", param)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
 };

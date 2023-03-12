@@ -35,6 +35,14 @@
               <v-list-item-title> Common </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <v-list-item link @click="goQnaMng" dense>
+            <v-list-item-icon>
+              <v-icon>mdi-head-question-outline</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Q&A </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </v-list>
       </v-col>
       <v-col cols="10">
@@ -64,6 +72,10 @@ export default {
       if (this.$route.path != "/Admin/CommonMng")
         this.$router.push("/Admin/CommonMng");
     },
+    goQnaMng(){
+      if (this.$route.path != "/Admin/QnaMng")
+        this.$router.push("/Admin/QnaMng");
+    }
   },
 };
 </script>

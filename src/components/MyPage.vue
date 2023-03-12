@@ -151,17 +151,15 @@ export default {
     },
     myQnaInfoDrawer(flag) {
       if (flag) {
-        this.$store
-          .dispatch("product/selectMyQnaInfoList", this.UserInfo.cd)
-          .then((resp) => {
-            if (resp) {
-              this.myQnaInfoDialogFlag = !this.myQnaInfoDialogFlag;
-            } else {
-              this.$dialog.message.error(
-                "QnA 정보를 가져오는데 오류가 발생했습니다."
-              );
-            }
-          });
+        this.$store.dispatch("product/selectMyQnaInfoList").then((resp) => {
+          if (resp) {
+            this.myQnaInfoDialogFlag = !this.myQnaInfoDialogFlag;
+          } else {
+            this.$dialog.message.error(
+              "QnA 정보를 가져오는데 오류가 발생했습니다."
+            );
+          }
+        });
       } else this.myQnaInfoDialogFlag = !this.myQnaInfoDialogFlag;
     },
   },

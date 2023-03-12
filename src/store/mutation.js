@@ -25,5 +25,11 @@ export default {
   },
   setMailAuthTy(state, payload){
     state.MailAuthTy = payload;
+  },
+  setAnswerWriteInfo(state, payload){
+    state.AnswerWriteInfo = payload;
+  },
+  setQnaList(state, payload){
+    state.QnaList = payload;
   }
 };

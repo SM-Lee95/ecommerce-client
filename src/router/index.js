@@ -15,6 +15,9 @@ import UserMng from "../components/UserMngPage.vue";
 import CreatePrd from "../components/CreatePrdPage.vue";
 import SelectPrd from "../components/SelectPrdPage.vue";
 import CommonMngPage from "../components/CommonMngPage.vue";
+import QnaMngPage from "../components/QnaMngPage.vue";
+
+
 import VueCookies from "vue-cookies";
 
 Vue.use(VueRouter);
@@ -90,6 +93,10 @@ const routes = [
       {
         path: "CommonMng",
         component: CommonMngPage,
+      },
+      {
+        path: "QnaMng",
+        component: QnaMngPage,
       },
     ],
   },

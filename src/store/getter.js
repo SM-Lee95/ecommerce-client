@@ -28,5 +28,11 @@ export default {
   },
   MailAuthTy(state){
     return state.MailAuthTy;
+  },
+  AnswerWriteInfo(state){
+    return state.AnswerWriteInfo;
+  },
+  QnaList(state){
+    return state.QnaList;
   }
 };

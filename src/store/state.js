@@ -22,4 +22,6 @@ export default {
   DeliList: null, //택배회사리스트
   BankList: null, //은행리스트
   MailAuthTy: 0, //메일 dialog 타입 0 -> 회원가입 1 -> 비밀번호찾기
+  AnswerWriteInfo: null,
+  QnaList: [],
 };
