@@ -169,7 +169,7 @@
         <v-tabs-items v-model="tab">
           <v-tab-item>
             <v-card flat>
-              <v-card-text :html="DetailInfo.description"></v-card-text>
+              <v-card-text v-html="DetailInfo.description"></v-card-text>
             </v-card>
           </v-tab-item>
           <v-tab-item>
