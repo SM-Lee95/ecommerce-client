@@ -1,10 +1,10 @@
 <template>
-  <v-container style="min-height: 1000px" fluid>
+  <v-container style="min-height: 1000px">
     <v-row>
       <v-col cols="6">
-        <v-card elevation="0" max-width="450px" class="pa-10">
-          <v-row>
-            <v-col>
+        <v-card elevation="0" max-width="90%">
+          <v-row align-self="center" class="text-center">
+            <v-col class="mt-5 ml-5">
               <v-img
                 :src="DetailInfo.thumbnail"
                 contain
@@ -64,7 +64,9 @@
               >
             </v-row>
             <v-row class="text-right" no-gutters>
-              <v-col>택배배송 | 배송비 : {{ DetailInfo.deliPri.comma() }} 원</v-col>
+              <v-col
+                >택배배송 | 배송비 : {{ DetailInfo.deliPri.comma() }} 원</v-col
+              >
             </v-row>
             <v-row class="text-right" no-gutters>
               <v-col>제조사 - {{ DetailInfo.corpNm }}</v-col>
@@ -164,13 +166,227 @@
         </v-toolbar>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row align-content="center">
       <v-col>
         <v-tabs-items v-model="tab">
           <v-tab-item>
-            <v-card flat>
-              <v-card-text v-html="DetailInfo.description"></v-card-text>
-            </v-card>
+            <v-container>
+              <v-row
+                ><v-col align-self="center">
+                  <v-img
+                    src="../assets/LovaneNotice.jpeg"
+                    contain
+                    position="center center"
+                  ></v-img> </v-col
+              ></v-row>
+              <v-row>
+                <v-col>
+                  <v-card flat>
+                    <v-card-text v-html="DetailInfo.description"></v-card-text>
+                  </v-card>
+                </v-col>
+              </v-row>
+              <v-divider></v-divider>
+              <v-row>
+                <v-col class="ml-3 mt-3">
+                  상품정보 제공고시
+                  <v-simple-table class="mt-5">
+                    <template v-slot:default>
+                      <colgroup>
+                        <col width="50%" />
+                        <col />
+                      </colgroup>
+                      <tbody>
+                        <tr>
+                          <th scope="row">제품소재</th>
+                          <td colspan="1">상품상세참조</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">색상</th>
+                          <td colspan="1">상품상세참조</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">치수</th>
+                          <td colspan="1">상품상세참조</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">제조자(사)</th>
+                          <td colspan="1">상품상세참조</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">제조국</th>
+                          <td colspan="1">국산</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">세탁방법 및 취급시 주의사항</th>
+                          <td colspan="1">상품상세참조</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">제조연월</th>
+                          <td colspan="1">상품상세참조</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">품질보증기준</th>
+                          <td colspan="1">상품상세참조</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">A/S 책임자와 전화번호</th>
+                          <td colspan="1">상품상세참조 (010-2610-9255)</td>
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col class="ml-3 mt-3">
+                  거래조건에 관한 정보
+                  <v-simple-table class="mt-5">
+                    <template v-slot:default>
+                      <colgroup>
+                        <col width="50%" />
+                        <col />
+                      </colgroup>
+                      <tbody>
+                        <tr>
+                          <th scope="row">재화등의 배송방법에 관한 정보</th>
+                          <td colspan="1">택배</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">주문 이후 예상되는 배송기간</th>
+                          <td colspan="1">
+                            대금 지급일로부터 12일 이내에 발송
+                          </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">
+                            제품하자·오배송 등에 따른 청약철회 등의 경우
+                            청약철회 등의 기한 및 통신판매업자가 부담하는
+                            반품비용 등에 관한 정보
+                          </th>
+                          <td colspan="1">
+                            전자상거래 등에서의 소비자보호에 관한 법률 등에 의한
+                            제품의 하자 또는 오배송 등으로 인한 청약철회의
+                            경우에는 상품 수령 후 3개월 이내, 그 사실을 안 날
+                            또는 알 수 있었던 날로부터 30일 이내에 청약철회를 할
+                            수 있으며, 반품 비용은 통신판매업자가 부담합니다.
+                          </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">
+                            제품하자가 아닌 소비자의 단순변심에 따른 청약철회 시
+                            소비자가 부담하는 반품비용 등에 관한 정보
+                          </th>
+                          <td colspan="1">
+                            편도 4000원 (최초 배송비 무료인 경우 8000원 부과)
+                          </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">
+                            제품하자가 아닌 소비자의 단순변심에 따른 청약철회가
+                            불가능한 경우 그 구체적 사유와 근거
+                          </th>
+                          <td colspan="1">
+                            전자상거래 등에서의 소비자보호에 관한 법률 등에 의한
+                            청약철회 제한 사유에 해당하는 경우 및 기타
+                            객관적으로 이에 준하는 것으로 인정되는 경우
+                            청약철회가 제한될 수 있습니다.
+                          </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">
+                            재화등의 교환·반품·보증 조건 및 품질보증기준
+                          </th>
+                          <td colspan="1">
+                            소비자분쟁해결기준(공정거래위원회 고시) 및
+                            관계법령에 따릅니다.
+                          </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">재화등의 A/S 관련 전화번호</th>
+                          <td colspan="1">010-2610-9255</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">
+                            대금을 환불받기 위한 방법과 환불이 지연될 경우
+                            지연배상금을 지급받을 수 있다는 지연배상금 지급의
+                            구체적인 조건·절차
+                          </th>
+                          <td colspan="1">
+                            주문취소 및 대금의 환불은 네이버페이 마이페이지에서
+                            신청할 수 있으며, 전자상거래 등에서의 소비자보호에
+                            관한 법률에 따라 소비자의 청약철회 후 판매자가 재화
+                            등을 반환 받은 날로부터 3영업일 이내에 지급받은
+                            대금의 환급을 정당한 사유 없이 지연하는 때에는
+                            소비자는 지연기간에 대해서 연 15%의 지연배상금을
+                            판매자에게 청구할 수 있습니다.
+                          </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">
+                            소비자피해보상의 처리, 재화등에 대한 불만 처리 및
+                            소비자와 사업자 사이의 분쟁처리에 관한 사항
+                          </th>
+                          <td colspan="1">
+                            소비자분쟁해결기준(공정거래위원회 고시) 및
+                            관계법령에 따릅니다.
+                          </td>
+                        </tr>
+                        <tr>
+                          <th scope="row">
+                            거래에 관한 약관의 내용 또는 확인할 수 있는 방법
+                          </th>
+                          <td colspan="1">
+                            상품상세 페이지 및 페이지 하단의 이용약관 링크를
+                            통해 확인할 수 있습니다.
+                          </td>
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col class="ml-3 mt-3">
+                  판매자정보 안내
+                  <v-simple-table class="mt-5">
+                    <template v-slot:default>
+                      <colgroup>
+                        <col width="20%" />
+                        <col width="30%" />
+                        <col width="20%" />
+                        <col />
+                      </colgroup>
+                      <tbody>
+                        <tr>
+                          <th scope="row">상호명</th>
+                          <td colspan="1">
+                            로브아네 (lovane) (사업자 / 개인 사업자)
+                          </td>
+                          <th scope="row">대표자</th>
+                          <td>김진현</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">사업자등록번호</th>
+                          <td colspan="1">5310501959</td>
+                          <th scope="row">통신판매업번호</th>
+                          <td>2022-서울광진-1585</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">사업장소재지</th>
+                          <td colspan="3">
+                            서울특별시 광진구 능동로55길 45 (퍼시픽빌리지) 씨동
+                            301호 (우 : 04904)
+                            <br />(메일:lovaneofficial@gmail.com)
+                            <br />고객센터: 010-2610-9255
+                          </td>
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
+                </v-col>
+              </v-row>
+            </v-container>
           </v-tab-item>
           <v-tab-item>
             <qn-a-info></qn-a-info>

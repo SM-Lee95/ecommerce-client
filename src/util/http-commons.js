@@ -3,8 +3,8 @@ import store from "../store";
 import VueCookies from "vue-cookies";
 
 const createAxios = axios.create({
-  // baseURL: "http://114.202.212.82/",
-  baseURL: "http://localhost:8081/",
+  baseURL: "http://114.202.212.82/",
+  // baseURL: "http://localhost:8081/",
   headers: {
     "Content-type": "application/json",
     Accept: "application/json",

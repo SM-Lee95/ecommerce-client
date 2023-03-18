@@ -29,6 +29,7 @@ export default {
         filebrowserUploadUrl: axios.defaults.baseURL + "prd/img/upload?",
         filebrowserImageUploadUrl: axios.defaults.baseURL + "prd/img/upload?",
         filebrowserUploadMethod: "form",
+        removeButtons: "",
       },
       preview: "",
     };
