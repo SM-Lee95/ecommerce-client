@@ -147,4 +147,16 @@ export default {
         return false;
       });
   },
+  updatePassToInit(context, data) {
+    return http
+      .put("/user/pass/admin", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
 };
