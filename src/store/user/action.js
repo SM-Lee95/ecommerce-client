@@ -136,5 +136,15 @@ export default {
         return false;
       });
   },
-  
+  selectUserIdFromEmail(context, data) {
+    return http
+      .get("/user/email/id", data)
+      .then((resp) => {
+        return resp;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
 };

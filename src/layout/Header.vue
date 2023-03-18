@@ -12,7 +12,13 @@
       <v-row class="text-right">
         <v-col cols="5"></v-col>
         <v-col cols="3" align-self="center">
-          <v-img position="center center" height="200px" width="200px" @click="toMain" src="../assets/lovane.png" ></v-img>
+          <v-img
+            position="center center"
+            height="200px"
+            width="200px"
+            @click="toMain"
+            src="../assets/lovane.png"
+          ></v-img>
         </v-col>
         <v-col v-show="!isLogin" cols="4">
           <v-btn value="login" small text @click.stop="drawer = !drawer">
@@ -103,9 +109,18 @@
                     :disabled="invalid"
                     >로그인
                   </v-btn>
-                  <v-btn block text elevation="0" @click="searchPass"
-                    >비밀번호찾기
-                  </v-btn>
+                  <v-row no-gutters>
+                    <v-col>
+                      <v-btn block text elevation="0" @click="searchID"
+                        >아이디 찾기
+                      </v-btn>
+                    </v-col>
+                    <v-col>
+                      <v-btn block text elevation="0" @click="searchPass"
+                        >비밀번호 찾기
+                      </v-btn>
+                    </v-col>
+                  </v-row>
                 </v-col>
               </v-row>
             </v-col>
@@ -234,10 +249,44 @@ export default {
       this.$store.commit("common/setMailAuthTy", 1);
       this.mailAuthDrawer = true;
     },
+    searchID() {
+      this.$store.commit("common/setMailAuthTy", 2);
+      this.mailAuthDrawer = true;
+    },
     mailAuthComplete(vo) {
       this.close("mailAuthDrawer");
-      this.newPassId = vo.id;
-      this.newPassDrawer = true;
+      if (vo.authType == 1) {
+        this.newPassId = vo.id;
+        this.newPassDrawer = true;
+      } else if (vo.authType == 2) {
+        this.$store
+          .dispatch("user/selectUserIdFromEmail", {
+            params: {
+              email: vo.email,
+            },
+          })
+          .then((resp) => {
+            if (resp.statusCode == "200") {
+              this.$dialog
+                .confirm({
+                  title: "아이디 찾기",
+                  text:
+                    "하기 회원님의 이메일로 가입된 아이디가 있습니다.\n아이디 : " +
+                    resp.message +
+                    "\n 입력창에 자동 입력하시겠습니까?",
+                  showClose: false,
+                })
+                .then((flag) => {
+                  if (!flag) return;
+                  this.username = resp.message;
+                });
+            } else {
+              this.$dialog.message.error(
+                "일치하는 메일 계정이 존재하지 않습니다."
+              );
+            }
+          });
+      }
     },
     close(name) {
       this[name] = false;

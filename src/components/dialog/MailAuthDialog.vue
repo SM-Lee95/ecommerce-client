@@ -53,6 +53,7 @@
                 인증완료
                 <v-icon color="gray darken-2">mdi-content-save-move</v-icon>
               </v-btn>
+              <v-btn v-if="send" @click="clear" text> 초기화 </v-btn>
             </v-col>
           </v-row>
         </v-col>
@@ -68,7 +69,6 @@ export default {
     email: "",
     id: "",
     send: false,
-    comp: false,
     authId: null,
   }),
   computed: {
@@ -81,6 +81,7 @@ export default {
           this.$dialog.message.warning("입력값을 확인해주세요.");
           return;
         } else {
+          console.log(this.MailAuthTy);
           let url = this.MailAuthTy == 1 ? "user/emailPass" : "user/emailAuth";
           this.$store
             .dispatch(url, {
@@ -94,6 +95,10 @@ export default {
                 );
                 this.send = true;
                 this.authId = resp.data.message;
+              } else if (resp.data.statusCode == "12") {
+                this.$dialog.message.warning(
+                  "메일 송부에 실패하셨습니다. " + resp.data.message
+                );
               } else {
                 this.$dialog.message.warning(
                   "메일 송부에 실패하셨습니다. 입력 정보 확인 후 재시도해주세요."
@@ -111,7 +116,12 @@ export default {
         this.$store.dispatch("user/compAuth", this.authId).then((resp) => {
           if (resp.data.statusCode == "200" && resp.data.message == "true") {
             this.$dialog.message.success("인증에 성공하셨습니다.");
-            this.$emit("complete", { email: this.email, id: this.id });
+            this.$emit("complete", {
+              email: this.email,
+              id: this.id,
+              authType: this.MailAuthTy,
+            });
+            this.clear();
           } else {
             this.$dialog.message.warning(
               "인증에 실패하셨습니다. 메일에 생성된 버튼을 누르고 다시 시도해주세요."
@@ -119,6 +129,11 @@ export default {
           }
         });
       }
+    },
+    clear() {
+      this.send = false;
+      this.authId = "";
+      this.email = "";
     },
   },
 };

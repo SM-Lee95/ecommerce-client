@@ -37,6 +37,16 @@ extend("fileSize", {
   },
   message: "파일 크기는 5MB 이하로 등록해주세요.",
 });
+extend("passwordCustom", {
+  validate(value) {
+    return (
+      !value ||
+      value.match("^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^+\\-=])(?=\\S+$).*$")
+    );
+  },
+  message:
+    "비밀번호는 숫자, 영어 알파벳(대/소문자 상관없이), 특수문자 하나 이상씩을 포함해야합니다.",
+});
 
 Vue.component("ValidationProvider", ValidationProvider);
 Vue.component("ValidationObserver", ValidationObserver);
@@ -58,7 +68,10 @@ Vue.use(VueCookies);
 Vue.$cookies.config("7d");
 /** Object prototype */
 String.prototype.comma = function () {
-  return String(Math.ceil(Number(this)/100)*100).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
+  return String(Math.ceil(Number(this) / 100) * 100).replace(
+    /(\d)(?=(?:\d{3})+(?!\d))/g,
+    "$1,"
+  );
   // return String(this).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
 };
 String.prototype.uncomma = function () {
