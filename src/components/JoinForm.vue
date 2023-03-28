@@ -1,6 +1,6 @@
 <template>
-  <v-container class="white">
-    <v-row>
+  <v-container class="white pa-15">
+    <v-row class="pl-15 pr-15">
       <v-col>
         <validation-observer ref="observer" v-slot="{ invalid }">
           <form @submit.prevent="submit">
@@ -84,7 +84,7 @@
                 @keyup="transToPhone"
               ></v-text-field>
             </validation-provider>
-            <v-row>
+            <v-row no-gutters>
               <v-col cols="10">
                 <validation-provider
                   v-slot="{ errors }"
@@ -94,7 +94,7 @@
                   <v-text-field
                     v-model="email"
                     :error-messages="errors"
-                    label="본인 확인 이메일(****@****.com)"
+                    label="본인 확인 이메일(****@****)"
                     required
                     readonly
                     @click="joinMailAuth"
@@ -110,147 +110,151 @@
                   >메일인증</v-btn
                 >
               </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="5">
-                <v-row justify="center">
-                  <v-chip class="white" label>생년월일 </v-chip>
+              <v-col>
+                <v-menu
+                  ref="menu1"
+                  v-model="menu1"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="dateFormatted"
+                      label="생년월일"
+                      hint="YYYY-MM-DD"
+                      persistent-hint
+                      v-bind="attrs"
+                      @blur="birth = parseDate(dateFormatted)"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
                   <v-date-picker
                     v-model="birth"
-                    year-icon="mdi-calendar-blank"
-                    prev-icon="mdi-skip-previous"
-                    next-icon="mdi-skip-next"
+                    no-title
+                    @input="menu1 = false"
                   ></v-date-picker>
+                </v-menu>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <label>주소지</label>
+                <v-row>
+                  <v-col cols="6">
+                    <v-text-field
+                      dense
+                      label="우편번호"
+                      hide-details="auto"
+                      required
+                      v-model="postcode"
+                      readonly
+                      @click="daumPostCode"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12">
+                    <v-text-field
+                      dense
+                      label="주소"
+                      hide-details="auto"
+                      required
+                      readonly
+                      v-model="mainAddress"
+                      @click="daumPostCode"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12">
+                    <v-text-field
+                      dense
+                      label="상세 주소"
+                      v-model="etcAddress"
+                    ></v-text-field>
+                  </v-col>
                 </v-row>
               </v-col>
-              <v-col cols="7">
-                <v-row>
-                  <v-col>
-                    <label>주소지</label>
-                    <v-row>
-                      <v-col cols="6">
-                        <v-text-field
-                          dense
-                          label="우편번호"
-                          hide-details="auto"
-                          required
-                          v-model="postcode"
-                          readonly
-                          @click="daumPostCode"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col cols="12">
-                        <v-text-field
-                          dense
-                          label="주소"
-                          hide-details="auto"
-                          required
-                          readonly
-                          v-model="mainAddress"
-                          @click="daumPostCode"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                    <v-row>
-                      <v-col cols="12">
-                        <v-text-field
-                          dense
-                          label="기타 주소"
-                          v-model="etcAddress"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                </v-row>
-                <v-row no-gutters>
-                  <v-col class="text-right">
-                    <v-row no-gutters
-                      ><v-col>
-                        <validation-provider
-                          v-slot="{ errors }"
-                          rules="required"
-                          name="checkbox"
-                        >
-                          <v-checkbox
-                            v-model="ageYn"
-                            :error-messages="errors"
-                            label="[필수] 만 14세 이상입니다."
-                            type="checkbox"
-                          ></v-checkbox> </validation-provider></v-col
-                    ></v-row>
-                    <v-row no-gutters
-                      ><v-col>
-                        <validation-provider
-                          v-slot="{ errors }"
-                          rules="required"
-                          name="checkbox"
-                        >
-                          <v-checkbox
-                            v-model="storeTermsYn"
-                            :error-messages="errors"
-                            label="[필수] 로브아네 스토어 이용 약관"
-                            type="checkbox"
-                          ></v-checkbox> </validation-provider></v-col
-                      ><v-col class="text-left" align-self="center"
-                        ><v-btn text @click="storeTermsDrawerToggle('STORE')"
-                          >자세히</v-btn
-                        ></v-col
-                      ></v-row
-                    >
-                    <v-row no-gutters
-                      ><v-col>
-                        <validation-provider
-                          v-slot="{ errors }"
-                          rules="required"
-                          name="checkbox"
-                        >
-                          <v-checkbox
-                            v-model="personalTermsYn"
-                            :error-messages="errors"
-                            label="[필수] 개인정보 수집 및 이용 동의"
-                            type="checkbox"
-                          ></v-checkbox> </validation-provider></v-col
-                      ><v-col class="text-left" align-self="center"
-                        ><v-btn text @click="storeTermsDrawerToggle('PERSONAL')"
-                          >자세히</v-btn
-                        ></v-col
-                      ></v-row
-                    >
-
-                    <!--
-                    <validation-provider
-                      v-slot="{ errors }"
-                      rules="required"
-                      name="checkbox"
-                    >
-                      <v-checkbox
-                        v-model="emailYn"
-                        :error-messages="errors"
-                        label="Email 수신 동의"
-                        type="checkbox"
-                      ></v-checkbox>
-                    </validation-provider>
-                    <validation-provider
-                      v-slot="{ errors }"
-                      rules="required"
-                      name="checkbox"
-                    >
-                      <v-checkbox
-                        v-model="phoneYn"
-                        :error-messages="errors"
-                        label="SMS 수신 동의"
-                        type="checkbox"
-                      ></v-checkbox>
-                    </validation-provider>
-                    -->
-                    <v-btn class="mr-4" type="submit" :disabled="invalid">
-                      회원가입
-                    </v-btn>
-                    <v-btn @click="clear"> 초기화 </v-btn>
-                  </v-col>
-                </v-row>
+            </v-row>
+            <v-row no-gutters>
+              <v-col class="text-right">
+                <validation-provider
+                  v-slot="{ errors }"
+                  rules="required"
+                  name="checkbox"
+                >
+                  <v-checkbox
+                    v-model="ageYn"
+                    :error-messages="errors"
+                    label="[필수] 만 14세 이상입니다."
+                    type="checkbox"
+                  ></v-checkbox>
+                </validation-provider>
+                <validation-provider
+                  v-slot="{ errors }"
+                  rules="required"
+                  name="checkbox"
+                >
+                  <v-checkbox
+                    v-model="storeTermsYn"
+                    :error-messages="errors"
+                    label="[필수] 로브아네 스토어 이용 약관"
+                    type="checkbox"
+                    @click="storeTermsDrawerToggle('STORE')"
+                  ></v-checkbox>
+                </validation-provider>
+                <validation-provider
+                  v-slot="{ errors }"
+                  rules="required"
+                  name="checkbox"
+                >
+                  <v-checkbox
+                    v-model="personalTermsYn"
+                    :error-messages="errors"
+                    label="[필수] 개인정보 수집 및 이용 동의"
+                    type="checkbox"
+                    @click="storeTermsDrawerToggle('PERSONAL')"
+                  ></v-checkbox>
+                </validation-provider>
+                <validation-provider
+                  v-slot="{ errors }"
+                  rules="required"
+                  name="checkbox"
+                >
+                  <v-checkbox
+                    v-model="emailYn"
+                    :error-messages="errors"
+                    label="[선택] Email 수신 동의"
+                    type="checkbox"
+                  ></v-checkbox>
+                </validation-provider>
+                <validation-provider
+                  v-slot="{ errors }"
+                  rules="required"
+                  name="checkbox"
+                >
+                  <v-checkbox
+                    v-model="phoneYn"
+                    :error-messages="errors"
+                    label="[선택] SMS 수신 동의"
+                    type="checkbox"
+                  ></v-checkbox> </validation-provider
+              ></v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <v-btn
+                  class="mr-4"
+                  type="submit"
+                  :disabled="invalid"
+                  block
+                  text
+                >
+                  회원가입
+                </v-btn>
               </v-col>
             </v-row>
           </form>
@@ -260,7 +264,7 @@
     <v-dialog v-model="mailAuthDrawer" width="800px" height="100%" scrollable
       ><mail-auth-dialog v-on:complete="mailAuthComplete"></mail-auth-dialog
     ></v-dialog>
-    <v-dialog v-model="storeTermsDrawer">
+    <v-dialog v-model="storeTermsDrawer" width="800px" height="100%">
       <store-terms-dialog :version="storeTermsVersion"></store-terms-dialog
     ></v-dialog>
   </v-container>
@@ -294,8 +298,15 @@ export default {
     ageYn: false,
     storeTermsYn: false,
     personalTermsYn: false,
+    menu1: false,
+    dateFormatted: "",
   }),
   methods: {
+    parseDate(date) {
+      if (!date) return null;
+      const [year, month, day] = date.split("-");
+      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    },
     submit() {
       const formData = new FormData();
       if (!this.ageYn || !this.storeTermsYn || !this.personalTermsYn) {

@@ -1,23 +1,23 @@
 <template>
-  <v-container fluid style="min-height: 950px">
+  <v-container style="min-height: 950px" class="pl-15 pr-15">
     <v-row dense style="min-height: 800px">
       <v-col
         v-for="(product, index) in Pagination.content"
         :key="product.cd"
-        cols="2"
+        cols="3"
       >
         <v-card
           elevation="0"
           flat
           :height="Pagination.content.length > 6 ? '100%' : '55%'"
           @click="getDetailInfo(product.cd)"
+          class="pa-2 mt-1 pb-1"
         >
           <v-img
             :src="product.thumbnail"
             class="white--text align-end"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-            height="80%"
-            min-width="100%"
+            height="70%"
           >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -31,10 +31,11 @@
             </v-card-actions>
           </v-img>
           <v-card-title
-            class="text-truncate pa-2 text-caption"
+            class="pa-2 text-caption"
             v-text="product.name"
             @click="getDetailInfo(product.cd)"
           ></v-card-title>
+          <v-spacer v-if="product.name.length < 39"></v-spacer>
           <v-card-subtitle>
             <v-row>
               <v-col>
@@ -42,14 +43,15 @@
                   <v-col class="text-left">{{
                     product.discountRate + " %"
                   }}</v-col>
-                </v-row>
-                <v-row class="text-caption" no-gutters>
                   <v-col
                     class="text-right text-decoration-line-through text-caption"
                     >{{ product.salesPri.comma() + " 원" }}</v-col
                   >
                 </v-row>
                 <v-row class="text-caption" no-gutters>
+                  <v-col class="text-left">{{
+                    product.deliPri == "0" ? "무료배송" : ""
+                  }}</v-col>
                   <v-col class="text-right">{{
                     String(
                       Number(product.salesPri) *

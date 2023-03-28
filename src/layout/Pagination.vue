@@ -1,13 +1,14 @@
 <template>
   <v-container fluid>
     <v-divider></v-divider>
-    <v-row
+    <v-row class="mt-5 mb-5"
       ><v-col>
         <v-pagination
           v-model="Pagination.number"
           :length="Pagination.totalPages"
           color="grey"
           @input="updateList"
+          circle
         ></v-pagination> </v-col
     ></v-row>
   </v-container>

@@ -1,8 +1,9 @@
 <template>
   <v-container fluid>
     <v-footer padless>
-      <v-card flat tile class="grey text-center flex">
-        <v-card-text class="white--text pt-0">
+      <v-card flat tile class="text-center flex">
+        <v-divider></v-divider>
+        <v-card-text class="grey--text pt-0">
           <dt>판매자정보</dt>
           <dd>
             로브아네 (lovane) (사업자 / 일반 사업자) - 대표자 : 김진현 <br />
@@ -14,7 +15,7 @@
           </dd>
         </v-card-text>
         <v-divider></v-divider>
-        <v-card-text class="white--text">
+        <v-card-text class="grey--text">
           {{ new Date().getFullYear() }} — <strong>Lovane</strong>
         </v-card-text>
       </v-card>

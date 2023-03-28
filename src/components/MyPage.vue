@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <!-- 개인정보 수정 다이얼로그 -->
     <v-dialog
       v-model="userInfoDrawer"
