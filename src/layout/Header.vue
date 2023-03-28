@@ -53,7 +53,7 @@
       </v-row>
       <template v-slot:extension><MenuBar /></template>
     </v-app-bar>
-    <v-dialog v-model="drawer" height="100%" width="800px">
+    <v-dialog v-model="drawer" height="100%" width="40%">
       <validation-observer ref="observer" v-slot="{ invalid }">
         <form @submit.prevent="submit">
           <v-row class="white" no-gutters>

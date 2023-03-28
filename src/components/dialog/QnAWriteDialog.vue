@@ -1,21 +1,25 @@
 <template>
-  <v-container fluid class="white">
+  <v-container class="white">
     <v-row>
-      <v-col>
+      <v-col class="ma-1">
         <v-textarea
           outlined
           v-model="description"
           label="Q & A 작성"
+          rows="10"
+          auto-grow
+          rounded
         ></v-textarea>
+        <v-checkbox
+          v-model="secretYn"
+          label="비공개"
+          color="blue lighten-2"
+          hide-details
+        ></v-checkbox>
       </v-col>
     </v-row>
     <v-row class="text-right" no-gutters>
       <v-col>
-        <v-checkbox
-          v-model="secretYn"
-          label="비공개여부"
-          type="checkbox"
-        ></v-checkbox>
         <v-btn text @click="insertQnaInfo"> 작성하기 </v-btn>
       </v-col>
     </v-row>

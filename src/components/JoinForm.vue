@@ -123,8 +123,7 @@
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
                       v-model="dateFormatted"
-                      label="생년월일"
-                      hint="YYYY-MM-DD"
+                      label="생년월일(YYYY-MM-DD)"
                       persistent-hint
                       v-bind="attrs"
                       @blur="birth = parseDate(dateFormatted)"

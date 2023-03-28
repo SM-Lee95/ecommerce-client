@@ -1,35 +1,31 @@
 <template>
   <v-container style="min-height: 1000px">
-    <v-row>
+    <v-row style="min-height: 600px">
       <v-col cols="6">
-        <v-card elevation="0" max-width="90%">
-          <v-row align-self="center" class="text-center">
-            <v-col class="mt-5 ml-5">
-              <v-img
-                :src="DetailInfo.thumbnail"
-                contain
-                min-width="430px"
-                position="center center"
-              ></v-img>
-            </v-col>
-          </v-row>
+        <v-card elevation="0" class="pa-6">
+          <v-img
+            :src="DetailInfo.thumbnail"
+            contain
+            position="center center"
+            style="max-height: 600px"
+          ></v-img>
         </v-card>
       </v-col>
       <v-col cols="6">
-        <v-row class="text-right">
+        <v-row class="text-left">
           <v-col class="mr-2 mt-2">
             <v-btn text @click="getList(DetailInfo.catalog.cd)">
               {{ DetailInfo.catalog.name }}</v-btn
             >
           </v-col>
         </v-row>
-        <v-card elevation="0" flat outlined>
+        <v-card elevation="0" outlined>
           <v-row class="text-right" no-gutters>
-            <v-col class="mr-5 mt-2">
+            <v-col class="mr-2 mt-2">
               <v-btn
                 icon
                 @click.stop="like(DetailInfo.cd, DetailInfo.love)"
-                :color="true == DetailInfo.love ? 'pink' : 'black'"
+                :color="true == DetailInfo.love ? 'pink lighten-4' : 'black'"
               >
                 <v-icon>mdi-heart</v-icon>
               </v-btn>
@@ -68,16 +64,13 @@
                 >택배배송 | 배송비 : {{ DetailInfo.deliPri.comma() }} 원</v-col
               >
             </v-row>
-            <v-row class="text-right" no-gutters>
-              <v-col>제조사 - {{ DetailInfo.corpNm }}</v-col>
-            </v-row>
           </v-card-text>
           <v-divider class="mx-4"></v-divider>
           <v-card-text>
             Option
             <v-chip-group
               v-model="option"
-              active-class="deep-purple accent-4 white--text"
+              active-class="black white--text"
               column
             >
               <v-chip v-for="(tag, i) in DetailInfo.detail" :key="i"
@@ -89,7 +82,7 @@
           <v-card-actions>
             <v-row no-gutters>
               <v-col class="text-right mr-10">
-                <v-btn text color="deep-purple lighten-2" @click="addOption">
+                <v-btn text color="black lighten-2" @click="addOption">
                   Add
                 </v-btn>
               </v-col>
@@ -147,21 +140,13 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row class="mt-5">
       <v-col>
         <v-toolbar>
           <v-tabs dark background-color="grey" grow v-model="tab">
-            <v-tab>
-              <v-badge color="black" icon="mdi-information"> 상세정보 </v-badge>
-            </v-tab>
-            <v-tab>
-              <v-badge color="red" icon="mdi-help"> Q&A </v-badge>
-            </v-tab>
-            <v-tab>
-              <v-badge color="purple" icon="mdi-keyboard-return">
-                반품/교환정보
-              </v-badge>
-            </v-tab>
+            <v-tab>상세정보 </v-tab>
+            <v-tab>Q&A </v-tab>
+            <v-tab>반품/교환정보 </v-tab>
           </v-tabs>
         </v-toolbar>
       </v-col>
