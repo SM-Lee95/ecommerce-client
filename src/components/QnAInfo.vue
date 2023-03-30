@@ -23,13 +23,15 @@
             <v-btn
               @click="qnaInfoDialogView(item)"
               :disabled="
-                (item.secretYn == 'N' || UserInfo.cd == item.userCd) && item.answerYn == 'Y'
+                (item.secretYn == 'N' ||
+                  (UserInfo && UserInfo.cd == item.userCd)) &&
+                item.answerYn == 'Y'
                   ? false
                   : true
               "
               text
               >{{
-                item.secretYn == "N" || UserInfo.cd == item.userCd
+                item.secretYn == "N" || !UserInfo || UserInfo.cd == item.userCd
                   ? item.question
                   : "비밀글입니다."
               }}</v-btn

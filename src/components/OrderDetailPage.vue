@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <v-row no-gutters>
       <v-col class="text-h6 font-weight-bold">주문 상세 정보</v-col>
       <v-col class="text-right"
@@ -25,12 +25,7 @@
       no-data-text="주문 건이 존재하지 않습니다."
     >
       <template v-slot:item.thumbnail="{ item }">
-        <v-img
-          :src="item.thumbnail"
-          max-height="100%"
-          min-height="100%"
-          max-width="100"
-        ></v-img>
+        <v-img :src="item.thumbnail" contain max-width="100"></v-img>
       </template>
       <template v-slot:item.prdInfo="{ item }">
         <v-row no-gutters>

@@ -1,15 +1,14 @@
 <template>
   <v-container style="min-height: 1000px">
     <v-row style="min-height: 600px">
-      <v-col cols="6">
-        <v-card elevation="0" class="pa-6">
-          <v-img
-            :src="DetailInfo.thumbnail"
-            contain
-            position="center center"
-            style="max-height: 600px"
-          ></v-img>
-        </v-card>
+      <v-col cols="6" class="d-flex justify-center">
+        <v-img
+          :src="DetailInfo.thumbnail"
+          contain
+          position="center center"
+          max-width="80%"
+          aspect-ratio="0.75"
+        ></v-img>
       </v-col>
       <v-col cols="6">
         <v-row class="text-left">
@@ -33,22 +32,22 @@
           </v-row>
           <v-row no-gutters
             ><v-col
-              ><v-card-title class="ml-4">{{
+              ><v-card-title class="ml-2 subtitle-1">{{
                 DetailInfo.name
               }}</v-card-title></v-col
             ></v-row
           >
           <v-card-text>
             <v-row class="text-right" no-gutters>
-              <v-col cols="1" class="text-h6"
+              <v-col cols="1" class="subtitle-1"
                 >{{ DetailInfo.discountRate }} %</v-col
               >
               <v-col cols="9"></v-col>
-              <v-col cols="2" class="text-decoration-line-through text-h6"
+              <v-col cols="2" class="text-decoration-line-through subtitle-2"
                 >{{ DetailInfo.salesPri.comma() }} 원</v-col
               >
             </v-row>
-            <v-row class="text-h6 text-right" no-gutters>
+            <v-row class="subtitle-1 text-right" no-gutters>
               <v-col>
                 {{
                   String(
@@ -66,46 +65,44 @@
             </v-row>
           </v-card-text>
           <v-divider class="mx-4"></v-divider>
-          <v-card-text>
+          <v-card-text class="ml-2">
             Option
             <v-chip-group
               v-model="option"
               active-class="black white--text"
               column
             >
-              <v-chip v-for="(tag, i) in DetailInfo.detail" :key="i"
+              <v-chip
+                v-for="(tag, i) in DetailInfo.detail"
+                :key="i"
+                @click="addOption(i)"
                 >{{ tag.size.name }}-{{ tag.color.name }}
               </v-chip>
             </v-chip-group>
             <v-divider class="mx-4"></v-divider>
           </v-card-text>
-          <v-card-actions>
-            <v-row no-gutters>
-              <v-col class="text-right mr-10">
-                <v-btn text color="black lighten-2" @click="addOption">
-                  Add
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-card-actions>
-          <v-divider class="mx-4"></v-divider>
           <v-card-text>
             <v-list-item v-for="(item, i) in selectOptions" :key="i">
               <v-list-item-title>
                 <v-row no-gutters>
-                  <v-col align-self="center" class="text-left">
+                  <v-col
+                    align-self="center"
+                    class="text-left subtitle-2"
+                    cols="4"
+                  >
                     {{ item.size + "-" + item.color }}
                   </v-col>
-                  <v-col class="text-right ml-5">
+                  <v-col class="text-right ml-5" cols="3">
                     <v-select
                       v-model="item.cnt"
                       :items="items"
                       @change="calc"
+                      item-color="black"
                     ></v-select>
                   </v-col>
                   <v-col align-self="center" class="text-right">
-                    <v-btn x-small text @click="deleteOption(i)">
-                      <v-icon> mdi-close-outline </v-icon>
+                    <v-btn small text @click="deleteOption(i)">
+                      <v-icon small> mdi-close </v-icon>
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -114,7 +111,7 @@
             </v-list-item>
             <v-list-item>
               <v-row dense no-gutters>
-                <v-col class="text-left"><b>총 상품 금액</b></v-col>
+                <v-col class="text-left">총 상품 금액</v-col>
                 <v-col class="text-right">
                   총 수량 {{ this.cnt }}개 |
                   {{ String(this.totPrice).comma() }}원
@@ -142,30 +139,36 @@
     </v-row>
     <v-row class="mt-5">
       <v-col>
-        <v-toolbar>
-          <v-tabs dark background-color="grey" grow v-model="tab">
-            <v-tab>상세정보 </v-tab>
-            <v-tab>Q&A </v-tab>
-            <v-tab>반품/교환정보 </v-tab>
+        <v-toolbar flat>
+          <v-tabs
+            background-color="white"
+            grow
+            v-model="tab"
+            slider-color="grey"
+          >
+            <v-tab active-class="black--text">상세정보 </v-tab>
+            <v-tab active-class="black--text">Q&A </v-tab>
+            <v-tab active-class="black--text">반품/교환정보 </v-tab>
           </v-tabs>
         </v-toolbar>
       </v-col>
     </v-row>
-    <v-row align-content="center">
+    <v-row>
       <v-col>
         <v-tabs-items v-model="tab">
           <v-tab-item>
             <v-container>
               <v-row
-                ><v-col align-self="center">
+                ><v-col class="d-flex justify-center">
                   <v-img
                     src="../assets/LovaneNotice.jpeg"
                     contain
                     position="center center"
+                    max-width="60%"
                   ></v-img> </v-col
               ></v-row>
               <v-row>
-                <v-col>
+                <v-col class="d-flex justify-center">
                   <v-card flat>
                     <v-card-text v-html="DetailInfo.description"></v-card-text>
                   </v-card>
@@ -436,17 +439,13 @@ export default {
           } else this.$dialog.message.error("상품 목록 조회에 실패했습니다.");
         });
     },
-    addOption() {
-      if (this.option == null) {
-        this.$dialog.message.warning("옵션을 선택 후 시도해주세요.");
-        return;
-      }
+    addOption(index) {
       var option = new Object();
-      option.size = this.DetailInfo.detail[this.option].size.name;
-      option.color = this.DetailInfo.detail[this.option].color.name;
+      option.size = this.DetailInfo.detail[index].size.name;
+      option.color = this.DetailInfo.detail[index].color.name;
       option.price =
         (this.DetailInfo.salesPri * (100 - this.DetailInfo.discountRate)) / 100;
-      option.basketKey = this.DetailInfo.detail[this.option].productKey;
+      option.basketKey = this.DetailInfo.detail[index].productKey;
       option.cnt = 1;
       if (
         this.selectOptions.find((value) => value.basketKey == option.basketKey)

@@ -1,7 +1,7 @@
 <template>
-  <v-container fluid>
-    <v-row no-gutters>
-      <v-col class="ml-6">
+  <v-container>
+    <v-row no-gutters class="mt-6">
+      <v-col>
         <v-icon x-large> mdi-basket </v-icon>
         <b class="text-h5 ml-4">장바구니</b>
       </v-col>
@@ -19,12 +19,12 @@
           v-model="selectList"
           item-key="cd"
           no-data-text="장바구니에 상품이 존재하지 않습니다."
+          height="500px"
         >
           <template v-slot:item.thumbnail="{ item }">
             <v-img
               :src="item.thumbnail"
-              max-height="100%"
-              min-height="100%"
+              contain
               max-width="100"
               @click="getDetailInfo(item.cd)"
             >
@@ -33,14 +33,19 @@
           <template v-slot:item.prdNm="{ item }">
             <v-row>
               <v-col>
-                <v-btn text @click="getDetailInfo(item.cd)">{{ item.name }}</v-btn>
+                <v-btn small text @click="getDetailInfo(item.cd)">{{
+                  item.name
+                }}</v-btn>
               </v-col>
             </v-row>
-          </template>
-          <template v-slot:item.options="{ item }">
-            <v-row v-for="(detail, index) in item.detail" :key="index">
-              <v-col>
-                {{ detail.size.name }} - {{ detail.color.name }} - {{ detail.basketCnt }}개
+            <v-row
+              v-for="(detail, index) in item.detail"
+              :key="index"
+              no-gutters
+            >
+              <v-col class="text-caption">
+                {{ detail.size.name }} - {{ detail.color.name }} -
+                {{ detail.basketCnt }}개
                 <v-btn icon x-small @click="deleteOption(detail.productKey)">
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
@@ -62,8 +67,10 @@
           </template>
           <template v-slot:item.discountPri="{ item }">
             {{
-              String(Number(item.salesPri) * ((100 - Number(item.discountRate)) / 100)).comma() +
-              " 원"
+              String(
+                Number(item.salesPri) *
+                  ((100 - Number(item.discountRate)) / 100)
+              ).comma() + " 원"
             }}
           </template>
           <template v-slot:item.discountRate="{ item }">
@@ -77,7 +84,9 @@
     </v-row>
     <v-divider></v-divider>
     <v-row class="mt-5">
-      <v-col class="text-left ml-10"> 총 합계 : {{ String(BasketList.endSum).comma() }} 원 </v-col>
+      <v-col class="text-left ml-10">
+        총 합계 : {{ String(BasketList.endSum).comma() }} 원
+      </v-col>
       <v-col class="text-right mr-10">
         <v-btn text @click="order"> 주문하기 </v-btn>
       </v-col>
@@ -97,7 +106,6 @@ export default {
       header: [
         { value: "thumbnail", align: "center" },
         { text: "상품명", value: "prdNm", align: "start" },
-        { text: "선택옵션", value: "options", align: "center" },
         { text: "판매금액", value: "salesPri", align: "center" },
         { text: "할인율", value: "discountRate", align: "center" },
         { text: "할인금액", value: "discountPri", align: "center" },
@@ -116,7 +124,10 @@ export default {
       this.$store.dispatch("product/getDetailInfo", cd).then((resp) => {
         if (resp) {
           if (this.$route.path != "/Detail") this.$router.push("/Detail");
-        } else this.$dialog.message.error("상품 정보를 조회하는 중에 오류가 발생했습니다.");
+        } else
+          this.$dialog.message.error(
+            "상품 정보를 조회하는 중에 오류가 발생했습니다."
+          );
       });
     },
     like(index, cd, love) {
@@ -146,12 +157,14 @@ export default {
         this.$dialog.message.warning("로그인 후에 시도해주세요.");
         return;
       }
-      this.$store.dispatch("product/delBasketInfo", { prdCd: productCd, listCd: 0 }).then((resp) => {
-        if (resp) {
-          this.$dialog.message.success("Success");
-          this.$store.dispatch("product/getBasketList");
-        } else this.$dialog.message.error("Fail");
-      });
+      this.$store
+        .dispatch("product/delBasketInfo", { prdCd: productCd, listCd: 0 })
+        .then((resp) => {
+          if (resp) {
+            this.$dialog.message.success("Success");
+            this.$store.dispatch("product/getBasketList");
+          } else this.$dialog.message.error("Fail");
+        });
     },
     deleteOption(productKey) {
       if (!this.UserInfo) {

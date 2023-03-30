@@ -2,43 +2,14 @@
   <v-container fluid>
     <v-row>
       <v-col class="text-center">
-        <v-menu
+        <v-btn
           v-for="catalog in MenuList"
           :key="catalog.cd"
-          open-on-hover
-          offset-y
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              @click="updateList(catalog.cd)"
-              v-bind="attrs"
-              class="button mr-6"
-              text
-              v-on="on"
-              v-if="catalog.children && catalog.children.length != '0'"
-              >{{ catalog.name }}
-            </v-btn>
-            <v-btn
-              @click="updateList(catalog.cd)"
-              text
-              class="button mr-6"
-              v-if="!catalog.children || catalog.children.length == 0"
-              >{{ catalog.name }}
-            </v-btn>
-          </template>
-          <v-list flat rounded elevation="0">
-            <v-list-item
-              v-for="subCatalog in catalog.children"
-              :key="subCatalog.cd"
-              :value="subCatalog"
-              no-gu
-            >
-              <v-btn class="caption" text @click="updateList(subCatalog.cd)">{{
-                subCatalog.name
-              }}</v-btn>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+          @click="updateList(catalog)"
+          text
+          class="button mr-6"
+          >{{ catalog.name }}
+        </v-btn>
       </v-col>
     </v-row>
     <v-divider></v-divider>
@@ -62,12 +33,15 @@ export default {
     });
   },
   methods: {
-    updateList(param) {
+    updateList(obj) {
       this.$store
-        .dispatch("product/getItemList", { param: param, page: 0 })
+        .dispatch("product/getItemList", { param: obj.cd, page: 0 })
         .then((resp) => {
           if (resp) {
-            if (this.$route.path != "/") this.$router.push("/");
+            this.$store.commit("common/setSelectedMenu", obj);
+            if (this.$route.path != "/") {
+              this.$router.push("/");
+            }
           } else this.$dialog.message.error("상품 목록 조회에 실패했습니다.");
         });
     },

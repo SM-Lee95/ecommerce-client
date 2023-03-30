@@ -34,5 +34,8 @@ export default {
   },
   QnaList(state){
     return state.QnaList;
+  },
+  SelectedMenu(state){
+    return state.SelectedMenu;
   }
 };

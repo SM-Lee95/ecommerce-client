@@ -31,5 +31,8 @@ export default {
   },
   setQnaList(state, payload){
     state.QnaList = payload;
+  },
+  setSelectedMenu(state, payload){
+    state.SelectedMenu = payload;
   }
 };

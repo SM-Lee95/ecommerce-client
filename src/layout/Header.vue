@@ -59,7 +59,7 @@
           <v-row class="white" no-gutters>
             <v-col>
               <v-row class="mt-1" justify="space-between">
-                <v-col class="text-h6 ml-4"> 로그인 </v-col>
+                <v-col class="text-h6 ml-4"> Login </v-col>
                 <v-col></v-col>
                 <v-col class="text-right">
                   <v-btn icon @click.stop="drawer = !drawer">
@@ -76,7 +76,7 @@
                     rules="required"
                   >
                     <v-text-field
-                      label="아이디"
+                      label="ID"
                       prepend-inner-icon="mdi-account-heart-outline"
                       v-model="username"
                       :error-messages="errors"
@@ -89,7 +89,7 @@
                   >
                     <v-text-field
                       class="mx-auto"
-                      label="비밀번호"
+                      label="Password"
                       prepend-inner-icon="mdi-lock"
                       v-model="password"
                       :error-messages="errors"
@@ -107,7 +107,7 @@
                     elevation="0"
                     @click="goLogin"
                     :disabled="invalid"
-                    >로그인
+                    >Login
                   </v-btn>
                   <v-row no-gutters>
                     <v-col>

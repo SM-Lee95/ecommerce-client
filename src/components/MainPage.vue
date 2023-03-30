@@ -1,6 +1,22 @@
 <template>
   <v-container style="min-height: 950px" class="pl-15 pr-15">
-    <v-row dense style="min-height: 800px">
+    <v-row class="text-center" v-if="SelectedMenu"
+      ><v-col>{{ SelectedMenu.name }}</v-col></v-row
+    >
+    <v-row v-if="SelectedMenu"
+      ><v-col class="text-center">
+        <v-btn
+          small
+          v-for="catalog in SelectedMenu.children"
+          :key="catalog.cd"
+          @click="updateList(catalog.cd)"
+          text
+          class="button mr-6"
+          >{{ catalog.name }}
+        </v-btn>
+      </v-col></v-row
+    >
+    <v-row  class="mt-5" dense style="min-height: 800px">
       <v-col
         v-for="(product, index) in Pagination.content"
         :key="product.cd"
@@ -17,7 +33,7 @@
             :src="product.thumbnail"
             class="white--text align-end"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-            height="70%"
+            aspect-ratio="0.75"
           >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -88,6 +104,7 @@ export default {
   computed: {
     ...mapGetters("product", ["Pagination"]),
     ...mapGetters("user", ["UserInfo"]),
+    ...mapGetters("common", ["SelectedMenu"]),
   },
   methods: {
     getDetailInfo(cd) {
@@ -113,6 +130,13 @@ export default {
           this.$dialog.message.warning("Fail");
         }
       });
+    },
+    updateList(cd) {
+      this.$store
+        .dispatch("product/getItemList", { param: cd, page: 0 })
+        .then((resp) => {
+          if (!resp) this.$dialog.message.error("상품 목록 조회에 실패했습니다.");
+        });
     },
   },
   mounted() {},
