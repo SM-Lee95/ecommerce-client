@@ -1,31 +1,27 @@
 <template>
-  <v-container>
-    <!-- 개인정보 수정 다이얼로그 -->
-    <v-dialog
-      v-model="userInfoDrawer"
-      max-width="600px"
-      height="100%"
-      scrollable
-    >
-      <v-row class="white">
-        <v-col>
-          <v-row class="mt-1" justify="space-between">
-            <v-col class="ml-2 mt-1 text-h6"> 개인정보수정 </v-col>
-            <v-col></v-col>
-            <v-col class="text-right">
-              <v-btn icon @click.stop="setUserInfoDrawer" right>
-                <v-icon>mdi-close-box</v-icon>
-              </v-btn>
-            </v-col>
-          </v-row>
-          <v-divider></v-divider>
-          <v-row>
-            <v-col>
-              <modi-info-page />
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
+  <v-container class="pa-15">
+    <v-dialog v-model="userInfoDrawer" width="600px">
+      <v-container class="white">
+        <v-row>
+          <v-col>
+            <v-row class="mt-1" justify="space-between">
+              <v-col class="ml-5 mt-1 text-h6"> 개인정보수정 </v-col>
+              <v-col></v-col>
+              <v-col class="text-right">
+                <v-btn icon @click.stop="setUserInfoDrawer" right>
+                  <v-icon>mdi-close-box</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+            <v-divider></v-divider>
+            <v-row>
+              <v-col>
+                <modi-info-page />
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-dialog>
     <v-row>
       <v-col class="text-h4"> MyPage </v-col>
@@ -90,7 +86,7 @@
         {{ OrderProcList[item.procTy] }}
       </template>
     </v-data-table>
-    <v-dialog v-model="myQnaInfoDialogFlag">
+    <v-dialog v-model="myQnaInfoDialogFlag" width="800px">
       <qna-info-dialog-vue></qna-info-dialog-vue>
     </v-dialog>
   </v-container>

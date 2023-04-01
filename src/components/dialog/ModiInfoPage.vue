@@ -136,18 +136,14 @@
         <v-divider></v-divider>
         <v-row class="text-right">
           <v-col>
-            <v-btn @click="saveInfo" text>
-              저장
-              <v-icon color="gray darken-2">mdi-content-save-move</v-icon>
-            </v-btn>
             <v-btn @click.stop="passModiDrawer = !passModiDrawer" text>
               비밀번호변경
-              <v-icon color="gray darken-2">mdi-close</v-icon>
             </v-btn>
+            <v-btn @click="saveInfo" text> 저장 </v-btn>
           </v-col>
         </v-row>
       </v-list>
-      <v-dialog v-model="passModiDrawer" width="600px" height="100%" scrollable>
+      <v-dialog v-model="passModiDrawer" width="600px">
         <v-row class="white" no-gutters>
           <v-col>
             <v-row class="mt-1">

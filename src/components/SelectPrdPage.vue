@@ -112,7 +112,7 @@
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
     </v-data-table>
-    <v-dialog v-model="modiDialog" width="1000" :retain-focus="false">
+    <v-dialog v-model="modiDialog" width="1000px" :retain-focus="false">
       <product-modi-info-dialog v-on:close="close"></product-modi-info-dialog>
     </v-dialog>
   </v-container>

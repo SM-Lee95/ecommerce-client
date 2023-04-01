@@ -73,7 +73,7 @@
         </v-data-table>
       </v-col>
     </v-row>
-    <v-dialog v-model="updateAnswerDialog"
+    <v-dialog v-model="updateAnswerDialog" width="800px"
       ><answer-write-dialog
         v-on:close="updateAnswerDialogDrawer"
       ></answer-write-dialog

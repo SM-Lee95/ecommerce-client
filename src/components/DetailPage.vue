@@ -1,6 +1,6 @@
 <template>
   <v-container style="min-height: 1000px">
-    <v-row style="min-height: 600px">
+    <v-row style="min-height: 600px" class="pa-10">
       <v-col cols="6" class="d-flex justify-center">
         <v-img
           :src="DetailInfo.thumbnail"
@@ -18,13 +18,13 @@
             >
           </v-col>
         </v-row>
-        <v-card elevation="0" outlined>
+        <v-card elevation="0" outlined class="mt-1">
           <v-row class="text-right" no-gutters>
             <v-col class="mr-2 mt-2">
               <v-btn
                 icon
                 @click.stop="like(DetailInfo.cd, DetailInfo.love)"
-                :color="true == DetailInfo.love ? 'pink lighten-4' : 'black'"
+                :color="true == DetailInfo.love ? 'pink lighten-4' : 'white'"
               >
                 <v-icon>mdi-heart</v-icon>
               </v-btn>
@@ -137,7 +137,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row class="mt-5">
+    <v-row class="pa-5">
       <v-col>
         <v-toolbar flat>
           <v-tabs
@@ -153,7 +153,7 @@
         </v-toolbar>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row class="pa-5">
       <v-col>
         <v-tabs-items v-model="tab">
           <v-tab-item>

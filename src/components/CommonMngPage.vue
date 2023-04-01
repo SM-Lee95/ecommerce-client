@@ -39,8 +39,11 @@
         </v-data-table>
       </v-col>
     </v-row>
-    <v-dialog v-model="insertCodeDialog"
-      ><insert-code-dialog :version="dialogVersion" v-on:close="close"></insert-code-dialog
+    <v-dialog v-model="insertCodeDialog" width="1000px"
+      ><insert-code-dialog
+        :version="dialogVersion"
+        v-on:close="close"
+      ></insert-code-dialog
     ></v-dialog>
   </v-container>
 </template>
@@ -117,9 +120,9 @@ export default {
       this.dialogVersion = "color";
       this.insertCodeDialog = true;
     },
-    close(){
-        this.insertCodeDialog = false;
-    }
+    close() {
+      this.insertCodeDialog = false;
+    },
   },
 };
 </script>

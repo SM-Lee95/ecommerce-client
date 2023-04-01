@@ -46,10 +46,10 @@
         </v-data-table>
       </v-col>
     </v-row>
-    <v-dialog v-model="qnaInfoDialogFlag" max-width="40%">
+    <v-dialog v-model="qnaInfoDialogFlag" width="800px">
       <qn-a-info-dialog></qn-a-info-dialog>
     </v-dialog>
-    <v-dialog v-model="qnaWriteDialogFlag" max-width="40%">
+    <v-dialog v-model="qnaWriteDialogFlag" width="600px">
       <qn-a-write-dialog v-on:close="qnaWriteDialogView"></qn-a-write-dialog>
     </v-dialog>
   </v-container>

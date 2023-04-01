@@ -62,6 +62,11 @@ Vue.use(VuetifyDialog, {
   context: {
     vuetify,
   },
+  confirm: {
+    icon: false,
+    width: 400,
+    color: "grey",
+  },
 });
 Vue.use(CKEditor);
 Vue.use(VueCookies);

@@ -1,9 +1,34 @@
 <template>
   <v-container fluid>
+    <v-btn
+      fab
+      dark
+      fixed
+      bottom
+      right
+      color="black"
+      small
+      @click="$vuetify.goTo(0)"
+      style="margin-bottom: 50px"
+    >
+      <v-icon> mdi-menu-up </v-icon>
+    </v-btn>
+    <v-btn
+      fab
+      dark
+      fixed
+      bottom
+      right
+      color="black"
+      small
+      @click="$vuetify.goTo(9999)"
+    >
+      <v-icon> mdi-menu-down </v-icon>
+    </v-btn>
     <v-footer padless>
       <v-card flat tile class="text-center flex">
         <v-divider></v-divider>
-        <v-card-text class="grey--text pt-0">
+        <v-card-text class="grey--text pt-3">
           <dt>판매자정보</dt>
           <dd>
             로브아네 (lovane) (사업자 / 일반 사업자) - 대표자 : 김진현 <br />

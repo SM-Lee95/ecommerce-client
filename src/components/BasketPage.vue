@@ -3,9 +3,11 @@
     <v-row no-gutters class="mt-6">
       <v-col>
         <v-icon x-large> mdi-basket </v-icon>
-        <b class="text-h5 ml-4">장바구니</b>
+        <b class="text-h5 ml-5" style="vertical-align: middle">장바구니</b>
       </v-col>
-      <v-col class="text-right mr-4"> <b>장바구니</b> > 주문 / 결제 </v-col>
+      <v-col class="text-right mr-4" align-self="center"
+        >장바구니 > 주문 / 결제
+      </v-col>
     </v-row>
     <v-row>
       <v-col>
@@ -19,7 +21,7 @@
           v-model="selectList"
           item-key="cd"
           no-data-text="장바구니에 상품이 존재하지 않습니다."
-          height="500px"
+          height="800px"
         >
           <template v-slot:item.thumbnail="{ item }">
             <v-img
@@ -42,6 +44,7 @@
               v-for="(detail, index) in item.detail"
               :key="index"
               no-gutters
+              class="ml-3"
             >
               <v-col class="text-caption">
                 {{ detail.size.name }} - {{ detail.color.name }} -
@@ -58,20 +61,22 @@
           <template v-slot:item.midSum="{ item }">
             {{ String(item.midSum).comma() + " 원" }}
           </template>
-          <template v-slot:item.salesPri="{ item }">
-            <v-row
-              ><v-col class="text-decoration-line-through">{{
+          <template v-slot:item.discountPri="{ item }">
+            <v-row no-gutters
+              ><v-col class="text-decoration-line-through text-caption">{{
                 item.salesPri.comma() + " 원"
               }}</v-col></v-row
             >
-          </template>
-          <template v-slot:item.discountPri="{ item }">
-            {{
-              String(
-                Number(item.salesPri) *
-                  ((100 - Number(item.discountRate)) / 100)
-              ).comma() + " 원"
-            }}
+            <v-row no-gutters
+              ><v-col class="body-2">
+                {{
+                  String(
+                    Number(item.salesPri) *
+                      ((100 - Number(item.discountRate)) / 100)
+                  ).comma() + " 원"
+                }}</v-col
+              ></v-row
+            >
           </template>
           <template v-slot:item.discountRate="{ item }">
             {{ item.discountRate + " %" }}
@@ -106,9 +111,8 @@ export default {
       header: [
         { value: "thumbnail", align: "center" },
         { text: "상품명", value: "prdNm", align: "start" },
-        { text: "판매금액", value: "salesPri", align: "center" },
         { text: "할인율", value: "discountRate", align: "center" },
-        { text: "할인금액", value: "discountPri", align: "center" },
+        { text: "금액", value: "discountPri", align: "center" },
         { text: "배송비", value: "deliPri", align: "center" },
         { text: "합계", value: "midSum", align: "center" },
         { text: "삭제", value: "actions", align: "center" },

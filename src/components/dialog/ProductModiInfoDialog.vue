@@ -116,7 +116,7 @@
         </v-card-actions>
       </v-card>
     </validation-observer>
-    <v-dialog v-model="detailOptionDialog">
+    <v-dialog v-model="detailOptionDialog" width="800px">
       <product-modi-detail-dialog on:close="close"></product-modi-detail-dialog>
     </v-dialog>
   </v-container>

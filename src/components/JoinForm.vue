@@ -112,13 +112,12 @@
               </v-col>
               <v-col>
                 <v-menu
-                  ref="menu1"
                   v-model="menu1"
-                  :close-on-content-click="false"
                   transition="scale-transition"
                   offset-y
                   max-width="290px"
                   min-width="auto"
+                  :close-on-content-click="false"
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
@@ -128,13 +127,10 @@
                       v-bind="attrs"
                       @blur="birth = parseDate(dateFormatted)"
                       v-on="on"
+                      readonly
                     ></v-text-field>
                   </template>
-                  <v-date-picker
-                    v-model="birth"
-                    no-title
-                    @input="menu1 = false"
-                  ></v-date-picker>
+                  <v-date-picker v-model="birth" no-title></v-date-picker>
                 </v-menu>
               </v-col>
             </v-row>
@@ -395,6 +391,11 @@ export default {
         this.storeTermsVersion = flag;
       }
       this.storeTermsDrawer = !this.storeTermsDrawer;
+    },
+  },
+  watch: {
+    birth() {
+      this.dateFormatted = this.parseDate(this.birth);
     },
   },
 };

@@ -13,7 +13,7 @@
         <router-view></router-view>
       </v-col>
     </v-row>
-    <v-dialog v-model="excelTableDialog" width="85%"
+    <v-dialog v-model="excelTableDialog"
       ><excel-table-dialog></excel-table-dialog
     ></v-dialog>
   </v-container>

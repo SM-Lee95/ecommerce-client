@@ -1,6 +1,6 @@
 <template>
-  <v-container fluid>
-    <v-card>
+  <v-container class="white" fluid>
+    <v-card flat>
       <v-card-title class="text-h6"> 주문 상태 수정 </v-card-title>
       <v-divider></v-divider>
       <v-card-actions>

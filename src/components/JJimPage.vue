@@ -21,7 +21,7 @@
               <v-btn
                 icon
                 @click.stop="like(index, product.cd, product.love)"
-                :color="true == product.love ? 'pink' : 'black'"
+                :color="true == product.love ? 'pink lighten-4' : 'white'"
               >
                 <v-icon>mdi-heart</v-icon>
               </v-btn>

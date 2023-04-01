@@ -16,7 +16,7 @@
         </v-btn>
       </v-col></v-row
     >
-    <v-row  class="mt-5" dense style="min-height: 800px">
+    <v-row  class="mt-5 pl-15 pr-15" dense style="min-height: 800px">
       <v-col
         v-for="(product, index) in Pagination.content"
         :key="product.cd"
@@ -40,7 +40,7 @@
               <v-btn
                 icon
                 @click.stop="like(index, product.cd, product.love)"
-                :color="true == product.love ? 'pink' : 'black'"
+                :color="true == product.love ? 'pink lighten-4' : 'white'"
               >
                 <v-icon>mdi-heart</v-icon>
               </v-btn>

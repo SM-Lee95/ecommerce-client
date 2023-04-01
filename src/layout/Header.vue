@@ -53,99 +53,100 @@
       </v-row>
       <template v-slot:extension><MenuBar /></template>
     </v-app-bar>
-    <v-dialog v-model="drawer" height="100%" width="40%">
-      <validation-observer ref="observer" v-slot="{ invalid }">
-        <form @submit.prevent="submit">
-          <v-row class="white" no-gutters>
-            <v-col>
-              <v-row class="mt-1" justify="space-between">
-                <v-col class="text-h6 ml-4"> Login </v-col>
-                <v-col></v-col>
-                <v-col class="text-right">
-                  <v-btn icon @click.stop="drawer = !drawer">
-                    <v-icon>mdi-close-outline</v-icon>
-                  </v-btn>
-                </v-col>
-              </v-row>
-              <v-divider></v-divider>
-              <v-row class="ml-1 mr-1 mt-1">
-                <v-col>
-                  <validation-provider
-                    v-slot="{ errors }"
-                    name="아이디"
-                    rules="required"
-                  >
-                    <v-text-field
-                      label="ID"
-                      prepend-inner-icon="mdi-account-heart-outline"
-                      v-model="username"
-                      :error-messages="errors"
-                    ></v-text-field>
-                  </validation-provider>
-                  <validation-provider
-                    v-slot="{ errors }"
-                    name="비밀번호"
-                    rules="required"
-                  >
-                    <v-text-field
-                      class="mx-auto"
-                      label="Password"
-                      prepend-inner-icon="mdi-lock"
-                      v-model="password"
-                      :error-messages="errors"
-                      :type="'password'"
+    <v-dialog v-model="drawer" width="500px">
+      <v-container class="white" fluid>
+        <validation-observer ref="observer" v-slot="{ invalid }">
+          <form @submit.prevent="submit">
+            <v-row class="white" no-gutters>
+              <v-col>
+                <v-row class="mt-1" justify="space-between">
+                  <v-col class="text-h6 ml-4"> Login </v-col>
+                  <v-col></v-col>
+                  <v-col class="text-right">
+                    <v-btn icon @click.stop="drawer = !drawer">
+                      <v-icon>mdi-close-outline</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+                <v-divider></v-divider>
+                <v-row class="ml-1 mr-1 mt-1">
+                  <v-col>
+                    <validation-provider
+                      v-slot="{ errors }"
+                      name="아이디"
+                      rules="required"
                     >
-                    </v-text-field>
-                  </validation-provider>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-btn
-                    block
-                    text
-                    elevation="0"
-                    @click="goLogin"
-                    :disabled="invalid"
-                    >Login
-                  </v-btn>
-                  <v-row no-gutters>
-                    <v-col>
-                      <v-btn block text elevation="0" @click="searchID"
-                        >아이디 찾기
-                      </v-btn>
-                    </v-col>
-                    <v-col>
-                      <v-btn block text elevation="0" @click="searchPass"
-                        >비밀번호 찾기
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row>
-        </form>
-      </validation-observer>
-      <v-dialog
-        transition="dialog-bottom-transition"
-        v-model="mailAuthDrawer"
-        width="800px"
-        height="100%"
-      >
-        <mail-auth-dialog v-on:complete="mailAuthComplete"></mail-auth-dialog>
-      </v-dialog>
-      <v-dialog
-        transition="dialog-bottom-transition"
-        v-model="newPassDrawer"
-        width="800px"
-        height="100%"
-      >
-        <new-pass-dialog
-          v-on:close="close('newPassDrawer')"
-          :id="newPassId"
-        ></new-pass-dialog>
-      </v-dialog>
+                      <v-text-field
+                        label="ID"
+                        prepend-inner-icon="mdi-account-heart-outline"
+                        v-model="username"
+                        :error-messages="errors"
+                      ></v-text-field>
+                    </validation-provider>
+                    <validation-provider
+                      v-slot="{ errors }"
+                      name="비밀번호"
+                      rules="required"
+                    >
+                      <v-text-field
+                        class="mx-auto"
+                        label="Password"
+                        prepend-inner-icon="mdi-lock"
+                        v-model="password"
+                        :error-messages="errors"
+                        :type="'password'"
+                      >
+                      </v-text-field>
+                    </validation-provider>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <v-btn
+                      block
+                      text
+                      elevation="0"
+                      @click="goLogin"
+                      :disabled="invalid"
+                      >Login
+                    </v-btn>
+                    <v-row no-gutters>
+                      <v-col>
+                        <v-btn block text elevation="0" @click="searchID"
+                          >아이디 찾기
+                        </v-btn>
+                      </v-col>
+                      <v-col>
+                        <v-btn block text elevation="0" @click="searchPass"
+                          >비밀번호 찾기
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+          </form>
+        </validation-observer>
+
+        <v-dialog
+          transition="dialog-bottom-transition"
+          v-model="mailAuthDrawer"
+          width="720px"
+        >
+          <mail-auth-dialog v-on:complete="mailAuthComplete"></mail-auth-dialog>
+        </v-dialog>
+        <v-dialog
+          transition="dialog-bottom-transition"
+          v-model="newPassDrawer"
+          width="720px"
+        >
+          <new-pass-dialog
+            v-on:close="close('newPassDrawer')"
+            :id="newPassId"
+          ></new-pass-dialog>
+        </v-dialog>
+      </v-container>
     </v-dialog>
   </v-container>
 </template>

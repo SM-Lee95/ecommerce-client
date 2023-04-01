@@ -13,7 +13,7 @@
             <v-btn text @click="updateAllStockCnt">재고 수량 변경</v-btn>
           </v-col>
         </v-row>
-        <v-dialog v-model="insertOptionDialog">
+        <v-dialog v-model="insertOptionDialog" width="1200px">
           <insert-product-option-dialog
             v-on:close="openInsertOptionDialog"
           ></insert-product-option-dialog>

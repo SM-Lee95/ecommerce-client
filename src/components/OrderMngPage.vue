@@ -109,7 +109,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-dialog v-model="modiDialog" width="85%">
+        <v-dialog v-model="modiDialog">
           <order-mng-page-modi-dialog></order-mng-page-modi-dialog>
         </v-dialog>
       </v-col>
