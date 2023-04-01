@@ -4,7 +4,7 @@ export default {
   getItemList(context, data) {
     // page -> 요청 페이지 번호
     // param -> 메뉴 코드
-    if (data.param) context.commit("setSelectMenuCd", data.param);
+    if (data.param == 0 || data.param) context.commit("setSelectMenuCd", data.param);
     data.size = 24;
     return http
       .get("/prd/list/" + context.getters["selectMenuCd"], { params: data })

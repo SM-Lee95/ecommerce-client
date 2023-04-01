@@ -21,7 +21,7 @@
       right
       color="black"
       small
-      @click="$vuetify.goTo(9999)"
+      @click="$vuetify.goTo(999999)"
     >
       <v-icon> mdi-menu-down </v-icon>
     </v-btn>
