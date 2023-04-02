@@ -6,8 +6,7 @@
       <v-card-actions>
         <v-row class="text-right">
           <v-col>
-            <v-btn text @click="saveInfoProc"> 주문별 상태 수정 </v-btn>
-            <v-btn text @click="saveDtlProc"> 아이템별 주문 상태 수정 </v-btn>
+            <v-btn text @click="saveDtlProc"> 주문 상태 수정 </v-btn>
             <v-btn text @click="createTrdInfo"> 운송장 등록 </v-btn>
           </v-col>
         </v-row>
@@ -31,100 +30,137 @@
           v-model="selected"
           disable-sort
           calculate-widths
+          :items-per-page="-1"
           no-data-text="주문 건이 존재하지 않습니다."
         >
           <template v-slot:item.prdInfo="{ item }">
             <v-row no-gutters>
-              <v-col class="text-left">
+              <v-col class="text-caption">
                 {{ item.corpNm }}
               </v-col>
             </v-row>
             <v-row no-gutters>
-              <v-col class="text-left">
-                <v-btn text @click="getDetailInfo(item.prdCd)">{{ item.name }}</v-btn>
+              <v-col class="text-caption">
+                <v-btn small text @click="getDetailInfo(item.prdCd)">{{
+                  item.name
+                }}</v-btn>
               </v-col>
             </v-row>
             <v-row no-gutters>
-              <v-col class="text-left">
+              <v-col class="text-caption">
                 옵션 :
-                {{ item.color + " / " + item.size + " / " + item.cnt + "개" }}
+                {{
+                  item.color +
+                  " / " +
+                  item.size +
+                  " / " +
+                  item.cnt +
+                  "개 (남은수량 : " +
+                  item.remainCnt +
+                  "개)"
+                }}
               </v-col>
             </v-row>
           </template>
-          <template v-slot:item.originPri="{ item }">
-            {{ item.applyPri.comma() + " 원" }}
-          </template>
           <template v-slot:item.discountRate="{ item }">
-            {{ item.discountRate + " %" }}
+            <v-row no-gutters>
+              <v-col class="text-caption">
+                {{ item.discountRate + " %" }}
+              </v-col>
+            </v-row>
           </template>
           <template v-slot:item.salesPri="{ item }">
-            {{ item.applyPri.comma() + " 원" }}
+            <v-row no-gutters>
+              <v-col class="text-caption text-decoration-line-through">
+                {{ item.originPri.comma() + " 원" }}
+              </v-col>
+            </v-row>
+            <v-row no-gutters>
+              <v-col class="text-caption">
+                {{ item.applyPri.comma() + " 원" }}
+              </v-col>
+            </v-row>
           </template>
           <template v-slot:item.deliCnt="{ item }">
-            <v-text-field v-model="item.deliCnt" type="number" single-line></v-text-field>
+            <v-row no-gutters>
+              <v-col class="text-caption">
+                <v-text-field
+                  v-model="item.deliCnt"
+                  type="number"
+                  single-line
+                ></v-text-field>
+              </v-col>
+            </v-row>
           </template>
           <template v-slot:item.subSumPri="{ item }">
-            {{ String(Number(item.applyPri) * Number(item.cnt)).comma() + " 원" }}
+            <v-row no-gutters>
+              <v-col class="text-caption">{{
+                String(Number(item.applyPri) * Number(item.cnt)).comma() + " 원"
+              }}</v-col></v-row
+            >
           </template>
           <template v-slot:item.proc="{ item }">
-            {{ OrderProcList[item.procTy] }}
+            <v-row no-gutters>
+              <v-col class="text-caption">
+                {{ OrderProcList[item.procTy] }}</v-col
+              ></v-row
+            >
           </template>
           <template v-slot:item.traCd="{ item }">
-            <v-btn text @click="getDeliInfo(item.traCd)">{{ item.traCd }}</v-btn>
+            <v-btn
+              v-if="item.traCd"
+              small
+              text
+              @click="
+                getDeliInfo({ ords_cd: item.ordsDtlKey.ordsCd, list_cd: item.ordsDtlKey.listCd })
+              "
+              >배송상세</v-btn
+            >
           </template>
         </v-data-table>
       </v-card-text>
       <v-divider></v-divider>
     </v-card>
+    <v-dialog v-model="transactionDrawer" width="600px">
+      <transaction-info-dialog></transaction-info-dialog>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-
+import TransactionInfoDialog from "../dialog/TransactionInfoDialog.vue";
 export default {
   name: "OrderMngPageModiDialog",
+  components: {
+    TransactionInfoDialog,
+  },
   data: () => ({
     detailHeader: [
-      { text: "상품정보", value: "prdInfo", align: "start", width: "10px" },
-      { text: "금액", value: "originPri", align: "start", width: "10px" },
-      { text: "할인율", value: "discountRate", align: "center", width: "10px" },
-      { text: "할인금액", value: "salesPri", align: "start", width: "20px" },
-      { text: "배송수량", value: "deliCnt", align: "center", width: "90px" },
-      { text: "합계금액", value: "subSumPri", align: "start", width: "10px" },
-      { text: "운송장번호", value: "traCd", align: "center", width: "30px" },
-      { text: "주문상태", value: "proc", align: "center", width: "10px" },
+      { text: "상품정보", value: "prdInfo", align: "start", width: "150px" },
+      { text: "할인율", value: "discountRate", align: "center" },
+      { text: "금액", value: "salesPri", align: "start" },
+      { text: "배송수량", value: "deliCnt", align: "center", width: "100px" },
+      { text: "합계금액", value: "subSumPri", align: "start" },
+      { text: "배송상태", value: "traCd", align: "center" },
+      { text: "주문상태", value: "proc", align: "center" },
     ],
     procTy: 0,
     selected: [],
+    transactionDrawer: false,
   }),
   methods: {
-    saveInfoProc() {
-      this.$dialog
-        .confirm({
-          title: "주문 상태 수정",
-          text:
-            this.OrderProcList[this.procTy] + " 로 해당 주문의 주문 상태가 수정됩니다.",
-          showClose: false,
-        })
-        .then((resp) => {
-          if (!resp) return;
-          let reqData = {
-            procTy: this.procTy,
-            ordsCd: this.OrderEditObjList.cd,
-          };
-          this.$store.dispatch("order/updateOrdsInfoProc", reqData).then((resp) => {
-            if (resp) this.$dialog.message.info("수정되었습니다.");
-            else this.$dialog.message.error("수정에 실패하셨습니다.");
-            this.modiDialog = false;
-          });
-        });
-    },
     saveDtlProc() {
+      if (this.selected.length == 0) {
+        this.$dialog.message.error("품목 선택 후 진행해주세요.");
+        return;
+      }
       this.$dialog
         .confirm({
           title: "개별 주문 상태 수정",
-          text: this.OrderProcList[this.procTy] + " 상태로 선택된 품목의 주문 상태가 수정됩니다.",
+          text:
+            this.OrderProcList[this.procTy] +
+            " 상태로 선택된 품목의 주문 상태가 수정됩니다.",
           showClose: false,
         })
         .then((resp) => {
@@ -133,11 +169,13 @@ export default {
             procTy: this.procTy,
             ordsDtlList: this.selected,
           };
-          this.$store.dispatch("order/updateOrdsDtlProc", reqData).then((resp) => {
-            if (resp) this.$dialog.message.info("수정되었습니다.");
-            else this.$dialog.message.error("수정에 실패하셨습니다.");
-            this.modiDialog = false;
-          });
+          this.$store
+            .dispatch("order/updateOrdsDtlProc", reqData)
+            .then((resp) => {
+              if (resp) this.$dialog.message.info("수정되었습니다.");
+              else this.$dialog.message.error("수정에 실패하셨습니다.");
+              this.modiDialog = false;
+            });
         });
     },
     createTrdInfo() {
@@ -146,14 +184,19 @@ export default {
         return;
       }
       let isErr = this.selected.filter((vo) => {
+        console.log(vo);
         if (!vo.deliCnt) {
           this.$dialog.message.error("0보다 큰 숫자를 입력해주세요.");
           return true;
-        } else if (isNaN(vo.deliCnt)){
-          this.$dialog.message.error("선택된 주문의 배송수량을 숫자로 전부 입력해주세요.");
+        } else if (isNaN(vo.deliCnt)) {
+          this.$dialog.message.error(
+            "선택된 주문의 배송수량을 숫자로 전부 입력해주세요."
+          );
           return true;
         } else if (vo.remainCnt < vo.deliCnt) {
-          this.$dialog.message.error("선택된 주문 아이템의 남은 배송 수량보다 크지않은 배송수량을 입력해주세요.");
+          this.$dialog.message.error(
+            "선택된 주문 아이템의 남은 배송 수량보다 크지않은 배송수량을 입력해주세요."
+          );
           return true;
         }
         return false;
@@ -187,14 +230,25 @@ export default {
           });
         });
     },
-    getDeliInfo(traCd) {
-      this.$deliInfoPopup(traCd);
+    getDeliInfo(obj) {
+      this.$store
+        .dispatch("order/selectTransactionInfo", { params: obj })
+        .then((resp) => {
+          if (resp) this.transactionDrawer = !this.transactionDrawer;
+          else
+            this.$dialog.message.error(
+              "배송 정보를 가져오는데 오류가 발생했습니다."
+            );
+        });
     },
     getDetailInfo(cd) {
       this.$store.dispatch("product/getDetailInfo", cd).then((resp) => {
         if (resp) {
           if (this.$route.path != "/Detail") this.$router.push("/Detail");
-        } else this.$dialog.message.error("상품 정보를 조회하는 중에 오류가 발생했습니다.");
+        } else
+          this.$dialog.message.error(
+            "상품 정보를 조회하는 중에 오류가 발생했습니다."
+          );
       });
     },
   },
@@ -202,7 +256,6 @@ export default {
     ...mapGetters("order", ["OrderEditObjList"]),
     ...mapGetters("common", ["ProcList", "OrderProcList"]),
   },
-
 };
 </script>
 

@@ -67,4 +67,7 @@ export default {
   setExchangeRequestInfo(state, payload) {
     state.ExchangeRequestInfo = payload;
   },
+  setTransactionInfo(state, payload){
+    state.TransactionInfo = payload;
+  }
 };

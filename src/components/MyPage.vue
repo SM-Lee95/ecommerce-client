@@ -63,8 +63,7 @@
     <v-data-table
       :headers="header"
       :items="this.OrderHisList"
-      class="elevation- mt-3"
-      hide-default-footer
+      class="elevation-mt-3"
       disable-sort
       no-data-text="주문 건이 존재하지 않습니다."
     >
@@ -72,15 +71,27 @@
         {{ item.regDati.substr(2, 8) }}
       </template>
       <template v-slot:item.cd="{ item }">
-        {{ item.cd }}
+        <v-btn text @click="getOrderDetail(item.ordsDtlKey.ordsCd)">
+          {{ item.ordsDtlKey.ordsCd }}</v-btn
+        >
       </template>
       <template v-slot:item.info="{ item }">
-        <v-btn text @click="getOrderDetail(item.cd)">
-          {{ item.ordsDoc }}
-        </v-btn>
+        <v-row no-gutters>
+          <v-col class="text-left text-caption">
+            <v-btn small text @click="getDetailInfo(item.prdCd)">
+              {{ item.name }}
+            </v-btn>
+          </v-col></v-row
+        >
+        <v-row no-gutters>
+          <v-col class="text-left text-caption">
+            옵션 :
+            {{ item.color + " / " + item.size + " / " + item.cnt + "개" }}
+          </v-col>
+        </v-row>
       </template>
       <template v-slot:item.pri="{ item }">
-        {{ item.totPri.comma() + " 원" }}
+        {{ item.applyPri.comma() + " 원" }}
       </template>
       <template v-slot:item.proc="{ item }">
         {{ OrderProcList[item.procTy] }}
@@ -105,9 +116,9 @@ export default {
     userInfoDrawer: false,
     myQnaInfoDialogFlag: false,
     header: [
+      { text: "주문번호(주문상세)", value: "cd", align: "center" },
       { text: "주문일자", value: "date", align: "center" },
-      { text: "주문번호", value: "cd", align: "center" },
-      { text: "주문정보", value: "info", align: "center" },
+      { text: "상품명", value: "info", align: "left" },
       { text: "결제금액", value: "pri", align: "center" },
       { text: "주문상태", value: "proc", align: "center" },
     ],
@@ -118,6 +129,16 @@ export default {
     ...mapGetters("common", ["OrderProcList"]),
   },
   methods: {
+    getDetailInfo(cd) {
+      this.$store.dispatch("product/getDetailInfo", cd).then((resp) => {
+        if (resp) {
+          if (this.$route.path != "/Detail") this.$router.push("/Detail");
+        } else
+          this.$dialog.message.error(
+            "상품 정보를 조회하는 중에 오류가 발생했습니다."
+          );
+      });
+    },
     setUserInfoDrawer() {
       this.userInfoDrawer = !this.userInfoDrawer;
     },

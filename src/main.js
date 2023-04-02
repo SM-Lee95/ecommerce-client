@@ -64,7 +64,7 @@ Vue.use(VuetifyDialog, {
   },
   confirm: {
     icon: false,
-    width: 400,
+    width: 500,
     color: "grey",
   },
 });

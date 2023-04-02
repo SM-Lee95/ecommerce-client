@@ -80,26 +80,43 @@
           :items-per-page="-1"
         >
           <template v-slot:item.date="{ item }">
-            {{ item.regDati.substr(2, 8) }}
+            <v-row no-gutters class="text-caption"
+              ><v-col>{{ item.regDati.substr(2, 8) }}</v-col></v-row
+            >
           </template>
           <template v-slot:item.cd="{ item }">
-            {{ item.cd }}
+            <v-row no-gutters class="text-caption"
+              ><v-col>{{ item.cd }}</v-col></v-row
+            >
           </template>
           <template v-slot:item.info="{ item }">
-            <v-btn text @click="getOrderDetail(item.cd)">
+            <v-btn small text @click="getOrderDetail(item.cd)">
               {{ item.ordsDoc }}
             </v-btn>
           </template>
           <template v-slot:item.pri="{ item }">
-            {{ item.totPri.comma() + " 원" }}
+            <v-row no-gutters class="text-caption"
+              ><v-col> {{ item.totPri.comma() + " 원" }}</v-col></v-row
+            >
           </template>
-          <template v-slot:item.proc="{ item }">
-            {{ OrderProcList[item.procTy] }}
+          <template v-slot:item.recvPhone="{ item }">
+            <v-row no-gutters class="text-caption"
+              ><v-col> {{ item.recvPhone }}</v-col></v-row
+            >
+          </template>
+          <template v-slot:item.recvNm="{ item }">
+            <v-row no-gutters class="text-caption"
+              ><v-col> {{ item.recvNm }}</v-col></v-row
+            >
           </template>
           <template v-slot:item.address="{ item }">
-            ({{ item.postcode }})
-            {{ item.mainAddress }}
-            {{ item.etcAddress }}
+            <v-row no-gutters class="text-caption"
+              ><v-col>
+                ({{ item.postcode }})
+                {{ item.mainAddress }}
+                {{ item.etcAddress }}</v-col
+              ></v-row
+            >
           </template>
           <template v-slot:item.actions="{ item }">
             <v-icon small @click="editDialog(item)"> mdi-pencil </v-icon>
@@ -109,7 +126,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-dialog v-model="modiDialog">
+        <v-dialog v-model="modiDialog" width="1200px">
           <order-mng-page-modi-dialog></order-mng-page-modi-dialog>
         </v-dialog>
       </v-col>
@@ -159,12 +176,11 @@ export default {
     header: [
       { text: "주문일자", value: "date", align: "center" },
       { text: "주문번호", value: "cd", align: "center" },
-      { text: "주문정보", value: "info", align: "center" },
+      { text: "주문정보", value: "info", align: "left" },
       { text: "배송주소", value: "address", align: "center" },
       { text: "연락처", value: "recvPhone", align: "center" },
       { text: "수령자", value: "recvNm", align: "center" },
       { text: "결제금액", value: "pri", align: "center" },
-      { text: "주문상태", value: "proc", align: "center" },
       { text: "", value: "actions", align: "center" },
     ],
     OptionList: [
@@ -182,7 +198,7 @@ export default {
       new Date(
         Date.now() -
           new Date().getTimezoneOffset() * 60000 -
-          60000 * 60 * 24 * 360
+          60000 * 60 * 24 * 90
       )
         .toISOString()
         .substr(0, 10),

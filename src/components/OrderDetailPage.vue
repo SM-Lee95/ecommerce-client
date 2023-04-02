@@ -2,9 +2,8 @@
   <v-container>
     <v-row no-gutters>
       <v-col class="text-h6 font-weight-bold">주문 상세 정보</v-col>
-      <v-col class="text-right"
-        >주문 상태 :
-        <b>{{ OrderProcList[this.OrderDetailInfo[0].repProcTy] }}</b></v-col
+      <v-col class="text-right mr-4" align-self="center"
+        >일자 : <b>{{ this.OrderDetailInfo[0].regDati }}</b></v-col
       >
     </v-row>
     <v-row no-gutters>
@@ -12,9 +11,8 @@
         >주문 번호 : <b>{{ this.OrderDetailInfo[0].ordsCd }}</b></v-col
       >
       <v-col class="text-right">
-        <v-btn text @click="goTokTok">TokTok 주문 문의</v-btn> 일자 :
-        <b>{{ this.OrderDetailInfo[0].regDati }}</b></v-col
-      >
+        <v-btn text @click="goTokTok">TokTok 주문 문의</v-btn>
+      </v-col>
     </v-row>
     <v-data-table
       :headers="header"
@@ -29,19 +27,14 @@
       </template>
       <template v-slot:item.prdInfo="{ item }">
         <v-row no-gutters>
-          <v-col class="text-left">
-            {{ item.corpNm }}
-          </v-col>
-        </v-row>
-        <v-row no-gutters>
-          <v-col class="text-left">
-            <v-btn text @click="getDetailInfo(item.prdCd)">{{
+          <v-col class="text-left text-caption">
+            <v-btn small text @click="getDetailInfo(item.prdCd)">{{
               item.name
             }}</v-btn>
           </v-col>
         </v-row>
         <v-row no-gutters>
-          <v-col class="text-left">
+          <v-col class="text-left text-caption">
             옵션 : {{ item.color + " / " + item.size }}
           </v-col>
         </v-row>
@@ -50,13 +43,22 @@
         {{ item.applyPri.comma() + " 원" }}
       </template>
       <template v-slot:item.discountRate="{ item }">
-        {{ item.discountRate + " %" }}
+        <v-row no-gutters class="text-caption"
+          ><v-col>{{ item.discountRate + " %" }}</v-col></v-row
+        >
       </template>
       <template v-slot:item.salesPri="{ item }">
-        {{ item.applyPri.comma() + " 원" }}
+        <v-row no-gutters class="text-decoration-line-through text-caption"
+          ><v-col>{{ item.originPri.comma() + " 원" }}</v-col></v-row
+        >
+        <v-row no-gutters class="text-caption"
+          ><v-col>{{ item.applyPri.comma() + " 원" }}</v-col></v-row
+        >
       </template>
       <template v-slot:item.cnt="{ item }">
-        {{ item.cnt + " 개" }}
+        <v-row no-gutters class="text-caption"
+          ><v-col> {{ item.cnt + " 개" }}</v-col></v-row
+        >
       </template>
       <template v-slot:item.subSumPri="{ item }">
         {{ String(Number(item.applyPri) * Number(item.cnt)).comma() + " 원" }}
@@ -64,7 +66,7 @@
       <template v-slot:item.proc="{ item }">
         <v-row no-gutters>
           <v-col align-self="center">
-            <v-btn text @click="getProcAlert(item)">
+            <v-btn small text @click="getProcAlert(item)">
               {{ OrderProcList[item.procTy] }}
               {{
                 (item.procTy == "2" ||
@@ -83,29 +85,33 @@
           <v-col cols="6" v-if="item.procTy < 2">
             <v-row no-gutters v-if="item.listCd >= 0"
               ><v-col>
-                <v-btn text @click="cancelOrder(item)">주문취소</v-btn>
+                <v-btn small text @click="cancelOrder(item)">주문취소</v-btn>
               </v-col></v-row
             >
-            <v-row no-gutters
+            <v-row no-gutters v-if="item.listCd >= 0 && item.procTy < 1"
               ><v-col>
-                <v-btn text @click="updateOption(item)">옵션변경</v-btn>
+                <v-btn small text @click="updateOption(item)">옵션변경</v-btn>
               </v-col></v-row
             >
           </v-col>
           <v-col cols="6" v-if="item.procTy == 4">
             <v-row no-gutters
               ><v-col>
-                <v-btn text @click="confirmPurchase(item)">구매확정</v-btn>
+                <v-btn small text @click="confirmPurchase(item)"
+                  >구매확정</v-btn
+                >
               </v-col></v-row
             >
             <v-row no-gutters v-if="item.listCd >= 0"
               ><v-col>
-                <v-btn text @click="exchangeRequest(item)">교환요청</v-btn>
+                <v-btn small text @click="exchangeRequest(item)"
+                  >교환요청</v-btn
+                >
               </v-col></v-row
             >
             <v-row no-gutters
               ><v-col>
-                <v-btn text @click="returnRequest(item)">반품요청</v-btn>
+                <v-btn small text @click="returnRequest(item)">반품요청</v-btn>
               </v-col></v-row
             >
           </v-col>
@@ -114,12 +120,19 @@
     </v-data-table>
     <v-divider></v-divider>
     <validation-observer ref="observer" v-slot="{ invalid }">
-      <v-row class="mt-5 font-weight-bold" no-gutters>
+      <v-row class="pa-5 font-weight-bold">
         <v-col cols="6">
           <v-row>
             <v-col class="text-h6" cols="7"> 배송지 정보 </v-col>
-            <v-col cols="5" v-if="OrderDetailInfo[0].repProcTy < 2">
-              <v-btn v-if="!updateFlag" text @click="updateOrderInfo"
+            <v-col
+              cols="5"
+              v-if="
+                !OrderDetailInfo.filter(
+                  (vo) => vo.procTy >= 2 && vo.procTy != 10
+                ).length
+              "
+            >
+              <v-btn v-if="!updateFlag" text @click="updateOrderInfo" small
                 >주문정보수정</v-btn
               >
               <v-btn
@@ -127,9 +140,10 @@
                 @click="updateComplete(OrderDetailInfo[0].ordsCd)"
                 v-if="updateFlag"
                 :disabled="invalid"
+                small
                 >변경완료</v-btn
               >
-              <v-btn text @click="updateCancel" v-if="updateFlag"
+              <v-btn text @click="updateCancel" v-if="updateFlag" small
                 >변경취소</v-btn
               >
             </v-col>
@@ -281,22 +295,22 @@
         </v-col>
       </v-row>
     </validation-observer>
-    <v-dialog v-model="optionDialog"
+    <v-dialog v-model="optionDialog" width="800px"
       ><order-option-update-dialog
         v-on:close="close('optionDialog')"
       ></order-option-update-dialog>
     </v-dialog>
-    <v-dialog v-model="cancelDialog"
+    <v-dialog v-model="cancelDialog" width="600px"
       ><order-cancel-dialog
         v-on:close="close('cancelDialog')"
       ></order-cancel-dialog>
     </v-dialog>
-    <v-dialog v-model="exchangeDialog">
+    <v-dialog v-model="exchangeDialog" width="800px">
       <exchange-request-dialog
         v-on:close="close('exchangeDialog')"
       ></exchange-request-dialog>
     </v-dialog>
-    <v-dialog v-model="returnDialog">
+    <v-dialog v-model="returnDialog" width="800px">
       <return-request-dialog
         v-on:close="close('returnDialog')"
       ></return-request-dialog>
@@ -321,15 +335,14 @@ export default {
   },
   data: () => ({
     header: [
-      { value: "thumbnail", align: "center" },
-      { text: "상품정보", value: "prdInfo", align: "start" },
-      { text: "금액", value: "originPri", align: "start" },
-      { text: "할인율", value: "discountRate", align: "center" },
-      { text: "할인금액", value: "salesPri", align: "start" },
-      { text: "수량", value: "cnt", align: "center" },
-      { text: "합계금액", value: "subSumPri", align: "start" },
-      { text: "주문상태", value: "proc", align: "center" },
-      { text: "", value: "action", align: "center" },
+      { value: "thumbnail", align: "center", width: "100px" },
+      { text: "상품정보", value: "prdInfo", align: "start", width: "500px" },
+      { text: "할인율", value: "discountRate", align: "center", width: "65px" },
+      { text: "할인금액", value: "salesPri", align: "start", width: "100px" },
+      { text: "수량", value: "cnt", align: "center", width: "60px" },
+      { text: "합계금액", value: "subSumPri", align: "start", width: "100px" },
+      { text: "주문상태", value: "proc", align: "center", width: "50px" },
+      { text: "", value: "action", align: "center", width: "50px" },
     ],
     postcode: "",
     mainAddress: "",
@@ -364,14 +377,15 @@ export default {
           title: "주문 접수",
           text:
             "<b>계좌로 입금이 완료되지 않았습니다.</b><br/>" +
-            "입금 후 확인 부탁드립니다. <br/>" +
-            "입금 계좌 : 225050-56-278305 (농협)",
+            "정확한 금액으로 입금 후 확인 부탁드립니다. <br/>" +
+            "입금 계좌 : 3021649166621 (농협) <br/>" +
+            "예금주 : 김진현 ",
           showClose: false,
         });
       } else if (item.procTy == 1) {
         this.$dialog.info({
-          title: "결제 완료",
-          text: "결제 완료되었습니다.",
+          title: "결제 확인",
+          text: "결제 확인이 완료되었습니다. 배송 예정입니다.",
           showClose: false,
         });
       } else if (item.procTy == 2) {

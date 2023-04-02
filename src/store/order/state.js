@@ -10,4 +10,5 @@ export default {
   OrderUpdateOptionInfo: [], //주문 옵션 수정 정보
   ReturnRequestInfo: null, //환불요청정보
   ExchangeRequestInfo: null, //교환요청정보
+  TransactionInfo: [], //배송정보
 };

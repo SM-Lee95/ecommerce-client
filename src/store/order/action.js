@@ -72,18 +72,6 @@ export default {
         return false;
       });
   },
-  updateOrdsInfoProc(context, data) {
-    return http
-      .put("/ords/info/" + data.procTy + "/admin", data.ordsCd)
-      .then((resp) => {
-        if (resp.data.statusCode == "200") return true;
-        return false;
-      })
-      .catch((resp) => {
-        console.log("서버오류 \n " + resp);
-        return false;
-      });
-  },
   selectOrderMngList(context, data) {
     return http
       .get("/ords/list/admin", { params: data })
@@ -185,6 +173,21 @@ export default {
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         else return resp.data.message;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  selectTransactionInfo(context, data) {
+    return http
+      .get("/tra/list/admin", data)
+      .then((resp) => {
+        if (!resp.data.statusCode) {
+          context.commit("setTransactionInfo", resp.data);
+          return true;
+        }
+        return false;
       })
       .catch((resp) => {
         console.log("서버오류 \n " + resp);

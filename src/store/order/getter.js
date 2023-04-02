@@ -32,4 +32,7 @@ export default {
   ExchangeRequestInfo(state) {
     return state.ExchangeRequestInfo;
   },
+  TransactionInfo(state){
+    return state.TransactionInfo;
+  }
 };
