@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid fill-height style="align-items: inherit;">
+  <v-container fluid fill-height style="align-items: inherit">
     <v-row no-gutters>
       <v-col cols="2" class="grey lighten-3">
         <v-list class="grey lighten-3">
@@ -57,28 +57,61 @@ export default {
   name: "AdminPage.vue",
   methods: {
     goProductMng() {
-      if (this.$route.path != "/Admin/ProductMng/SelectPrd")
+      if (this.$route.path != "/Admin/ProductMng/SelectPrd") {
+        this.$store
+          .dispatch("product/selectPrdList", {
+            cateCd: 0,
+          })
+          .then((resp) => {
+            if (!resp)
+              this.$dialog.message.warning("조회 중 에러가 발생했습니다.");
+          });
         this.$router.push("/Admin/ProductMng/SelectPrd");
+      }
     },
     goOrderMng() {
-      if (this.$route.path != "/Admin/OrderMng")
+      if (this.$route.path != "/Admin/OrderMng") {
+        this.$store
+          .dispatch("order/selectOrderMngList", {
+            beforeDati: new Date(
+              Date.now() -
+                new Date().getTimezoneOffset() * 60000 -
+                60000 * 60 * 24 * 90
+            )
+              .toISOString()
+              .substr(0, 10),
+            afterDati: new Date(
+              Date.now() -
+                new Date().getTimezoneOffset() * 60000 +
+                60000 * 60 * 24
+            )
+              .toISOString()
+              .substr(0, 10),
+          })
+          .then((resp) => {
+            if (!resp)
+              this.$dialog.message.warning("조회 중 에러가 발생했습니다.");
+          });
         this.$router.push("/Admin/OrderMng");
+      }
     },
     goUserMng() {
-      if (this.$route.path != "/Admin/UserMng")
+      if (this.$route.path != "/Admin/UserMng") {
         this.$router.push("/Admin/UserMng");
+      }
     },
     goCommonMng() {
-      if (this.$route.path != "/Admin/CommonMng")
+      if (this.$route.path != "/Admin/CommonMng") {
         this.$router.push("/Admin/CommonMng");
+      }
     },
-    goQnaMng(){
-      if (this.$route.path != "/Admin/QnaMng")
+    goQnaMng() {
+      if (this.$route.path != "/Admin/QnaMng") {
         this.$router.push("/Admin/QnaMng");
-    }
+      }
+    },
   },
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

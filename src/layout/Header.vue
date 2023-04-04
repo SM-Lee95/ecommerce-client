@@ -95,6 +95,7 @@
                         v-model="password"
                         :error-messages="errors"
                         :type="'password'"
+                        @keyup.enter="goLogin"
                       >
                       </v-text-field>
                     </validation-provider>

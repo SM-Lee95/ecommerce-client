@@ -144,7 +144,8 @@
                   v-if="
                     !OrderDetailInfo.filter(
                       (vo) => vo.procTy >= 2 && vo.procTy != 10
-                    ).length
+                    ).length &&
+                    OrderDetailInfo.filter((vo) => vo.procTy != 10).length
                   "
                 >
                   <v-btn v-if="!updateFlag" text @click="updateOrderInfo" small

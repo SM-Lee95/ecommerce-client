@@ -163,7 +163,7 @@ export default {
       { name: "표기", cd: "001" },
       { name: "미표기", cd: "003" },
     ],
-    cateCd: 1,
+    cateCd: 0,
     optionCd: "prdNm",
     searchValue: "",
     modiDialog: false,
@@ -207,8 +207,6 @@ export default {
         searchValue: this.searchValue,
         statFlag: this.statFlag,
       };
-      console.log(reqData);
-
       this.$store.dispatch("product/selectPrdList", reqData).then((resp) => {
         if (!resp) this.$dialog.message.warning("조회 중 에러가 발생했습니다.");
       });
