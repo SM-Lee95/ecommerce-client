@@ -108,7 +108,7 @@ export default {
     ],
     productList: [],
     file: null,
-    exampleURL: axios.defaults.baseURL + "util/Product_Example.xlsx",
+    exampleURL: axios.defaults.baseURL + "/util/Product_Example.xlsx",
   }),
   methods: {
     insertInfo() {

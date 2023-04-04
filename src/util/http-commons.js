@@ -5,6 +5,7 @@ import VueCookies from "vue-cookies";
 const createAxios = axios.create({
   baseURL: window.location.protocol + "//" + window.location.host,
   // baseURL: "http://localhost:8081/",
+  // baseURL: "http://www.lovane.store/",
   headers: {
     "Content-type": "application/json",
     Accept: "application/json",

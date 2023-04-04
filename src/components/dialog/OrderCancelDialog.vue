@@ -1,9 +1,9 @@
 <template>
-  <v-container fluid class="white">
+  <v-container fluid class="white pa-1">
     <validation-observer ref="observer" v-slot="{ invalid }">
       <v-row no-gutters>
         <v-col>
-          <v-row class="mt-1">
+          <v-row class="pa-2">
             <v-col
               v-if="OrderCancelInfo.procTy != '0'"
               class="mt-1 ml-1 text-h6"
@@ -16,23 +16,23 @@
             >
           </v-row>
           <v-divider></v-divider>
-          <v-row v-if="OrderCancelInfo.procTy == '0'">
+          <v-row v-if="OrderCancelInfo.procTy == '0'" class="pa-1">
             <v-col>
               <v-row>
-                <v-col class="red--text lighten-2 text-center"
+                <v-col class="red--text lighten-2 text-center text-caption"
                   >결제 이전 주문건은 전체 취소만 가능합니다. <br />총
                   {{ OrderCancelInfo.totCnt }} 개의 아이템 주문 건이
                   취소됩니다.</v-col
                 >
               </v-row>
               <v-row>
-                <v-col class="text-center"
+                <v-col class="text-center text-caption"
                   >주문 요약 : {{ OrderCancelInfo.ordsDoc }}</v-col
                 >
               </v-row>
             </v-col>
           </v-row>
-          <v-row v-if="OrderCancelInfo.procTy != '0'">
+          <v-row v-if="OrderCancelInfo.procTy != '0'" class="pa-1">
             <v-col class="ml-2 mr-2">
               <validation-provider
                 v-slot="{ errors }"
