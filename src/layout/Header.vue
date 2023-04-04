@@ -243,8 +243,17 @@ export default {
       });
     },
     goAdmin() {
-      if (this.$route.path != "/Admin/ProductMng/SelectPrd")
+      if (this.$route.path != "/Admin/ProductMng/SelectPrd") {
+        this.$store
+          .dispatch("product/selectPrdList", {
+            cateCd: 0,
+          })
+          .then((resp) => {
+            if (!resp)
+              this.$dialog.message.warning("조회 중 에러가 발생했습니다.");
+          });
         this.$router.push("/Admin/ProductMng/SelectPrd");
+      }
     },
     searchPass() {
       this.$store.commit("common/setMailAuthTy", 1);

@@ -72,7 +72,7 @@
                 {{ String(item.discountPri).comma() + " 원" }}
               </template>
               <template v-slot:item.actions="{ item }">
-                <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+                <v-icon small @click="deleteItem(item)">mdi-close</v-icon>
               </template>
             </v-data-table>
           </v-col>

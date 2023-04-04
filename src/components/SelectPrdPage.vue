@@ -49,7 +49,8 @@
         </v-col>
       </v-row>
     </v-toolbar>
-    <v-row class="text-right">
+    <v-divider></v-divider>
+    <v-row class="text-right mt-2">
       <v-col>
         <v-btn text @click="toggleStatFlag">표기 여부 변경</v-btn>
       </v-col>
@@ -57,7 +58,7 @@
     <v-data-table
       :headers="header"
       :items="ProductList"
-      class="elevation-0 mt-2"
+      class="elevation-0 mt-5"
       show-select
       hide-default-footer
       v-model="selected"
@@ -78,38 +79,50 @@
       </template>
       <template v-slot:item.prdNm="{ item }">
         <v-row no-gutters>
-          <v-col class="red--text" text-caption>{{
-            item.statFlag == "003" ? "*" : ""
-          }}</v-col>
+          <v-col class="red--text text-caption" v-if="item.statFlag == '003'">
+            *
+          </v-col>
           <v-col>
-            <v-btn text @click="getDetailInfo(item.cd)">{{ item.name }}</v-btn>
+            <v-btn small text @click="getDetailInfo(item.cd)">{{
+              item.name
+            }}</v-btn>
           </v-col>
         </v-row>
       </template>
       <template v-slot:item.buyPri="{ item }">
-        {{ item.buyPri.comma() + " 원" }}
+        <v-row no-gutters class="text-caption">
+          <v-col>{{ item.buyPri.comma() + " 원" }}</v-col></v-row
+        >
       </template>
       <template v-slot:item.deliPri="{ item }">
-        {{ item.deliPri.comma() + " 원" }}
+        <v-row no-gutters class="text-caption">
+          <v-col> {{ item.deliPri.comma() + " 원" }}</v-col></v-row
+        >
       </template>
       <template v-slot:item.salesPri="{ item }">
-        {{ item.salesPri.comma() + " 원" }}
+        <v-row no-gutters class="text-caption">
+          <v-col>{{ item.salesPri.comma() + " 원" }}</v-col></v-row
+        >
       </template>
       <template v-slot:item.discountPri="{ item }">
-        {{
-          String(
-            Number(item.salesPri) * ((100 - Number(item.discountRate)) / 100)
-          ).comma() + " 원"
-        }}
+        <v-row no-gutters class="text-caption">
+          <v-col>{{
+            String(
+              Number(item.salesPri) * ((100 - Number(item.discountRate)) / 100)
+            ).comma() + " 원"
+          }}</v-col></v-row
+        >
       </template>
       <template v-slot:item.discountRate="{ item }">
-        {{ item.discountRate + " %" }}
+        <v-row no-gutters class="text-caption">
+          <v-col>{{ item.discountRate + " %" }}</v-col></v-row
+        >
       </template>
       <template v-slot:item.actions="{ item }">
         <v-icon small class="mr-2" @click="editDialog(item)">
           mdi-pencil
         </v-icon>
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        <v-icon small @click="deleteItem(item)"> mdi-close </v-icon>
       </template>
     </v-data-table>
     <v-dialog v-model="modiDialog" width="1000px" :retain-focus="false">
@@ -158,7 +171,7 @@ export default {
   }),
   computed: {
     ...mapGetters("product", ["ProductList"]),
-    ...mapGetters("common", ["CateList","MenuList"]),
+    ...mapGetters("common", ["CateList", "MenuList"]),
   },
   mounted() {},
   methods: {
@@ -194,6 +207,8 @@ export default {
         searchValue: this.searchValue,
         statFlag: this.statFlag,
       };
+      console.log(reqData);
+
       this.$store.dispatch("product/selectPrdList", reqData).then((resp) => {
         if (!resp) this.$dialog.message.warning("조회 중 에러가 발생했습니다.");
       });

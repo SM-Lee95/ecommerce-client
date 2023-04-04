@@ -55,15 +55,15 @@
       </v-col>
     </v-row>
     <v-divider></v-divider>
-    <v-row class="mt-4">
+    <v-row class="mt-5 ml-2">
       <v-col>
-        주문목록 / 배송조회 내역 총 {{ this.OrderHisList.length }} 건
+        주문 목록 / 배송 조회 내역 총 {{ this.OrderHisList.length }} 건
       </v-col>
     </v-row>
     <v-data-table
       :headers="header"
       :items="this.OrderHisList"
-      class="elevation-mt-3"
+      class="mt-5"
       disable-sort
       no-data-text="주문 건이 존재하지 않습니다."
     >
@@ -71,7 +71,7 @@
         {{ item.regDati.substr(2, 8) }}
       </template>
       <template v-slot:item.cd="{ item }">
-        <v-btn text @click="getOrderDetail(item.ordsDtlKey.ordsCd)">
+        <v-btn block text @click="getOrderDetail(item.ordsDtlKey.ordsCd)">
           {{ item.ordsDtlKey.ordsCd }}</v-btn
         >
       </template>

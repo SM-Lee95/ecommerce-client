@@ -50,7 +50,7 @@
                 {{ detail.size.name }} - {{ detail.color.name }} -
                 {{ detail.basketCnt }}개
                 <v-btn icon x-small @click="deleteOption(detail.productKey)">
-                  <v-icon>mdi-delete</v-icon>
+                  <v-icon>mdi-close</v-icon>
                 </v-btn>
               </v-col>
             </v-row>
@@ -82,7 +82,7 @@
             {{ item.discountRate + " %" }}
           </template>
           <template v-slot:item.actions="{ item }">
-            <v-icon @click="deleteItem(item.cd)"> mdi-delete </v-icon>
+            <v-icon @click="deleteItem(item.cd)"> mdi-close </v-icon>
           </template>
         </v-data-table>
       </v-col>

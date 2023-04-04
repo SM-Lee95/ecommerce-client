@@ -2,11 +2,10 @@
   <v-container fluid>
     <v-btn
       fab
-      dark
       fixed
       bottom
       right
-      color="black"
+      color="white"
       small
       @click="$vuetify.goTo(0)"
       style="margin-bottom: 50px"
@@ -15,11 +14,10 @@
     </v-btn>
     <v-btn
       fab
-      dark
       fixed
       bottom
       right
-      color="black"
+      color="white"
       small
       @click="$vuetify.goTo(999999)"
     >
@@ -28,7 +26,7 @@
     <v-footer padless>
       <v-card flat tile class="text-center flex">
         <v-divider></v-divider>
-        <v-card-text class="grey--text pt-3">
+        <v-card-text class="grey--text pt-3 text-caption">
           <dt>판매자정보</dt>
           <dd>
             로브아네 (lovane) (사업자 / 일반 사업자) - 대표자 : 김진현 <br />
