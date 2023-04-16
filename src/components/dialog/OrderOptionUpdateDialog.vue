@@ -9,10 +9,10 @@
         <v-row>
           <v-col class="ml-2 mr-2">
             <v-card-text>
-              Option
+              변경 가능한 옵션
               <v-chip-group
                 v-model="optionVal"
-                active-class="deep-purple accent-4 white--text"
+                active-class="black accent-4 white--text"
               >
                 <v-chip
                   v-for="vo in OrderUpdateOptionInfo"
@@ -21,7 +21,6 @@
                   {{ vo.size.name }}-{{ vo.color.name }}
                 </v-chip>
               </v-chip-group>
-              <v-divider class="mx-4"></v-divider>
             </v-card-text>
           </v-col>
         </v-row>

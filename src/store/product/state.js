@@ -8,4 +8,5 @@ export default {
   EditProduct: null, //상품 정보 수정 객체
   EditProductDetail: null, //상품 상세 정보 수정 객체
   QnaDetailInfo: [], //QnA 상세 정보 리스트
+  ReviewInfoList: [], //Review 정보 리스트
 };

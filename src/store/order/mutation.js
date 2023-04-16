@@ -69,5 +69,8 @@ export default {
   },
   setTransactionInfo(state, payload){
     state.TransactionInfo = payload;
-  }
+  },
+  setReviewWriteItemInfo(state, payload){
+    state.ReviewWriteItemInfo = payload;
+  },
 };

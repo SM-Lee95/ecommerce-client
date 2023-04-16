@@ -41,8 +41,6 @@ export default {
   },
   methods: {
     insertQnaInfo() {
-      console.log(this.description);
-      console.log(this.secretYn);
       this.$dialog
         .confirm({
           title: "QnA 작성",

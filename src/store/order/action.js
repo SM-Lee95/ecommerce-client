@@ -104,11 +104,9 @@ export default {
       .get("/ords/option/info", data)
       .then((resp) => {
         if (!resp.data.statusCode) {
-          resp.data = resp.data.filter((vo) => {
-            //동일옵션 삭제
-            if (vo.productKey.listCd == data.params.prdListCd) return false;
-            return true;
-          });
+          resp.data = resp.data.filter(
+            (vo) => vo.productKey.listCd != data.params.prdListCd
+          );
           context.commit("setOrderUpdateOptionInfo", resp.data);
           return true;
         }
@@ -169,7 +167,7 @@ export default {
   },
   updateReturnRequest(context, data) {
     return http
-      .delete("/ords/returnRequest", data)
+      .put("/ords/returnRequest", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         else return resp.data.message;
@@ -187,6 +185,18 @@ export default {
           context.commit("setTransactionInfo", resp.data);
           return true;
         }
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  insertReviewInfo(context, data) {
+    return http
+      .post("/review/info", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
         return false;
       })
       .catch((resp) => {

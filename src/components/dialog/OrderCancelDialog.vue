@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="white pa-1">
     <validation-observer ref="observer" v-slot="{ invalid }">
-      <v-row no-gutters>
+      <v-row>
         <v-col>
           <v-row class="pa-2">
             <v-col
@@ -36,6 +36,20 @@
             <v-col class="ml-2 mr-2">
               <validation-provider
                 v-slot="{ errors }"
+                name="은행"
+                rules="required"
+              >
+                <v-select
+                  :items="BankList"
+                  item-text="name"
+                  item-value="commonKey.commCd"
+                  label="은행"
+                  v-model="returnBank"
+                  :error-messages="errors"
+                ></v-select>
+              </validation-provider>
+              <validation-provider
+                v-slot="{ errors }"
                 name="계좌번호"
                 rules="required|max:16|numeric"
               >
@@ -59,20 +73,6 @@
                   label="예금주"
                   required
                 ></v-text-field>
-              </validation-provider>
-              <validation-provider
-                v-slot="{ errors }"
-                name="은행"
-                rules="required"
-              >
-                <v-select
-                  :items="BankList"
-                  item-text="name"
-                  item-value="commonKey.commCd"
-                  label="은행"
-                  v-model="returnBank"
-                  :error-messages="errors"
-                ></v-select>
               </validation-provider>
             </v-col>
           </v-row>
@@ -123,7 +123,7 @@ export default {
           cancelObj.returnAccount +
           "(" +
           cancelObj.accountHolder +
-          ") 입니다. \n 다시 한번 확인해주세요.";
+          ") 입니다. <br> 다시 한번 확인해주세요.";
       }
       this.$dialog
         .confirm({

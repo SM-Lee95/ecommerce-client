@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <v-row class="text-right"
       ><v-col>
         <v-btn text @click="qnaWriteDialogView">Q&A 작성하기</v-btn>

@@ -112,7 +112,10 @@
               small
               text
               @click="
-                getDeliInfo({ ords_cd: item.ordsDtlKey.ordsCd, list_cd: item.ordsDtlKey.listCd })
+                getDeliInfo({
+                  ords_cd: item.ordsDtlKey.ordsCd,
+                  list_cd: item.ordsDtlKey.listCd,
+                })
               "
               >배송상세</v-btn
             >
@@ -172,9 +175,10 @@ export default {
           this.$store
             .dispatch("order/updateOrdsDtlProc", reqData)
             .then((resp) => {
-              if (resp) this.$dialog.message.info("수정되었습니다.");
-              else this.$dialog.message.error("수정에 실패하셨습니다.");
-              this.modiDialog = false;
+              if (resp) {
+                this.$dialog.message.info("수정되었습니다.");
+                this.$emit("refresh");
+              } else this.$dialog.message.error("수정에 실패하셨습니다.");
             });
         });
     },
@@ -183,25 +187,28 @@ export default {
         this.$dialog.message.error("품목 선택 후 진행해주세요.");
         return;
       }
-      let isErr = this.selected.filter((vo) => {
-        console.log(vo);
-        if (!vo.deliCnt) {
-          this.$dialog.message.error("0보다 큰 숫자를 입력해주세요.");
-          return true;
-        } else if (isNaN(vo.deliCnt)) {
-          this.$dialog.message.error(
-            "선택된 주문의 배송수량을 숫자로 전부 입력해주세요."
-          );
-          return true;
-        } else if (vo.remainCnt < vo.deliCnt) {
-          this.$dialog.message.error(
-            "선택된 주문 아이템의 남은 배송 수량보다 크지않은 배송수량을 입력해주세요."
-          );
-          return true;
-        }
-        return false;
-      }).length;
-      if (isErr) return;
+      if (
+        this.selected.filter((vo) => {
+          console.log(!vo.deliCnt);
+          if (!vo.deliCnt || vo.deliCnt == "0") {
+            this.$dialog.message.error("0보다 큰 숫자를 입력해주세요.");
+            return true;
+          } else if (isNaN(vo.deliCnt)) {
+            this.$dialog.message.error(
+              "선택된 주문의 배송수량을 숫자로 전부 입력해주세요."
+            );
+            return true;
+          } else if (vo.remainCnt < vo.deliCnt) {
+            this.$dialog.message.error(
+              "선택된 주문 아이템의 남은 배송 수량보다 크지않은 배송수량을 입력해주세요."
+            );
+            return true;
+          }
+          return false;
+        }).length
+      ) {
+        return;
+      }
       this.$dialog
         .prompt({
           title: "운송장 등록",
@@ -224,9 +231,10 @@ export default {
             orderDtlDtoList: this.selected,
           };
           this.$store.dispatch("order/insertTraList", reqData).then((resp) => {
-            if (resp) this.$dialog.message.info("등록되었습니다.");
-            else this.$dialog.message.error("등록에 실패하셨습니다.");
-            this.modiDialog = false;
+            if (resp) {
+              this.$dialog.message.info("등록되었습니다.");
+              this.$emit("refresh");
+            } else this.$dialog.message.error("등록에 실패하셨습니다.");
           });
         });
     },

@@ -25,5 +25,5 @@ export default {
   },
   QnaDetailInfo(state){
     return state.QnaDetailInfo;
-  }
+  },
 };

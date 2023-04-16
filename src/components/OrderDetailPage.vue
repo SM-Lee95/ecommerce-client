@@ -36,7 +36,7 @@
               </v-col>
             </v-row>
             <v-row no-gutters>
-              <v-col class="text-left text-caption">
+              <v-col class="text-left text-caption ml-3">
                 옵션 : {{ item.color + " / " + item.size }}
               </v-col>
             </v-row>
@@ -63,9 +63,11 @@
             >
           </template>
           <template v-slot:item.subSumPri="{ item }">
-            {{
+            <v-row no-gutters class="text-caption"
+              ><v-col>{{
               String(Number(item.applyPri) * Number(item.cnt)).comma() + " 원"
-            }}
+            }}</v-col></v-row
+            >
           </template>
           <template v-slot:item.proc="{ item }">
             <v-row no-gutters>
@@ -86,7 +88,7 @@
           </template>
           <template v-slot:item.action="{ item }">
             <v-row no-gutters>
-              <v-col cols="6" v-if="item.procTy < 2">
+              <v-col v-if="item.procTy < 3">
                 <v-row no-gutters v-if="item.listCd >= 0"
                   ><v-col>
                     <v-btn small text @click="cancelOrder(item)"
@@ -102,7 +104,7 @@
                   </v-col></v-row
                 >
               </v-col>
-              <v-col cols="6" v-if="item.procTy == 4">
+              <v-col v-if="item.procTy == 4">
                 <v-row no-gutters
                   ><v-col>
                     <v-btn small text @click="confirmPurchase(item)"
@@ -124,6 +126,18 @@
                     >
                   </v-col></v-row
                 >
+              </v-col>
+              <v-col v-if="item.procTy == 5">
+                <v-row
+                  ><v-col v-if="!item.reviewDescription">
+                    <v-btn small text @click="writeReview(item)"
+                      >후기작성</v-btn
+                    >
+                  </v-col>
+                  <v-col v-if="item.reviewDescription" class="text-caption">
+                    후기작성완료
+                  </v-col>
+                </v-row>
               </v-col>
             </v-row>
           </template>
@@ -315,7 +329,7 @@
         </validation-observer>
       </v-col></v-row
     >
-    <v-dialog v-model="optionDialog" width="800px"
+    <v-dialog v-model="optionDialog" width="600px"
       ><order-option-update-dialog
         v-on:close="close('optionDialog')"
       ></order-option-update-dialog>
@@ -335,6 +349,11 @@
         v-on:close="close('returnDialog')"
       ></return-request-dialog>
     </v-dialog>
+    <v-dialog v-model="reviewDialogDrawer" width="600px">
+      <review-write-dialog
+        v-on:close="close('reviewDialogDrawer')"
+      ></review-write-dialog>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -344,6 +363,7 @@ import OrderCancelDialog from "./dialog/OrderCancelDialog.vue";
 import ExchangeRequestDialog from "./dialog/ExchangeRequestDialog.vue";
 import OrderOptionUpdateDialog from "./dialog/OrderOptionUpdateDialog.vue";
 import ReturnRequestDialog from "./dialog/ReturnRequestDialog.vue";
+import ReviewWriteDialog from "./dialog/ReviewWriteDialog.vue";
 
 export default {
   name: "OrderDetailPage",
@@ -352,6 +372,7 @@ export default {
     OrderCancelDialog,
     ExchangeRequestDialog,
     ReturnRequestDialog,
+    ReviewWriteDialog,
   },
   data: () => ({
     header: [
@@ -375,6 +396,7 @@ export default {
     cancelDialog: false,
     exchangeDialog: false,
     returnDialog: false,
+    reviewDialogDrawer: false,
   }),
   computed: {
     ...mapGetters("order", ["OrderDetailInfo"]),
@@ -403,13 +425,13 @@ export default {
           showClose: false,
         });
       } else if (item.procTy == 1) {
-        this.$dialog.info({
+        this.$dialog.error({
           title: "결제 확인",
           text: "결제 확인이 완료되었습니다. 배송 예정입니다.",
           showClose: false,
         });
       } else if (item.procTy == 2) {
-        this.$dialog.info({
+        this.$dialog.error({
           title: "배송준비중",
           text: "배송이 준비중입니다.",
           showClose: false,
@@ -428,15 +450,15 @@ export default {
             )[0].name;
           text += "<br/>환불 금액 : " + item.returnPri.comma() + "원";
           text +=
-            "<br/><b class='red--text'>한 주문의 마지막 아이템 취소 건에 배송비가 합산 환불됩니다.</b>";
+            "<br/><b class='red--text'>한 주문의 모든 아이템 취소시 마지막 개별 취소 건에 배송비가 합산 환불됩니다.</b>";
         }
-        this.$dialog.info({
+        this.$dialog.error({
           title: "주문취소",
           text: text,
           showClose: false,
         });
       } else if (item.procTy == 8) {
-        this.$dialog.info({
+        this.$dialog.error({
           title: "물품 회수",
           text: "물품 회수가 완료됐습니다. <br/>반품 건은 환불이 진행되고 교환 건은 배송이 진행됩니다.",
           showClose: false,
@@ -560,6 +582,10 @@ export default {
     },
     close(vo) {
       this[vo] = false;
+    },
+    writeReview(vo) {
+      this.$store.commit("order/setReviewWriteItemInfo", vo);
+      this.reviewDialogDrawer = true;
     },
   },
 };

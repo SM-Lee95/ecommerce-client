@@ -127,7 +127,9 @@
     <v-row>
       <v-col>
         <v-dialog v-model="modiDialog" width="1200px">
-          <order-mng-page-modi-dialog></order-mng-page-modi-dialog>
+          <order-mng-page-modi-dialog
+            v-on:refresh="searchList"
+          ></order-mng-page-modi-dialog>
         </v-dialog>
       </v-col>
     </v-row>
@@ -149,6 +151,7 @@ export default {
       this.modiDialog = !this.modiDialog;
     },
     searchList() {
+      if (this.modiDialog) this.modiDialog = false;
       let reqData = {
         procCd: this.procCd,
         optionCd: this.optionCd,

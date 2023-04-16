@@ -148,6 +148,7 @@
           >
             <v-tab active-class="black--text">상세정보 </v-tab>
             <v-tab active-class="black--text">Q&A </v-tab>
+            <v-tab active-class="black--text">Review</v-tab>
             <v-tab active-class="black--text">반품/교환정보 </v-tab>
           </v-tabs>
         </v-toolbar>
@@ -380,6 +381,9 @@
             <qn-a-info></qn-a-info>
           </v-tab-item>
           <v-tab-item>
+            <review-info></review-info>
+          </v-tab-item>
+          <v-tab-item>
             <return-info></return-info>
           </v-tab-item>
         </v-tabs-items>
@@ -392,12 +396,15 @@
 import { mapGetters } from "vuex";
 import ReturnInfo from "./ReturnInfo";
 import QnAInfo from "./QnAInfo";
+import ReviewInfo from "./ReviewInfo";
+
 
 export default {
   name: "DetailPage.vue",
   components: {
     ReturnInfo,
     QnAInfo,
+    ReviewInfo,
   },
   data() {
     return {

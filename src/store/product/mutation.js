@@ -38,5 +38,8 @@ export default {
   },
   setQnaDetailInfo(state, payload){
     state.QnaDetailInfo = payload;
+  },
+  setReviewInfoList(state, payload){
+    state.ReviewInfoList = payload;
   }
 };

@@ -17,6 +17,7 @@ export default {
     8: "물품회수",
     9: "환불완료",
     10: "주문취소",
+    11: "검수완료",
   },
   ProcList: null, //주문상태정보리스트
   DeliList: null, //택배회사리스트

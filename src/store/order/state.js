@@ -11,4 +11,5 @@ export default {
   ReturnRequestInfo: null, //환불요청정보
   ExchangeRequestInfo: null, //교환요청정보
   TransactionInfo: [], //배송정보
+  ReviewWriteItemInfo: null, //리뷰작성정보
 };

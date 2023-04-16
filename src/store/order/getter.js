@@ -34,5 +34,8 @@ export default {
   },
   TransactionInfo(state){
     return state.TransactionInfo;
+  },
+  ReviewWriteItemInfo(state){
+    return state.ReviewWriteItemInfo;
   }
 };

@@ -36,7 +36,6 @@ createAxios.interceptors.response.use(
   },
   async function (error) {
     try {
-      console.log(error);
       if (error.response.status == 401 || error.response.status == 403) {
         //UNAUTHORIZED , FORBIDDEN
         store.commit("user/removeToken");
