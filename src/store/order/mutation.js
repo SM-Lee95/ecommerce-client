@@ -70,6 +70,9 @@ export default {
   setTransactionInfo(state, payload){
     state.TransactionInfo = payload;
   },
+  setTransactionList(state, payload){
+    state.TransactionList = payload;
+  },
   setReviewWriteItemInfo(state, payload){
     state.ReviewWriteItemInfo = payload;
   },

@@ -106,7 +106,7 @@ export default {
     goTransMng() {
       if (this.$route.path != "/Admin/TransMng") {
         this.$store
-          .dispatch("order/selectTransactionInfo", {
+          .dispatch("order/selectTransactionList", {
             beforeDati: new Date(
               Date.now() -
                 new Date().getTimezoneOffset() * 60000 -
