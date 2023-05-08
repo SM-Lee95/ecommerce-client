@@ -149,7 +149,7 @@ export default {
     modiDialog: false,
   }),
   computed: {
-    ...mapGetters("common", ["ProcList", "OrderProcList", "DeliList"]),
+    ...mapGetters("common", ["ProcList", "OrderProc", "DeliList"]),
     ...mapGetters("user", ["UserList"]),
   },
 };

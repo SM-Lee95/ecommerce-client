@@ -8,15 +8,23 @@
               <v-icon>mdi-hanger</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title> Product </v-list-item-title>
+              <v-list-item-title> 상품 관리 </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item link @click="goOrderMng" dense>
             <v-list-item-icon>
-              <v-icon>mdi-view-dashboard</v-icon>
+              <v-icon>mdi-order-bool-descending-variant</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title> Order </v-list-item-title>
+              <v-list-item-title> 주문 관리 </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item link @click="goTransMng" dense>
+            <v-list-item-icon>
+              <v-icon>mdi-truck-delivery-outline</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> 배송 관리 </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item link @click="goUserMng" dense>
@@ -24,7 +32,7 @@
               <v-icon>mdi-account-box</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title> User </v-list-item-title>
+              <v-list-item-title> 이용자 관리 </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item link @click="goCommonMng" dense>
@@ -32,7 +40,7 @@
               <v-icon>mdi-barcode</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title> Common </v-list-item-title>
+              <v-list-item-title> 공통코드 관리 </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item link @click="goQnaMng" dense>
@@ -40,7 +48,7 @@
               <v-icon>mdi-head-question-outline</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title> Q&A </v-list-item-title>
+              <v-list-item-title> Q&A 관리 </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -76,7 +84,7 @@ export default {
             beforeDati: new Date(
               Date.now() -
                 new Date().getTimezoneOffset() * 60000 -
-                60000 * 60 * 24 * 90
+                60000 * 60 * 24 * 360
             )
               .toISOString()
               .substr(0, 10),
@@ -93,6 +101,32 @@ export default {
               this.$dialog.message.warning("조회 중 에러가 발생했습니다.");
           });
         this.$router.push("/Admin/OrderMng");
+      }
+    },
+    goTransMng() {
+      if (this.$route.path != "/Admin/TransMng") {
+        this.$store
+          .dispatch("order/selectTransactionInfo", {
+            beforeDati: new Date(
+              Date.now() -
+                new Date().getTimezoneOffset() * 60000 -
+                60000 * 60 * 24 * 120
+            )
+              .toISOString()
+              .substr(0, 10),
+            afterDati: new Date(
+              Date.now() -
+                new Date().getTimezoneOffset() * 60000 +
+                60000 * 60 * 24
+            )
+              .toISOString()
+              .substr(0, 10),
+          })
+          .then((resp) => {
+            if (!resp)
+              this.$dialog.message.warning("조회 중 에러가 발생했습니다.");
+          });
+        this.$router.push("/Admin/TransMng");
       }
     },
     goUserMng() {

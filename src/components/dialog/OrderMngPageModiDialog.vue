@@ -1,25 +1,30 @@
 <template>
   <v-container class="white" fluid>
     <v-card flat>
-      <v-card-title class="text-h6"> 주문 상태 수정 </v-card-title>
+      <v-card-title class="text-h6">
+        <v-row
+          ><v-col>주문 상태 수정</v-col>
+          <v-col class="text-right">
+            <v-btn icon @click="close()" right>
+              <v-icon>mdi-close-box</v-icon>
+            </v-btn></v-col
+          ></v-row
+        >
+      </v-card-title>
       <v-divider></v-divider>
       <v-card-actions>
         <v-row class="text-right">
           <v-col>
-            <v-btn text @click="saveDtlProc"> 주문 상태 수정 </v-btn>
-            <v-btn text @click="createTrdInfo"> 운송장 등록 </v-btn>
+            <v-btn text @click="readyDelivery"> 배송준비처리 </v-btn>
+            <v-btn text @click="createTrdInfo"> 운송장 등록처리 </v-btn>
+            <v-btn text @click="completeReturn"> 회수완료처리 </v-btn>
+            <v-btn text @click="confirmExchange"> 교환확정처리 </v-btn>
+            <v-btn text @click="confirmReturn"> 환불확정처리 </v-btn>
           </v-col>
         </v-row>
       </v-card-actions>
       <v-divider></v-divider>
       <v-card-text>
-        <v-select
-          :items="ProcList"
-          item-text="name"
-          item-value="commonKey.commCd"
-          label="주문상태"
-          v-model="procTy"
-        ></v-select>
         <v-data-table
           :headers="detailHeader"
           :items="OrderEditObjList.orderDtlDtoList"
@@ -38,6 +43,11 @@
               <v-col class="text-caption">
                 {{ item.corpNm }}
               </v-col>
+              <v-col
+                v-if="item.ordsTy != 'ORDER'"
+                class="red--text text-caption"
+                >{{ item.ordsTy == "RETURN" ? "반품" : "교환" }}</v-col
+              >
             </v-row>
             <v-row no-gutters>
               <v-col class="text-caption">
@@ -102,7 +112,7 @@
           <template v-slot:item.proc="{ item }">
             <v-row no-gutters>
               <v-col class="text-caption">
-                {{ OrderProcList[item.procTy] }}</v-col
+                {{ OrderProc[item.procTy] }}</v-col
               ></v-row
             >
           </template>
@@ -122,10 +132,11 @@
           </template>
         </v-data-table>
       </v-card-text>
-      <v-divider></v-divider>
     </v-card>
-    <v-dialog v-model="transactionDrawer" width="600px">
-      <transaction-info-dialog></transaction-info-dialog>
+    <v-dialog v-model="transactionDrawer" width="600px" persistent>
+      <transaction-info-dialog
+        v-on:close="transactionDialog"
+      ></transaction-info-dialog>
     </v-dialog>
   </v-container>
 </template>
@@ -153,6 +164,103 @@ export default {
     transactionDrawer: false,
   }),
   methods: {
+    confirmReturn() {
+      if (this.selected.length == 0) {
+        this.$dialog.message.error("품목 선택 후 진행해주세요.");
+        return;
+      }
+      if (
+        this.selected.filter((vo) => {
+          if (vo.procTy != 8 || vo.ordsTy != "RETURN") {
+            this.$dialog.message.error(
+              "환불 신청 건 중 회수 완료 상태인 것만 처리 가능합니다."
+            );
+            return true;
+          }
+          return false;
+        }).length
+      ) {
+        return;
+      }
+    },
+    confirmExchange() {
+      if (this.selected.length == 0) {
+        this.$dialog.message.error("품목 선택 후 진행해주세요.");
+        return;
+      }
+      if (
+        this.selected.filter((vo) => {
+          if (vo.procTy != 8 || vo.ordsTy != "EXCHANGE") {
+            this.$dialog.message.error(
+              "교혼 신청 건 중 회수 완료 상태인 것만 처리 가능합니다."
+            );
+            return true;
+          }
+          return false;
+        }).length
+      ) {
+        return;
+      }
+    },
+    completeReturn() {
+      if (this.selected.length == 0) {
+        this.$dialog.message.error("품목 선택 후 진행해주세요.");
+        return;
+      }
+      if (
+        this.selected.filter((vo) => {
+          if (vo.procTy != 6 && vo.procTy != 7) {
+            this.$dialog.message.error(
+              "교환 신청, 환불 신청 상태인 것만 처리 가능합니다."
+            );
+            return true;
+          }
+          return false;
+        }).length
+      ) {
+        return;
+      }
+    },
+    readyDelivery() {
+      if (this.selected.length == 0) {
+        this.$dialog.message.error("품목 선택 후 진행해주세요.");
+        return;
+      }
+      if (
+        this.selected.filter((vo) => {
+          if (vo.procTy != 1) {
+            this.$dialog.message.error(
+              "결제 완료 상태인 것만 처리 가능합니다."
+            );
+            return true;
+          }
+          return false;
+        }).length
+      ) {
+        return;
+      }
+      this.$dialog
+        .confirm({
+          title: "주문 상태 수정",
+          text: "배송 준비 상태로 선택된 품목의 주문 상태가 수정됩니다.",
+          showClose: false,
+        })
+        .then((resp) => {
+          if (!resp) return;
+          let reqData = {
+            procTy: 2,
+            ordsDtlList: this.selected,
+          };
+          this.$store
+            .dispatch("order/updateOrdsDtlProc", reqData)
+            .then((resp) => {
+              if (resp) {
+                this.$dialog.message.info("수정되었습니다.");
+                this.close();
+              } else this.$dialog.message.error("수정에 실패하셨습니다.");
+            });
+        });
+    },
     saveDtlProc() {
       if (this.selected.length == 0) {
         this.$dialog.message.error("품목 선택 후 진행해주세요.");
@@ -162,7 +270,7 @@ export default {
         .confirm({
           title: "개별 주문 상태 수정",
           text:
-            this.OrderProcList[this.procTy] +
+            this.OrderProc[this.procTy] +
             " 상태로 선택된 품목의 주문 상태가 수정됩니다.",
           showClose: false,
         })
@@ -177,7 +285,7 @@ export default {
             .then((resp) => {
               if (resp) {
                 this.$dialog.message.info("수정되었습니다.");
-                this.$emit("refresh");
+                this.close();
               } else this.$dialog.message.error("수정에 실패하셨습니다.");
             });
         });
@@ -189,7 +297,10 @@ export default {
       }
       if (
         this.selected.filter((vo) => {
-          console.log(!vo.deliCnt);
+          if (vo.procTy != 2) {
+            this.$dialog.message.error("배송준비 상태인 것만 처리 가능합니다.");
+            return true;
+          }
           if (!vo.deliCnt || vo.deliCnt == "0") {
             this.$dialog.message.error("0보다 큰 숫자를 입력해주세요.");
             return true;
@@ -233,7 +344,7 @@ export default {
           this.$store.dispatch("order/insertTraList", reqData).then((resp) => {
             if (resp) {
               this.$dialog.message.info("등록되었습니다.");
-              this.$emit("refresh");
+              this.close();
             } else this.$dialog.message.error("등록에 실패하셨습니다.");
           });
         });
@@ -242,12 +353,15 @@ export default {
       this.$store
         .dispatch("order/selectTransactionInfo", { params: obj })
         .then((resp) => {
-          if (resp) this.transactionDrawer = !this.transactionDrawer;
+          if (resp) this.transactionDialog();
           else
             this.$dialog.message.error(
               "배송 정보를 가져오는데 오류가 발생했습니다."
             );
         });
+    },
+    transactionDialog() {
+      this.transactionDrawer = !this.transactionDrawer;
     },
     getDetailInfo(cd) {
       this.$store.dispatch("product/getDetailInfo", cd).then((resp) => {
@@ -259,10 +373,17 @@ export default {
           );
       });
     },
+    selectedRefresh() {
+      this.selected.splice(0, this.selected.length);
+    },
+    close() {
+      this.selectedRefresh();
+      this.$emit("close");
+    },
   },
   computed: {
     ...mapGetters("order", ["OrderEditObjList"]),
-    ...mapGetters("common", ["ProcList", "OrderProcList"]),
+    ...mapGetters("common", ["ProcList", "OrderProc"]),
   },
 };
 </script>

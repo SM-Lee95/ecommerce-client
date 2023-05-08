@@ -204,4 +204,28 @@ export default {
         return false;
       });
   },
+  insertPaymentInfo(context, data) {
+    return http
+      .post("/pay/info/admin", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  updateTransProc(context, data) {
+    return http
+      .put("/tra/list/admin", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
 };

@@ -71,11 +71,19 @@
             </v-col>
           </v-row>
         </v-toolbar>
+        <v-row>
+          <v-col class="text-right">
+            <v-btn text @click="completePayment"> 결제완료처리 </v-btn>
+          </v-col>
+        </v-row>
         <v-data-table
           :headers="header"
           :items="OrderMngList"
           class="elevation- mt-3"
           hide-default-footer
+          show-select
+          item-key="cd"
+          v-model="selected"
           no-data-text="주문 건이 존재하지 않습니다."
           :items-per-page="-1"
         >
@@ -90,13 +98,17 @@
             >
           </template>
           <template v-slot:item.info="{ item }">
-            <v-btn small text @click="getOrderDetail(item.cd)">
+            <v-btn x-small text @click="getOrderDetail(item.cd)">
               {{ item.ordsDoc }}
             </v-btn>
           </template>
           <template v-slot:item.pri="{ item }">
             <v-row no-gutters class="text-caption"
-              ><v-col> {{ item.totPri.comma() + " 원" }}</v-col></v-row
+              ><v-col>
+                <v-btn text small @click="paymentInfo(item)">{{
+                  item.totPri.comma() + " 원"
+                }}</v-btn></v-col
+              ></v-row
             >
           </template>
           <template v-slot:item.recvPhone="{ item }">
@@ -124,34 +136,55 @@
         </v-data-table>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col>
-        <v-dialog v-model="modiDialog" width="1200px">
-          <order-mng-page-modi-dialog
-            v-on:refresh="searchList"
-          ></order-mng-page-modi-dialog>
-        </v-dialog>
-      </v-col>
-    </v-row>
+    <v-dialog v-model="modiDialog" width="1200px" persistent>
+      <order-mng-page-modi-dialog
+        v-on:close="editDialog"
+      ></order-mng-page-modi-dialog>
+    </v-dialog>
+    <v-dialog v-model="paymentDrawer" width="1000px" persistent>
+      <insert-payment-dialog
+        :paymentObj="paymentObj"
+        v-on:close="togglePaymentDrawer"
+      ></insert-payment-dialog>
+    </v-dialog>
+    <v-dialog v-model="paymentInfoDrawer" width="600px">
+      <payment-info-dialog
+        :paymentObj="paymentObj"
+        v-on:close="paymentInfo"
+      ></payment-info-dialog>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import OrderMngPageModiDialog from "./dialog/OrderMngPageModiDialog";
+import InsertPaymentDialog from "./dialog/InsertPaymentDialog.vue";
+import PaymentInfoDialog from "./dialog/PaymentInfoDialog.vue";
+
 export default {
   name: "OrderMngPage",
-  components: { OrderMngPageModiDialog },
+  components: {
+    InsertPaymentDialog,
+    OrderMngPageModiDialog,
+    PaymentInfoDialog,
+  },
   methods: {
     editDialog(item) {
-      item.orderDtlDtoList.forEach((vo) => {
-        vo.deliCnt = vo.remainCnt;
-      });
-      this.$store.commit("order/setOrderEditObjList", Object.assign({}, item));
+      if (item) {
+        item.orderDtlDtoList.forEach((vo) => {
+          vo.deliCnt = vo.remainCnt;
+        });
+        this.$store.commit(
+          "order/setOrderEditObjList",
+          Object.assign({}, item)
+        );
+      } else {
+        this.searchList();
+      }
       this.modiDialog = !this.modiDialog;
     },
     searchList() {
-      if (this.modiDialog) this.modiDialog = false;
       let reqData = {
         procCd: this.procCd,
         optionCd: this.optionCd,
@@ -161,6 +194,7 @@ export default {
       };
       this.$store.dispatch("order/selectOrderMngList", reqData).then((resp) => {
         if (!resp) this.$dialog.message.warning("조회 중 에러가 발생했습니다.");
+        else this.selectedRefresh();
       });
     },
     getOrderDetail(ordsCd) {
@@ -173,6 +207,42 @@ export default {
           );
         }
       });
+    },
+    completePayment() {
+      if (this.selected.length != 1) {
+        this.$dialog.message.error("단일 주문 선택 후 진행해주세요.");
+        return;
+      }
+      if (
+        this.selected[0].orderDtlDtoList.filter((dtl) => {
+          if (dtl.procTy != 0) {
+            this.$dialog.message.error(
+              "주문 접수 상태인 것만 처리 가능합니다."
+            );
+            return true;
+          }
+          return false;
+        }).length
+      ) {
+        return;
+      }
+      this.paymentObj = this.selected[0];
+      this.togglePaymentDrawer();
+    },
+    togglePaymentDrawer() {
+      if (this.paymentDrawer) {
+        this.searchList();
+      }
+      this.paymentDrawer = !this.paymentDrawer;
+    },
+    paymentInfo(info) {
+      if (info) {
+        this.paymentObj = info;
+      }
+      this.paymentInfoDrawer = !this.paymentInfoDrawer;
+    },
+    selectedRefresh() {
+      this.selected.splice(0, this.selected.length);
     },
   },
   data: () => ({
@@ -201,7 +271,7 @@ export default {
       new Date(
         Date.now() -
           new Date().getTimezoneOffset() * 60000 -
-          60000 * 60 * 24 * 90
+          60000 * 60 * 24 * 360
       )
         .toISOString()
         .substr(0, 10),
@@ -211,9 +281,13 @@ export default {
         .toISOString()
         .substr(0, 10),
     ],
+    paymentDrawer: false,
+    selected: [],
+    paymentObj: null,
+    paymentInfoDrawer: false,
   }),
   computed: {
-    ...mapGetters("common", ["ProcList", "OrderProcList", "DeliList"]),
+    ...mapGetters("common", ["ProcList", "OrderProc", "DeliList"]),
     ...mapGetters("order", ["OrderMngList"]),
     dateRangeText() {
       return this.date.join(" ~ ");

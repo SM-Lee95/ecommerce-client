@@ -94,7 +94,7 @@
         {{ item.applyPri.comma() + " 원" }}
       </template>
       <template v-slot:item.proc="{ item }">
-        {{ OrderProcList[item.procTy] }}
+        {{ OrderProc[item.procTy] }}
       </template>
     </v-data-table>
     <v-dialog v-model="myQnaInfoDialogFlag" width="800px">
@@ -126,7 +126,7 @@ export default {
   computed: {
     ...mapGetters("order", ["OrderHisList", "OrderHisSummary"]),
     ...mapGetters("user", ["UserInfo"]),
-    ...mapGetters("common", ["OrderProcList"]),
+    ...mapGetters("common", ["OrderProc"]),
   },
   methods: {
     getDetailInfo(cd) {
@@ -144,8 +144,8 @@ export default {
     },
     getHisList(flag) {
       var code = "";
-      for (var codeVal in this.OrderProcList) {
-        if (flag.includes(this.OrderProcList[codeVal]))
+      for (var codeVal in this.OrderProc) {
+        if (flag.includes(this.OrderProc[codeVal]))
           code = code.concat(codeVal + ",");
       }
       this.$store.dispatch("order/getMyPageInfo", code).then((resp) => {

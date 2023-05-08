@@ -17,8 +17,8 @@ export default {
   ProcList(state) {
     return state.ProcList;
   },
-  OrderProcList(state) {
-    return state.OrderProcList;
+  OrderProc(state) {
+    return state.OrderProc;
   },
   DeliList(state) {
     return state.DeliList;

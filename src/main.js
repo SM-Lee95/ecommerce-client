@@ -47,6 +47,16 @@ extend("passwordCustom", {
   message:
     "비밀번호는 숫자, 영어 알파벳(대/소문자 상관없이), 특수문자 하나 이상씩을 포함해야합니다.",
 });
+extend("dateFormat", {
+  validate(value) {
+    return (
+      !value ||
+      value.match("^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$")
+    );
+  },
+  message:
+    "날짜는 YYYY-MM-DD 형식으로 실제 날짜를 입력해야합니다.",
+});
 
 Vue.component("ValidationProvider", ValidationProvider);
 Vue.component("ValidationObserver", ValidationObserver);

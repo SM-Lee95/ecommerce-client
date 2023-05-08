@@ -37,5 +37,5 @@ export default {
   },
   ReviewWriteItemInfo(state){
     return state.ReviewWriteItemInfo;
-  }
+  },
 };

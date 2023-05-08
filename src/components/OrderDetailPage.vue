@@ -73,7 +73,7 @@
             <v-row no-gutters>
               <v-col align-self="center">
                 <v-btn small text @click="getProcAlert(item)">
-                  {{ OrderProcList[item.procTy] }}
+                  {{ OrderProc[item.procTy] }}
                   {{
                     (item.procTy == "2" ||
                       item.procTy == "3" ||
@@ -400,7 +400,7 @@ export default {
   }),
   computed: {
     ...mapGetters("order", ["OrderDetailInfo"]),
-    ...mapGetters("common", ["OrderProcList", "BankList"]),
+    ...mapGetters("common", ["OrderProc", "BankList"]),
   },
   methods: {
     getDetailInfo(cd) {
