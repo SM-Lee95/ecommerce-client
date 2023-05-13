@@ -73,7 +73,7 @@
         </v-toolbar>
         <v-row>
           <v-col class="text-right" align-self="center">
-            <v-btn text @click="completeDelivery">배송완료처리</v-btn></v-col
+            <v-btn text @click="deliveryCompDialog">배송완료처리</v-btn></v-col
           >
         </v-row>
         <v-data-table
@@ -82,9 +82,11 @@
           class="elevation- mt-3"
           hide-default-footer
           show-select
-          item-key="transactionKey.traCd"
+          item-key="key"
           v-model="selected"
           no-data-text="주문 건이 존재하지 않습니다."
+          group-by="transactionKey.traCd"
+          show-group-by
           :items-per-page="-1"
         >
           <template v-slot:item.date="{ item }">
@@ -130,7 +132,7 @@
               @click="getOrderDetail(item.transactionKey.ordsCd)"
             >
               {{
-                item.transactionKey.ordsCd + "-" + item.transactionKey.listCd
+                item.transactionKey.ordsCd + " " + item.transactionKey.listCd
               }}
             </v-btn>
           </template>
@@ -138,9 +140,9 @@
       </v-col>
     </v-row>
     <v-dialog v-model="deliveryCompDrawer" width="600px" persistent>
-      <v-container>
+      <v-container class="white">
         <v-row class="pa-1">
-          <v-col class="text-h6">배송 완료 처리</v-col>
+          <v-col class="text-h6 ml-1">배송 완료 처리</v-col>
           <v-col class="text-right">
             <v-btn icon @click="deliveryCompDialog" right>
               <v-icon>mdi-close-box</v-icon>
@@ -149,7 +151,7 @@
         </v-row>
         <v-divider></v-divider>
         <validation-observer ref="observer" v-slot="{ invalid }">
-          <v-row
+          <v-row class="pa-1 ml-1 mr-1"
             ><v-col>
               <v-menu
                 v-model="menu1"
@@ -183,7 +185,7 @@
           <v-divider></v-divider>
           <v-row>
             <v-col class="text-right">
-              <v-btn text :disabled="invalid" @click="insertCompDate"
+              <v-btn text :disabled="invalid" @click="completeDelivery"
                 >확인</v-btn
               >
               <v-btn text @click="close">취소</v-btn>
@@ -202,8 +204,26 @@ export default {
   name: "TransMngPage",
   components: {},
   methods: {
-    insertCompDate() {},
     deliveryCompDialog() {
+      if (!this.deliveryCompDrawer) {
+        if (this.selected.length == 0) {
+          this.$dialog.message.error("배송 건 선택 후 진행해주세요.");
+          return;
+        }
+        if (
+          this.selected.filter((vo) => {
+            if (vo.compDati) {
+              this.$dialog.message.error(
+                "배송 일자가 없는 건만 처리 가능합니다."
+              );
+              return true;
+            }
+            return false;
+          }).length
+        ) {
+          return;
+        }
+      }
       this.deliveryCompDrawer = !this.deliveryCompDrawer;
     },
     searchList() {
@@ -288,12 +308,17 @@ export default {
   },
   data: () => ({
     header: [
-      { text: "등록일자", value: "date", align: "center" },
-      { text: "주문정보", value: "info", align: "center" },
-      { text: "운송번호", value: "traCd", align: "center" },
-      { text: "개수", value: "cnt", align: "center" },
-      { text: "완료일자", value: "compDati", align: "center" },
-      { text: "택배사", value: "parcelCd", align: "center" },
+      { text: "등록일자", value: "date", align: "center", groupable: false },
+      { text: "주문정보", value: "info", align: "center", groupable: false },
+      { text: "운송번호", value: "traCd", align: "center", groupable: false },
+      { text: "개수", value: "cnt", align: "center", groupable: false },
+      {
+        text: "완료일자",
+        value: "compDati",
+        align: "center",
+        groupable: false,
+      },
+      { text: "택배사", value: "parcelCd", align: "center", groupable: false },
     ],
     OptionList: [
       { name: "주문번호", cd: "ordsCd" },

@@ -36,15 +36,33 @@ export default {
     state.OrderHisSummary["주문접수 / 결제완료"] = payload.filter(
       (obj) => obj.procTy == "0" || obj.procTy == "1"
     ).length;
-    state.OrderHisSummary["배송준비"] = payload.filter((obj) => obj.procTy == "2").length; //배송준비
-    state.OrderHisSummary["배송중"] = payload.filter((obj) => obj.procTy == "3").length; //배송중
-    state.OrderHisSummary["배송완료"] = payload.filter((obj) => obj.procTy == "4").length; //배송완료
-    state.OrderHisSummary["구매확정"] = payload.filter((obj) => obj.procTy == "5").length; //구매확정
-    state.OrderHisSummary["반품신청"] = payload.filter((obj) => obj.procTy == "6").length; //반품신청
-    state.OrderHisSummary["교환신청"] = payload.filter((obj) => obj.procTy == "7").length; //교환신청
-    state.OrderHisSummary["물품회수"] = payload.filter((obj) => obj.procTy == "8").length; //물품회수
-    state.OrderHisSummary["환불완료"] = payload.filter((obj) => obj.procTy == "9").length; //환불완료
-    state.OrderHisSummary["주문취소"] = payload.filter((obj) => obj.procTy == "10").length; //주문취소
+    state.OrderHisSummary["배송준비"] = payload.filter(
+      (obj) => obj.procTy == "2"
+    ).length; //배송준비
+    state.OrderHisSummary["배송중"] = payload.filter(
+      (obj) => obj.procTy == "3"
+    ).length; //배송중
+    state.OrderHisSummary["배송완료"] = payload.filter(
+      (obj) => obj.procTy == "4"
+    ).length; //배송완료
+    state.OrderHisSummary["구매확정"] = payload.filter(
+      (obj) => obj.procTy == "5"
+    ).length; //구매확정
+    state.OrderHisSummary["반품신청"] = payload.filter(
+      (obj) => obj.procTy == "6"
+    ).length; //반품신청
+    state.OrderHisSummary["교환신청"] = payload.filter(
+      (obj) => obj.procTy == "7"
+    ).length; //교환신청
+    state.OrderHisSummary["물품회수"] = payload.filter(
+      (obj) => obj.procTy == "8"
+    ).length; //물품회수
+    state.OrderHisSummary["환불완료"] = payload.filter(
+      (obj) => obj.procTy == "9"
+    ).length; //환불완료
+    state.OrderHisSummary["주문취소"] = payload.filter(
+      (obj) => obj.procTy == "10"
+    ).length; //주문취소
   },
   setOrderDetailInfo(state, payload) {
     state.OrderDetailInfo = payload;
@@ -67,13 +85,22 @@ export default {
   setExchangeRequestInfo(state, payload) {
     state.ExchangeRequestInfo = payload;
   },
-  setTransactionInfo(state, payload){
+  setTransactionInfo(state, payload) {
     state.TransactionInfo = payload;
   },
-  setTransactionList(state, payload){
+  setTransactionList(state, payload) {
+    payload.forEach((vo) => {
+      vo.key =
+        vo.transactionKey.ordsCd +
+        "," +
+        vo.transactionKey.listCd +
+        "," +
+        vo.transactionKey.traCd;
+        console.log(vo.key);
+    });
     state.TransactionList = payload;
   },
-  setReviewWriteItemInfo(state, payload){
+  setReviewWriteItemInfo(state, payload) {
     state.ReviewWriteItemInfo = payload;
   },
 };

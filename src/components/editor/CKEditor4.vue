@@ -26,8 +26,8 @@ export default {
     return {
       editorData: "",
       editorConfig: {
-        filebrowserUploadUrl: axios.defaults.baseURL + "prd/img/upload?",
-        filebrowserImageUploadUrl: axios.defaults.baseURL + "prd/img/upload?",
+        filebrowserUploadUrl: axios.defaults.baseURL + "/prd/img/upload?",
+        filebrowserImageUploadUrl: axios.defaults.baseURL + "/prd/img/upload?",
         filebrowserUploadMethod: "form",
         removeButtons: "",
       },
