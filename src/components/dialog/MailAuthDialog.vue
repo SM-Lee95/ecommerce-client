@@ -81,7 +81,6 @@ export default {
           this.$dialog.message.warning("입력값을 확인해주세요.");
           return;
         } else {
-          console.log(this.MailAuthTy);
           let url = this.MailAuthTy == 1 ? "user/emailPass" : "user/emailAuth";
           this.$store
             .dispatch(url, {

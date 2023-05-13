@@ -41,6 +41,11 @@
               </v-chip-group>
             </v-card-text>
             <v-select
+              :items="countList"
+              label="교환 갯수"
+              v-model="returnCnt"
+            ></v-select>
+            <v-select
               :items="returnReasonList"
               item-text="name"
               item-value="cd"
@@ -91,20 +96,34 @@ export default {
     returnReason: 0,
     reasonDetail: "",
     reasonFile: null,
+    returnCnt: 1,
+    countList: [
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    ],
   }),
   computed: {
     ...mapGetters("order", ["OrderUpdateOptionInfo"]),
   },
   methods: {
     updateInfo() {
+      console.log(this.OrderUpdateOptionInfo);
       if (!this.optionVal && this.optionVal != "0" && this.returnReason != 2) {
         this.$dialog.message.error("옵션을 선택한 후에 진행해주세요.");
         return;
       }
+      let reqData = this.OrderUpdateOptionInfo[0];
+      if (reqData.cnt < this.returnCnt) {
+        this.$dialog.message.error(
+          "교환 신청한 갯수가 주문 갯수보다 많습니다."
+        );
+        return;
+      }
       let text =
-        this.returnReason == 2
+        this.returnCnt +
+        "개의 상품을 " +
+        (this.returnReason == 2
           ? "파손 사유로 같은 옵션으로 교환 요청하시겠습니까?"
-          : "선택 옵션으로 교환 요청하시겠습니까?";
+          : "선택 옵션으로 교환 요청하시겠습니까?");
       this.$dialog
         .confirm({
           title: "주문 옵션 교환 요청",
@@ -113,7 +132,6 @@ export default {
         })
         .then((resp) => {
           if (!resp) return;
-          let reqData = this.OrderUpdateOptionInfo[0];
           if (this.returnReason != 2) {
             reqData = this.OrderUpdateOptionInfo[this.optionVal];
             cancelObj.prdCd = reqData.productKey.prdCd;
@@ -125,6 +143,7 @@ export default {
           cancelObj.listCd = reqData.listCd;
           cancelObj.returnReason = this.returnReason;
           cancelObj.reasonDetail = this.reasonDetail;
+          cancelObj.returnCnt = this.returnCnt;
           if (this.reasonFile) formData.append("reasonFile", this.reasonFile);
           formData.append(
             "cancelObj",

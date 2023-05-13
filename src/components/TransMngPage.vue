@@ -82,11 +82,9 @@
           class="elevation- mt-3"
           hide-default-footer
           show-select
-          item-key="key"
+          item-key="traCd"
           v-model="selected"
           no-data-text="주문 건이 존재하지 않습니다."
-          group-by="transactionKey.traCd"
-          show-group-by
           :items-per-page="-1"
         >
           <template v-slot:item.date="{ item }">
@@ -104,12 +102,9 @@
           <template v-slot:item.traCd="{ item }"
             ><v-row no-gutters
               ><v-col class="text-caption"
-                ><v-btn
-                  text
-                  @click="getDeliInfo(item.transactionKey.traCd)"
-                  small
-                  >{{ item.transactionKey.traCd }}</v-btn
-                ></v-col
+                ><v-btn text @click="getDeliInfo(item.traCd)" small>{{
+                  item.traCd
+                }}</v-btn></v-col
               ></v-row
             >
           </template>
@@ -125,16 +120,14 @@
               }}</v-col></v-row
             >
           </template>
-          <template v-slot:item.info="{ item }">
-            <v-btn
-              small
-              text
-              @click="getOrderDetail(item.transactionKey.ordsCd)"
+          <template v-slot:item.info="{ item }"
+            ><v-row no-gutters
+              ><v-col class="text-caption"
+                ><v-btn @click="getDeliDetailInfo(item.traCd)" small text
+                  >배송상세</v-btn
+                ></v-col
+              ></v-row
             >
-              {{
-                item.transactionKey.ordsCd + " " + item.transactionKey.listCd
-              }}
-            </v-btn>
           </template>
         </v-data-table>
       </v-col>
@@ -188,21 +181,30 @@
               <v-btn text :disabled="invalid" @click="completeDelivery"
                 >확인</v-btn
               >
-              <v-btn text @click="close">취소</v-btn>
+              <v-btn text @click="deliveryCompDialog">취소</v-btn>
             </v-col>
           </v-row>
         </validation-observer>
       </v-container>
+    </v-dialog>
+    <v-dialog v-model="transactionDrawer" width="800px" persistent>
+      <transaction-info-dialog
+      :version="dialogVersion"
+        v-on:close="transactionDialog"
+      ></transaction-info-dialog>
     </v-dialog>
   </v-container>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import TransactionInfoDialog from "./dialog/TransactionInfoDialog.vue";
 
 export default {
   name: "TransMngPage",
-  components: {},
+  components: {
+    TransactionInfoDialog,
+  },
   methods: {
     deliveryCompDialog() {
       if (!this.deliveryCompDrawer) {
@@ -284,14 +286,14 @@ export default {
           if (!resp) return;
           let reqData = {
             transactionList: this.selected,
-            compDate: this.compDate,
+            compDate: this.dateFormatted,
           };
           this.$store
             .dispatch("order/updateTransProc", reqData)
             .then((resp) => {
               if (resp) {
                 this.$dialog.message.info("수정되었습니다.");
-                this.close();
+                this.deliveryCompDialog();
               } else this.$dialog.message.error("수정에 실패하셨습니다.");
             });
         });
@@ -305,11 +307,27 @@ export default {
       return this.DeliList.filter((vo) => vo.commonKey.commCd == parcelCd)[0]
         .name;
     },
+    getDeliInfo(traCd) {
+      this.$deliInfoPopup(traCd);
+    },
+    getDeliDetailInfo(traCd) {
+      this.$store
+        .dispatch("order/selectTransactionInfo", { params: { tra_cd: traCd } })
+        .then((resp) => {
+          if (resp) this.transactionDialog();
+          else
+            this.$dialog.message.error(
+              "배송 정보를 가져오는데 오류가 발생했습니다."
+            );
+        });
+    },
+    transactionDialog() {
+      this.transactionDrawer = !this.transactionDrawer;
+    },
   },
   data: () => ({
     header: [
       { text: "등록일자", value: "date", align: "center", groupable: false },
-      { text: "주문정보", value: "info", align: "center", groupable: false },
       { text: "운송번호", value: "traCd", align: "center", groupable: false },
       { text: "개수", value: "cnt", align: "center", groupable: false },
       {
@@ -319,6 +337,7 @@ export default {
         groupable: false,
       },
       { text: "택배사", value: "parcelCd", align: "center", groupable: false },
+      { text: "", value: "info", align: "center", groupable: false },
     ],
     OptionList: [
       { name: "주문번호", cd: "ordsCd" },
@@ -354,6 +373,8 @@ export default {
     dateFormatted: new Date(Date.now()).toISOString().substr(0, 10),
     compDate: "",
     menu1: false,
+    transactionDrawer: false,
+    dialogVersion: "WRITE",
   }),
   computed: {
     ...mapGetters("common", ["DeliList"]),

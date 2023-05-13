@@ -9,8 +9,8 @@
           </v-btn></v-col
         ></v-row
       >
-      <v-divider></v-divider>
-      <v-row class="pa-1 mt-2 ml-1"
+      <v-divider v-if="version == 'WRITE'"></v-divider>
+      <v-row class="pa-1 mt-2 ml-1" v-if="version == 'WRITE'"
         ><v-col cols="8">
           <v-menu
             v-model="menu1"
@@ -69,6 +69,22 @@
                 }}</v-col></v-row
               >
             </template>
+            <template v-slot:item.info="{ item }"
+              ><v-row no-gutters
+                ><v-col class="text-caption"
+                  ><v-btn
+                    text
+                    @click="getOrderDetail(item.transactionKey.ordsCd)"
+                    small
+                    >{{
+                      item.transactionKey.ordsCd +
+                      " - " +
+                      item.transactionKey.listCd
+                    }}</v-btn
+                  ></v-col
+                ></v-row
+              >
+            </template>
             <template v-slot:item.traCd="{ item }"
               ><v-row no-gutters
                 ><v-col class="text-caption"
@@ -103,9 +119,16 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
+  props: {
+    version: {
+      type: String,
+      required: true,
+    },
+  },
   data: () => ({
     header: [
       { text: "택배사", value: "parcelCd", align: "start", width: "150px" },
+      { text: "주문번호", value: "info", align: "center" },
       { text: "운송번호", value: "traCd", align: "center" },
       { text: "상품갯수", value: "cnt", align: "start" },
       { text: "완료일자", value: "compDati", align: "start" },
@@ -160,7 +183,7 @@ export default {
           if (!resp) return;
           let reqData = {
             transactionList: this.selected,
-            compDate: this.compDate,
+            compDate: this.dateFormatted,
           };
           this.$store
             .dispatch("order/updateTransProc", reqData)
@@ -178,6 +201,18 @@ export default {
     close() {
       this.selectedRefresh();
       this.$emit("close");
+    },
+    getOrderDetail(ordsCd) {
+      this.$store.dispatch("order/getOrderDetailInfo", ordsCd).then((resp) => {
+        if (resp) {
+          if (this.$route.path != "/OrderDetailPage")
+            this.$router.push("/OrderDetailPage");
+        } else {
+          this.$dialog.message.error(
+            "주문 상세 정보를 가져오는데 실패했습니다."
+          );
+        }
+      });
     },
   },
   watch: {

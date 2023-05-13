@@ -133,8 +133,9 @@
         </v-data-table>
       </v-card-text>
     </v-card>
-    <v-dialog v-model="transactionDrawer" width="600px" persistent>
+    <v-dialog v-model="transactionDrawer" width="800px" persistent>
       <transaction-info-dialog
+        :version="dialogVersion"
         v-on:close="transactionDialog"
       ></transaction-info-dialog>
     </v-dialog>
@@ -162,6 +163,7 @@ export default {
     procTy: 0,
     selected: [],
     transactionDrawer: false,
+    dialogVersion: "WRITE",
   }),
   methods: {
     confirmReturn() {
@@ -297,7 +299,7 @@ export default {
       }
       if (
         this.selected.filter((vo) => {
-          if (vo.procTy != 2) {
+          if (vo.procTy != 2 && vo.remainCnt == 0) {
             this.$dialog.message.error("배송준비 상태인 것만 처리 가능합니다.");
             return true;
           }

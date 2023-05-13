@@ -182,7 +182,6 @@ export default {
       .get("/tra/info/admin", data)
       .then((resp) => {
         if (!resp.data.statusCode) {
-          console.log(resp.data);
           context.commit("setTransactionInfo", resp.data);
           return true;
         }
@@ -234,7 +233,6 @@ export default {
       .get("/tra/list/admin", data)
       .then((resp) => {
         if (!resp.data.statusCode) {
-          console.log(resp.data);
           context.commit("setTransactionList", resp.data);
           return true;
         }

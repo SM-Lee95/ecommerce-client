@@ -18,7 +18,7 @@
       ><v-col>
         <v-data-table
           :headers="header"
-          :items="this.OrderDetailInfo"
+          :items="OrderDetailInfo"
           class="elevation-0 mt-2"
           hide-default-footer
           disable-sort
@@ -28,6 +28,11 @@
             <v-img :src="item.thumbnail" contain max-width="100"></v-img>
           </template>
           <template v-slot:item.prdInfo="{ item }">
+            <v-row no-gutters
+              ><v-col class="text-left text-caption red--text">
+                {{ item.ordsTy == "EXCHANGE" ? " (교환)" : "" }}</v-col
+              ></v-row
+            >
             <v-row no-gutters>
               <v-col class="text-left text-caption">
                 <v-btn small text @click="getDetailInfo(item.prdCd)">{{
@@ -44,12 +49,10 @@
           <template v-slot:item.originPri="{ item }">
             {{ item.applyPri.comma() + " 원" }}
           </template>
-          <template v-slot:item.discountRate="{ item }">
+          <template v-slot:item.salesPri="{ item }">
             <v-row no-gutters class="text-caption"
               ><v-col>{{ item.discountRate + " %" }}</v-col></v-row
             >
-          </template>
-          <template v-slot:item.salesPri="{ item }">
             <v-row no-gutters class="text-decoration-line-through text-caption"
               ><v-col>{{ item.originPri.comma() + " 원" }}</v-col></v-row
             >
@@ -65,23 +68,22 @@
           <template v-slot:item.subSumPri="{ item }">
             <v-row no-gutters class="text-caption"
               ><v-col>{{
-              String(Number(item.applyPri) * Number(item.cnt)).comma() + " 원"
-            }}</v-col></v-row
+                String(Number(item.applyPri) * Number(item.cnt)).comma() + " 원"
+              }}</v-col></v-row
             >
           </template>
           <template v-slot:item.proc="{ item }">
+            <v-row no-gutters v-if="item.traCd">
+              <v-col align-self="center">
+                <v-btn small text @click="getDeliDetailInfo(item)">
+                  배송상세
+                </v-btn>
+              </v-col>
+            </v-row>
             <v-row no-gutters>
               <v-col align-self="center">
                 <v-btn small text @click="getProcAlert(item)">
                   {{ OrderProc[item.procTy] }}
-                  {{
-                    (item.procTy == "2" ||
-                      item.procTy == "3" ||
-                      item.procTy == "4") &&
-                    item.traCd
-                      ? "(" + item.traCd + ")"
-                      : ""
-                  }}
                 </v-btn>
               </v-col>
             </v-row>
@@ -354,6 +356,12 @@
         v-on:close="close('reviewDialogDrawer')"
       ></review-write-dialog>
     </v-dialog>
+    <v-dialog v-model="transactionDrawer" width="800px" persistent>
+      <transaction-info-dialog
+        v-on:close="close('transactionDrawer')"
+        :version="dialogVersion"
+      ></transaction-info-dialog>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -364,6 +372,7 @@ import ExchangeRequestDialog from "./dialog/ExchangeRequestDialog.vue";
 import OrderOptionUpdateDialog from "./dialog/OrderOptionUpdateDialog.vue";
 import ReturnRequestDialog from "./dialog/ReturnRequestDialog.vue";
 import ReviewWriteDialog from "./dialog/ReviewWriteDialog.vue";
+import TransactionInfoDialog from "./dialog/TransactionInfoDialog.vue";
 
 export default {
   name: "OrderDetailPage",
@@ -373,12 +382,12 @@ export default {
     ExchangeRequestDialog,
     ReturnRequestDialog,
     ReviewWriteDialog,
+    TransactionInfoDialog,
   },
   data: () => ({
     header: [
       { value: "thumbnail", align: "center", width: "100px" },
       { text: "상품정보", value: "prdInfo", align: "center", width: "500px" },
-      { text: "할인율", value: "discountRate", align: "center", width: "65px" },
       { text: "할인금액", value: "salesPri", align: "center", width: "100px" },
       { text: "수량", value: "cnt", align: "center", width: "60px" },
       { text: "합계금액", value: "subSumPri", align: "center", width: "100px" },
@@ -397,6 +406,8 @@ export default {
     exchangeDialog: false,
     returnDialog: false,
     reviewDialogDrawer: false,
+    transactionDrawer: false,
+    dialogVersion: "READ",
   }),
   computed: {
     ...mapGetters("order", ["OrderDetailInfo"]),
@@ -415,13 +426,20 @@ export default {
     },
     getProcAlert(item) {
       if (item.procTy == 0) {
-        this.$dialog.error({
-          title: "주문 접수",
-          text:
+        let text = "";
+        if (item.ordsTy == "ORDER") {
+          text =
             "<b>계좌로 입금이 완료되지 않았습니다.</b><br/>" +
             "정확한 금액으로 입금 후 확인 부탁드립니다. <br/>" +
             "입금 계좌 : 3021649166621 (농협) <br/>" +
-            "예금주 : 김진현 ",
+            "예금주 : 김진현 ";
+        } else if (item.ordsTy == "EXCHANGE") {
+          text = "<b>교환 건이 상품 검수가 완료되지 않았습니다.</b><br/>" +
+            "상품 검수가 완료된 후에 배송 준비 예정입니다. <br/>";
+        }
+        this.$dialog.error({
+          title: "주문 접수",
+          text: text,
           showClose: false,
         });
       } else if (item.procTy == 1) {
@@ -460,7 +478,7 @@ export default {
       } else if (item.procTy == 8) {
         this.$dialog.error({
           title: "물품 회수",
-          text: "물품 회수가 완료됐습니다. <br/>반품 건은 환불이 진행되고 교환 건은 배송이 진행됩니다.",
+          text: "물품 회수가 확인 됐습니다. <br/><b>반품: 상품 검수 후 환불 금액 책정과 함께 환불 진행</b><br/><b>교환: 상품 검수와 배송비 정산 확인 후 배송 진행</b>",
           showClose: false,
         });
       }
@@ -543,6 +561,7 @@ export default {
             listCd: item.listCd,
             prdCd: item.prdCd,
             prdListCd: item.prdListCd,
+            cnt: item.cnt,
           },
         })
         .then((resp) => {
@@ -586,6 +605,22 @@ export default {
     writeReview(vo) {
       this.$store.commit("order/setReviewWriteItemInfo", vo);
       this.reviewDialogDrawer = true;
+    },
+    getDeliDetailInfo(vo) {
+      this.$store
+        .dispatch("order/selectTransactionInfo", {
+          params: { ords_cd: vo.ordsCd, list_cd: vo.listCd },
+        })
+        .then((resp) => {
+          if (resp) this.transactionDialog();
+          else
+            this.$dialog.message.error(
+              "배송 정보를 가져오는데 오류가 발생했습니다."
+            );
+        });
+    },
+    transactionDialog() {
+      this.transactionDrawer = !this.transactionDrawer;
     },
   },
 };

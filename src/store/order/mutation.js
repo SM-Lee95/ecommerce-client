@@ -89,15 +89,6 @@ export default {
     state.TransactionInfo = payload;
   },
   setTransactionList(state, payload) {
-    payload.forEach((vo) => {
-      vo.key =
-        vo.transactionKey.ordsCd +
-        "," +
-        vo.transactionKey.listCd +
-        "," +
-        vo.transactionKey.traCd;
-        console.log(vo.key);
-    });
     state.TransactionList = payload;
   },
   setReviewWriteItemInfo(state, payload) {

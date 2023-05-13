@@ -29,6 +29,11 @@
           <v-row class="ma-2">
             <v-col>
               <v-select
+                :items="countList"
+                label="반품 갯수"
+                v-model="returnCnt"
+              ></v-select>
+              <v-select
                 :items="returnReasonList"
                 item-text="name"
                 item-value="cd"
@@ -123,6 +128,10 @@ export default {
     returnReason: 0,
     reasonDetail: "",
     reasonFile: null,
+    returnCnt: 1,
+    countList: [
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    ],
   }),
   computed: {
     ...mapGetters("order", ["OrderCancelInfo"]),
@@ -130,6 +139,12 @@ export default {
   },
   methods: {
     returnRequest() {
+      if (this.OrderCancelInfo.cnt < this.returnCnt) {
+        this.$dialog.message.error(
+          "반품 신청한 갯수가 주문 갯수보다 많습니다."
+        );
+        return;
+      }
       let formData = new FormData();
       let cancelObj = new Object();
       cancelObj.ordsCd = this.OrderCancelInfo.ordsCd;
@@ -142,6 +157,7 @@ export default {
       cancelObj.prdListCd = this.OrderCancelInfo.prdListCd;
       cancelObj.returnReason = this.returnReason;
       cancelObj.reasonDetail = this.reasonDetail;
+      cancelObj.returnCnt = this.returnCnt;
       if (this.reasonFile) formData.append("reasonFile", this.reasonFile);
       formData.append(
         "cancelObj",

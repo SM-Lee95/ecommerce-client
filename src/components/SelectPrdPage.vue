@@ -171,7 +171,7 @@ export default {
   }),
   computed: {
     ...mapGetters("product", ["ProductList"]),
-    ...mapGetters("common", ["CateList", "MenuList"]),
+    ...mapGetters("common", ["MenuList"]),
   },
   mounted() {},
   methods: {
