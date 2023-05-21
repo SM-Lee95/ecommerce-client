@@ -167,7 +167,7 @@ export default {
   },
   updateReturnRequest(context, data) {
     return http
-      .put("/ords/returnRequest", data)
+      .put("/ords/return/request", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         else return resp.data.message;
@@ -236,6 +236,45 @@ export default {
           context.commit("setTransactionList", resp.data);
           return true;
         }
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  updateExchangeConfirm(context, data) {
+    return http
+      .put("/ords/exchange/confirm", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  selectCancelRequestInfo(context, data) {
+    return http
+      .get("/ords/return/info", data)
+      .then((resp) => {
+        if (!resp.data.statusCode) {
+          context.commit("setCancelRequestInfo", resp.data);
+          return true;
+        }
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  insertReturnPaymentInfo(context, data) {
+    return http
+      .put("/ords/return/confirm", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
         return false;
       })
       .catch((resp) => {

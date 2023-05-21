@@ -40,5 +40,8 @@ export default {
   },
   TransactionList(state){
     return state.TransactionList;
+  },
+  CancelRequestInfo(state){
+    return state.CancelRequestInfo;
   }
 };

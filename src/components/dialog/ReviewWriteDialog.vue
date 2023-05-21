@@ -132,6 +132,10 @@ export default {
             .then((resp) => {
               if (resp) {
                 this.$dialog.message.info("리뷰 작성이 완료되었습니다.");
+                this.$store.dispatch(
+                  "order/getOrderDetailInfo",
+                  this.ReviewWriteItemInfo.ordsCd
+                );
                 this.$emit("close");
               } else {
                 this.$dialog.message.error("리뷰 작성에 실패하였습니다.");

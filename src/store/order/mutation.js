@@ -94,4 +94,7 @@ export default {
   setReviewWriteItemInfo(state, payload) {
     state.ReviewWriteItemInfo = payload;
   },
+  setCancelRequestInfo(state, payload) {
+    state.CancelRequestInfo = payload;
+  },
 };

@@ -13,4 +13,5 @@ export default {
   TransactionInfo: [], //특정주문배송정보
   ReviewWriteItemInfo: null, //리뷰작성정보
   TransactionList: [], //배송 정보 리스트
+  CancelRequestInfo: null, //반품신청정보
 };

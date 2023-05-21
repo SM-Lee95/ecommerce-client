@@ -139,16 +139,24 @@
         v-on:close="transactionDialog"
       ></transaction-info-dialog>
     </v-dialog>
+    <v-dialog v-model="insertReturnPaymentDrawer" width="800px" persistent>
+      <insert-return-payment-dialog
+        v-on:close="insertPaymentDialog"
+      ></insert-return-payment-dialog>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import TransactionInfoDialog from "../dialog/TransactionInfoDialog.vue";
+import InsertReturnPaymentDialog from "../dialog/InsertReturnPaymentDialog.vue";
+
 export default {
   name: "OrderMngPageModiDialog",
   components: {
     TransactionInfoDialog,
+    InsertReturnPaymentDialog,
   },
   data: () => ({
     detailHeader: [
@@ -164,11 +172,12 @@ export default {
     selected: [],
     transactionDrawer: false,
     dialogVersion: "WRITE",
+    insertReturnPaymentDrawer: false,
   }),
   methods: {
     confirmReturn() {
-      if (this.selected.length == 0) {
-        this.$dialog.message.error("품목 선택 후 진행해주세요.");
+      if (this.selected.length != 1) {
+        this.$dialog.message.error("단일 품목 선택 후 진행해주세요.");
         return;
       }
       if (
@@ -184,6 +193,7 @@ export default {
       ) {
         return;
       }
+      this.insertPaymentDialog(this.selected[0].ordsDtlKey);
     },
     confirmExchange() {
       if (this.selected.length == 0) {
@@ -194,7 +204,7 @@ export default {
         this.selected.filter((vo) => {
           if (vo.procTy != 8 || vo.ordsTy != "EXCHANGE") {
             this.$dialog.message.error(
-              "교혼 신청 건 중 회수 완료 상태인 것만 처리 가능합니다."
+              "교환 신청 건 중 회수 완료 상태인 것만 처리 가능합니다."
             );
             return true;
           }
@@ -203,6 +213,23 @@ export default {
       ) {
         return;
       }
+      this.$dialog
+        .confirm({
+          title: "교환 확정 처리",
+          text: "교환 상품의 주문 상태가 결제 완료에서 배송 준비 상태로 수정됩니다.",
+          showClose: false,
+        })
+        .then((resp) => {
+          if (!resp) return;
+          this.$store
+            .dispatch("order/updateExchangeConfirm", this.selected)
+            .then((resp) => {
+              if (resp) {
+                this.$dialog.message.info("수정되었습니다.");
+                this.close();
+              } else this.$dialog.message.error("수정에 실패하셨습니다.");
+            });
+        });
     },
     completeReturn() {
       if (this.selected.length == 0) {
@@ -222,6 +249,27 @@ export default {
       ) {
         return;
       }
+      this.$dialog
+        .confirm({
+          title: "회수 완료 처리",
+          text: "회수 완료 상태로 선택된 품목의 주문 상태가 수정됩니다.",
+          showClose: false,
+        })
+        .then((resp) => {
+          if (!resp) return;
+          let reqData = {
+            procTy: 8,
+            ordsDtlList: this.selected,
+          };
+          this.$store
+            .dispatch("order/updateOrdsDtlProc", reqData)
+            .then((resp) => {
+              if (resp) {
+                this.$dialog.message.info("수정되었습니다.");
+                this.close();
+              } else this.$dialog.message.error("수정에 실패하셨습니다.");
+            });
+        });
     },
     readyDelivery() {
       if (this.selected.length == 0) {
@@ -364,6 +412,20 @@ export default {
     },
     transactionDialog() {
       this.transactionDrawer = !this.transactionDrawer;
+    },
+    insertPaymentDialog(param) {
+      if (!this.insertReturnPaymentDrawer) {
+        this.$store
+          .dispatch("order/selectCancelRequestInfo", { params: param })
+          .then((resp) => {
+            if (resp) {
+              this.insertReturnPaymentDrawer = !this.insertReturnPaymentDrawer;
+            } else
+              this.$dialog.message.error(
+                "주문 취소 관련 정보를 가져오는데 오류가 발생했습니다."
+              );
+          });
+      } else this.insertReturnPaymentDrawer = !this.insertReturnPaymentDrawer;
     },
     getDetailInfo(cd) {
       this.$store.dispatch("product/getDetailInfo", cd).then((resp) => {

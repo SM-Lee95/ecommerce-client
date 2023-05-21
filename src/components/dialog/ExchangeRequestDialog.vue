@@ -33,12 +33,17 @@
                 active-class="black accent-4 white--text"
               >
                 <v-chip
-                  v-for="vo in OrderUpdateOptionInfo"
-                  :key="vo.productKey.listCd"
+                  v-for="(vo,index) in OrderUpdateOptionInfo"
+                  :key="index"
                 >
                   {{ vo.size.name }}-{{ vo.color.name }}
                 </v-chip>
               </v-chip-group>
+              <v-row v-if="OrderUpdateOptionInfo.length <= 0"
+                ><v-col class="red--text"
+                  >변경 가능한 옵션이 없습니다.</v-col
+                ></v-row
+              >
             </v-card-text>
             <v-select
               :items="countList"
@@ -106,7 +111,6 @@ export default {
   },
   methods: {
     updateInfo() {
-      console.log(this.OrderUpdateOptionInfo);
       if (!this.optionVal && this.optionVal != "0" && this.returnReason != 2) {
         this.$dialog.message.error("옵션을 선택한 후에 진행해주세요.");
         return;
@@ -118,6 +122,8 @@ export default {
         );
         return;
       }
+      console.log(this.optionVal);
+
       let text =
         this.returnCnt +
         "개의 상품을 " +
@@ -132,13 +138,13 @@ export default {
         })
         .then((resp) => {
           if (!resp) return;
+          let cancelObj = new Object();
+          let formData = new FormData();
           if (this.returnReason != 2) {
             reqData = this.OrderUpdateOptionInfo[this.optionVal];
             cancelObj.prdCd = reqData.productKey.prdCd;
             cancelObj.prdListCd = reqData.productKey.listCd;
           }
-          let formData = new FormData();
-          let cancelObj = new Object();
           cancelObj.ordsCd = reqData.ordsCd;
           cancelObj.listCd = reqData.listCd;
           cancelObj.returnReason = this.returnReason;
