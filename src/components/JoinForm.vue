@@ -256,7 +256,7 @@
         </validation-observer>
       </v-col>
     </v-row>
-    <v-dialog v-model="mailAuthDrawer" width="800px" height="100%" scrollable
+    <v-dialog v-model="mailAuthDrawer" width="600px" scrollable
       ><mail-auth-dialog v-on:complete="mailAuthComplete"></mail-auth-dialog
     ></v-dialog>
     <v-dialog v-model="storeTermsDrawer" width="800px" height="100%">

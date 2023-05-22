@@ -133,7 +133,7 @@
         <v-dialog
           transition="dialog-bottom-transition"
           v-model="mailAuthDrawer"
-          width="720px"
+          width="500px"
         >
           <mail-auth-dialog v-on:complete="mailAuthComplete"></mail-auth-dialog>
         </v-dialog>
@@ -277,19 +277,19 @@ export default {
             },
           })
           .then((resp) => {
-            if (resp.statusCode == "200") {
+            if (resp.data.statusCode == "200") {
               this.$dialog
                 .confirm({
                   title: "아이디 찾기",
                   text:
-                    "하기 회원님의 이메일로 가입된 아이디가 있습니다.\n아이디 : " +
-                    resp.message +
-                    "\n 입력창에 자동 입력하시겠습니까?",
+                    "하기 회원님의 이메일로 가입된 아이디는 <b>" +
+                    resp.data.message.substring(0, 4) + "****" +
+                    "</b> 입력창에 자동 입력하시겠습니까?",
                   showClose: false,
                 })
                 .then((flag) => {
                   if (!flag) return;
-                  this.username = resp.message;
+                  this.username = resp.data.message;
                 });
             } else {
               this.$dialog.message.error(

@@ -125,9 +125,22 @@ export default {
         return false;
       });
   },
+  emailId(context, data) {
+    return http
+      .post("/mailing/emailId", data)
+      .then((resp) => {
+        return resp;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
   compAuth(context, data) {
     return http
-      .get("/mailing/comp/" + data)
+      .get("/mailing/comp/" + data.authId, {
+        params: { authNumber: data.authNum },
+      })
       .then((resp) => {
         return resp;
       })

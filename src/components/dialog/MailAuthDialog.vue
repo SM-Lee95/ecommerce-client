@@ -1,17 +1,18 @@
 <template>
   <v-container fluid class="white">
     <validation-observer ref="observer" v-slot="{ invalid }">
-      <v-row class="white" no-gutters>
+      <v-row class="white pa-1" no-gutters>
         <v-col>
           <v-row class="mt-1">
-            <v-col cols="2" class="mt-1 ml-1 text-h6"> Mail 인증 </v-col>
-            <v-col cols="9" class="text-right text-caption red--text"
-              >* 메일 송부후 현재 창을 떠나지 말고 메일에 존재하는 버튼을 누른
-              후 생성된 인증 완료 버튼을 눌러주세요.</v-col
-            >
+            <v-col class="mb-1 ml-1 text-h6"> 이메일 인증 </v-col>
           </v-row>
           <v-divider></v-divider>
-          <v-row>
+          <v-row class="mt-1 mr-1">
+            <v-col class="text-right text-caption red--text"
+              >* 메일 송부후 현재 창을 떠나지 말고 메일에 존재하는 번호를 입력 후 인증 완료 버튼을 눌러주세요.</v-col
+            >
+          </v-row>
+          <v-row class="mt-1 mb-1">
             <v-col class="ml-2 mr-2">
               <validation-provider
                 v-slot="{ errors }"
@@ -40,6 +41,12 @@
                   :readonly="send"
                 ></v-text-field>
               </validation-provider>
+              <v-text-field
+                v-model="authNum"
+                label="인증번호"
+                required
+                v-if="send"
+              ></v-text-field>
             </v-col>
           </v-row>
           <v-divider></v-divider>
@@ -70,6 +77,7 @@ export default {
     id: "",
     send: false,
     authId: null,
+    authNum: "",
   }),
   computed: {
     ...mapGetters("common", ["MailAuthTy"]),
@@ -81,7 +89,12 @@ export default {
           this.$dialog.message.warning("입력값을 확인해주세요.");
           return;
         } else {
-          let url = this.MailAuthTy == 1 ? "user/emailPass" : "user/emailAuth";
+          let url =
+            this.MailAuthTy == 1
+              ? "user/emailPass"
+              : this.MailAuthTy == 2
+              ? "user/emailId"
+              : "user/emailAuth";
           this.$store
             .dispatch(url, {
               email: this.email,
@@ -94,7 +107,11 @@ export default {
                 );
                 this.send = true;
                 this.authId = resp.data.message;
-              } else if (resp.data.statusCode == "12") {
+              } else if (
+                resp.data.statusCode == "12" ||
+                resp.data.statusCode == "6" ||
+                resp.data.statusCode == "13"
+              ) {
                 this.$dialog.message.warning(
                   "메일 송부에 실패하셨습니다. " + resp.data.message
                 );
@@ -112,21 +129,32 @@ export default {
         this.$dialog.message.warning("시스템에 문제가 존재합니다.");
         return;
       } else {
-        this.$store.dispatch("user/compAuth", this.authId).then((resp) => {
-          if (resp.data.statusCode == "200" && resp.data.message == "true") {
-            this.$dialog.message.success("인증에 성공하셨습니다.");
-            this.$emit("complete", {
-              email: this.email,
-              id: this.id,
-              authType: this.MailAuthTy,
-            });
-            this.clear();
-          } else {
-            this.$dialog.message.warning(
-              "인증에 실패하셨습니다. 메일에 생성된 버튼을 누르고 다시 시도해주세요."
-            );
-          }
-        });
+        if (this.authNum == "") {
+          this.$dialog.message.warning(
+            "인증번호 입력 후에 시도해주시기 바랍니다."
+          );
+          return;
+        }
+        this.$store
+          .dispatch("user/compAuth", {
+            authId: this.authId,
+            authNum: this.authNum,
+          })
+          .then((resp) => {
+            if (resp.data.statusCode == "200" && resp.data.message == "true") {
+              this.$dialog.message.success("인증에 성공하셨습니다.");
+              this.$emit("complete", {
+                email: this.email,
+                id: this.id,
+                authType: this.MailAuthTy,
+              });
+              this.clear();
+            } else {
+              this.$dialog.message.warning(
+                "인증에 실패하셨습니다. 메일에 기재된 번호를 입력한 후 다시 시도해주세요."
+              );
+            }
+          });
       }
     },
     clear() {

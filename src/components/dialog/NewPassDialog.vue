@@ -86,7 +86,7 @@ export default {
                 this.$dialog.message.success(
                   "비밀번호 변경에 성공하셨습니다. 변경된 비밀번호로 로그인 시도해주세요."
                 );
-                this.emit("close");
+                this.$emit("close");
               } else {
                 this.$dialog.message.warning("비밀번호 변경에 실패하셨습니다.");
               }
