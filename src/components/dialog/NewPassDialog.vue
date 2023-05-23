@@ -4,14 +4,11 @@
       <v-row class="white" no-gutters>
         <v-col>
           <v-row class="mt-1">
-            <v-col class="mt-1 ml-1 text-h6"> 비밀번호변경 </v-col>
+            <v-col class="ml-1 text-h6"> 비밀번호변경 </v-col>
           </v-row>
           <v-divider></v-divider>
-          <v-row>
+          <v-row class="pa-1">
             <v-col class="ml-2 mr-2">
-              <v-text-field v-once label="아이디" readonly>{{
-                id
-              }}</v-text-field>
               <validation-provider
                 v-slot="{ errors }"
                 name="newPassword"
