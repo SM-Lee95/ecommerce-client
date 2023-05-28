@@ -1,7 +1,7 @@
 <template>
-  <v-container class="white pa-15">
-    <v-row class="pl-15 pr-15">
-      <v-col>
+  <v-container class="white pa-5">
+    <v-row class="d-flex justify-center">
+      <v-col cols="8">
         <validation-observer ref="observer" v-slot="{ invalid }">
           <form @submit.prevent="submit">
             <validation-provider

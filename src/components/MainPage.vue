@@ -1,5 +1,5 @@
 <template>
-  <v-container style="min-height: 950px" class="pl-15 pr-15">
+  <v-container class="pl-10 pr-10">
     <v-row class="text-center" v-if="SelectedMenu"
       ><v-col>{{ SelectedMenu.name }}</v-col></v-row
     >
@@ -16,7 +16,7 @@
         </v-btn>
       </v-col></v-row
     >
-    <v-row  class="mt-5 pl-15 pr-15" dense style="min-height: 800px">
+    <v-row class="mt-5 pl-15 pr-15" dense>
       <v-col
         v-for="(product, index) in Pagination.content"
         :key="product.cd"
@@ -25,9 +25,8 @@
         <v-card
           elevation="0"
           flat
-          :height="Pagination.content.length > 6 ? '100%' : '55%'"
           @click="getDetailInfo(product.cd)"
-          class="pa-2 mt-1 pb-1"
+          class="pa-2 mt-1"
         >
           <v-img
             :src="product.thumbnail"
@@ -47,11 +46,10 @@
             </v-card-actions>
           </v-img>
           <v-card-title
-            class="pa-2 text-caption"
+            class="pa-2 text-caption text-truncate"
             v-text="product.name"
             @click="getDetailInfo(product.cd)"
           ></v-card-title>
-          <v-spacer v-if="product.name.length < 39"></v-spacer>
           <v-card-subtitle>
             <v-row>
               <v-col>
@@ -81,7 +79,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row align-content="end">
+    <v-row>
       <v-col>
         <pagination-vue />
       </v-col>

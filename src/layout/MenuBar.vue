@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid class="mt-8 white">
     <v-row>
       <v-col class="text-center">
         <v-btn
@@ -7,7 +7,6 @@
           :key="catalog.cd"
           @click="updateList(catalog)"
           text
-          class="button mr-6"
           >{{ catalog.name }}
         </v-btn>
       </v-col>

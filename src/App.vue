@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-container fluid>
-      <v-row style="min-height: 250px" no-gutters>
+      <v-row style="min-height: 200px" no-gutters>
         <v-col>
           <Header />
         </v-col>

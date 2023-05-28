@@ -162,7 +162,7 @@
               <v-row
                 ><v-col class="d-flex justify-center">
                   <v-img
-                    src="../assets/LovaneNotice.jpeg"
+                    src="../assets/LovaneNotice.png"
                     contain
                     position="center center"
                     max-width="60%"
