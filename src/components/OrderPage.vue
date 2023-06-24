@@ -187,8 +187,11 @@
         <v-row class="mt-1"
           ><v-col class="text-right"
             ><v-btn text @click="goOrderDetail">확인</v-btn>
-          </v-col></v-row
-        >
+            <im-port-payment-dialog
+              v-on:close="goOrderDetail"
+              :payment="payment"
+            ></im-port-payment-dialog> </v-col
+        ></v-row>
       </v-container>
     </v-dialog>
   </v-container>
@@ -196,9 +199,13 @@
 
 <script>
 import { mapGetters } from "vuex";
+import ImPortPaymentDialog from "./dialog/ImPortPaymentDialog.vue";
 
 export default {
   name: "OrderPage.vue",
+  components: {
+    ImPortPaymentDialog,
+  },
   data() {
     return {
       header: [
@@ -222,6 +229,7 @@ export default {
       phone: "",
       name: "",
       orderCompleteDrawer: false,
+      payment: null,
     };
   },
   methods: {
@@ -247,41 +255,55 @@ export default {
         this.$dialog.message.warning("수령자 정보를 작성한 후에 시도해주세요.");
         return;
       }
-      let OrderDto = new Object();
-      OrderDto.productInfoDto = this.OrderList;
-      OrderDto.mainAddress = this.mainAddress;
-      OrderDto.etcAddress = this.etcAddress;
-      OrderDto.postcode = this.postcode;
-      OrderDto.recvPhone = this.phone;
-      OrderDto.recvNm = this.name;
-      OrderDto.totPri = this.OrderInfo.totPrdPri;
-      OrderDto.totDeliPri = this.OrderInfo.totDeliPri;
-      OrderDto.totCnt = this.OrderInfo.totCnt;
-      OrderDto.reqMemo = this.reqMemo;
-      this.$store.dispatch("order/orderComplete", OrderDto).then((resp) => {
-        if (resp) {
-          this.$dialog.message.success(
-            "주문 완료되었습니다. 안내드린 계좌번호로 입금해주세요."
-          );
-          this.orderCompleteDrawer = true;
-        } else {
-          this.$dialog.message.error(
-            "주문에 실패하셨습니다. 확인 후 재시도 바랍니다."
-          );
-          this.$router.push("/");
-        }
-      });
+      this.$dialog
+        .confirm({
+          title: "주문 요청",
+          text: "주문 진행 하시겠습니까?",
+          showClose: false,
+        })
+        .then((resp) => {
+          if (!resp) return;
+          let OrderDto = new Object();
+          this.payment = new Object();
+          OrderDto.productInfoDto = this.OrderList;
+          OrderDto.mainAddress = this.mainAddress;
+          OrderDto.etcAddress = this.etcAddress;
+          OrderDto.postcode = this.postcode;
+          OrderDto.recvPhone = this.phone;
+          OrderDto.recvNm = this.name;
+          OrderDto.totPri = this.OrderInfo.totPrdPri;
+          OrderDto.totDeliPri = this.OrderInfo.totDeliPri;
+          OrderDto.totCnt = this.OrderInfo.totCnt;
+          OrderDto.reqMemo = this.reqMemo;
+          this.$store.dispatch("order/orderComplete", OrderDto).then((resp) => {
+            if (resp) {
+              this.$dialog.message.success(
+                "주문 완료되었습니다. 결제 진행하시거나 안내드린 계좌번호로 입금해주세요."
+              );
+              this.payment = resp;
+              this.orderCompleteDialog();
+            } else {
+              this.$dialog.message.error(
+                "주문에 실패하셨습니다. 확인 후 재시도 바랍니다."
+              );
+              this.$router.push("/");
+            }
+          });
+        });
     },
     daumPostCode() {
       this.$daumPostCode();
     },
     goOrderDetail() {
-      this.orderCompleteDrawer = !this.orderCompleteDrawer;
+      this.orderCompleteDialog();
       this.$store.dispatch("order/getMyPageInfo").then((resp) => {
         if (resp) {
           this.$router.push("/MyPage");
         } else this.$dialog.message.error("주문 정보 확인에 실패했습니다.");
       });
+    },
+    orderCompleteDialog() {
+      this.orderCompleteDrawer = !this.orderCompleteDrawer;
     },
   },
   computed: {

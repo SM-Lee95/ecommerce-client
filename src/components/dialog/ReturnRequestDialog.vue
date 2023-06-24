@@ -59,6 +59,7 @@
                 v-slot="{ errors }"
                 name="Bank"
                 rules="required"
+                v-if="OrderCancelInfo.payMtd != 'CARD'"
               >
                 <v-select
                   :items="BankList"
@@ -73,6 +74,7 @@
                 v-slot="{ errors }"
                 name="Account"
                 rules="required|max:16|numeric"
+                v-if="OrderCancelInfo.payMtd != 'CARD'"
               >
                 <v-text-field
                   v-model="returnAccount"
@@ -86,6 +88,7 @@
                 v-slot="{ errors }"
                 name="AccountHolder"
                 rules="required|max:16"
+                v-if="OrderCancelInfo.payMtd != 'CARD'"
               >
                 <v-text-field
                   v-model="accountHolder"
@@ -150,9 +153,18 @@ export default {
       cancelObj.ordsCd = this.OrderCancelInfo.ordsCd;
       cancelObj.listCd = this.OrderCancelInfo.listCd;
       cancelObj.procTy = this.OrderCancelInfo.procTy;
-      cancelObj.returnAccount = this.returnAccount;
-      cancelObj.returnBank = this.returnBank;
-      cancelObj.accountHolder = this.accountHolder;
+      let text = "반품 신청하시겠습니까?";
+      if (this.OrderCancelInfo.payMtd != "CARD") {
+        cancelObj.returnAccount = this.returnAccount;
+        cancelObj.returnBank = this.returnBank;
+        cancelObj.accountHolder = this.accountHolder;
+        text +=
+        "<br/>환불 받으실 계좌번호는 " +
+        cancelObj.returnAccount +
+        "(" +
+        cancelObj.accountHolder +
+        ") 입니다. <br/> 다시 한번 확인해주세요.";
+      }
       cancelObj.prdCd = this.OrderCancelInfo.prdCd;
       cancelObj.prdListCd = this.OrderCancelInfo.prdListCd;
       cancelObj.returnReason = this.returnReason;
@@ -163,12 +175,7 @@ export default {
         "cancelObj",
         new Blob([JSON.stringify(cancelObj)], { type: "application/json" })
       );
-      let text =
-        "환불 받으실 계좌번호는 " +
-        cancelObj.returnAccount +
-        "(" +
-        cancelObj.accountHolder +
-        ") 입니다. <br/> 다시 한번 확인해주세요.";
+
       this.$dialog
         .confirm({
           title: "반품 요청",

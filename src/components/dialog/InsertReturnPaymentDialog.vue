@@ -10,6 +10,12 @@
           <v-row
             ><v-col>
               <v-list outlined>
+                <v-list-item>
+                  <v-list-item-subtitle>결제 수단</v-list-item-subtitle>
+                  <v-list-item-subtitle>{{
+                    CancelRequestInfo.payMtd
+                  }}</v-list-item-subtitle>
+                </v-list-item>
                 <v-list-item v-if="CancelRequestInfo.returnFile">
                   <v-list-item-subtitle>참고 사진</v-list-item-subtitle>
                   <v-list-item-subtitle
@@ -22,13 +28,13 @@
                     CancelRequestInfo.returnReason
                   }}</v-list-item-subtitle>
                 </v-list-item>
-                <v-list-item>
+                <v-list-item v-if="CancelRequestInfo.payMtd != 'CARD'">
                   <v-list-item-subtitle>예금주</v-list-item-subtitle>
                   <v-list-item-subtitle>{{
                     CancelRequestInfo.accountHolder
                   }}</v-list-item-subtitle>
                 </v-list-item>
-                <v-list-item>
+                <v-list-item v-if="CancelRequestInfo.payMtd != 'CARD'">
                   <v-list-item-subtitle> 은행 </v-list-item-subtitle>
                   <v-list-item-subtitle>
                     <v-select
@@ -41,7 +47,7 @@
                     ></v-select
                   ></v-list-item-subtitle>
                 </v-list-item>
-                <v-list-item>
+                <v-list-item v-if="CancelRequestInfo.payMtd != 'CARD'">
                   <v-list-item-subtitle> 계좌번호 </v-list-item-subtitle>
                   <v-list-item-subtitle>
                     {{ CancelRequestInfo.returnAccount }}</v-list-item-subtitle
@@ -55,7 +61,7 @@
                     }}원</v-list-item-subtitle
                   >
                 </v-list-item>
-                <v-list-item>
+                <v-list-item v-if="CancelRequestInfo.payMtd != 'CARD'">
                   <v-list-item-subtitle>입금일자</v-list-item-subtitle>
                   <v-list-item-subtitle>
                     <v-menu
@@ -145,10 +151,10 @@ export default {
             .dispatch("order/insertReturnPaymentInfo", reqData)
             .then((resp) => {
               if (resp) {
-                this.$dialog.message.info("결제 등록이 완료되었습니다.");
+                this.$dialog.message.info("환불 등록이 완료되었습니다.");
                 this.cancel();
               } else {
-                this.$dialog.message.error("결제 등록에 실패하였습니다.");
+                this.$dialog.message.error("환불 등록에 실패하였습니다.");
               }
             });
         });

@@ -122,7 +122,6 @@ export default {
         );
         return;
       }
-      console.log(this.optionVal);
 
       let text =
         this.returnCnt +

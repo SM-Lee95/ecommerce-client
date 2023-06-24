@@ -1,7 +1,7 @@
 <template>
-  <v-container fluid class="white pa-1">
+  <v-container fluid class="white">
     <validation-observer ref="observer" v-slot="{ invalid }">
-      <v-row>
+      <v-row class="pa-1">
         <v-col>
           <v-row class="pa-2">
             <v-col
@@ -32,8 +32,11 @@
               </v-row>
             </v-col>
           </v-row>
-          <v-row v-if="OrderCancelInfo.procTy != '0'" class="pa-1">
-            <v-col class="ml-2 mr-2">
+          <v-row v-if="OrderCancelInfo.procTy != '0'" class="mt-2">
+            <v-col
+              class="ml-2 mr-2 mt-1"
+              v-if="OrderCancelInfo.payMtd == 'ACCOUNT_TRANSFER'"
+            >
               <validation-provider
                 v-slot="{ errors }"
                 name="은행"
@@ -75,6 +78,37 @@
                 ></v-text-field>
               </validation-provider>
             </v-col>
+            <v-col
+              class="ml-2 mr-2 mt-1"
+              v-if="OrderCancelInfo.payMtd == 'CARD'"
+            >
+              <v-row>
+                <v-col class="red--text lighten-2 text-center text-caption"
+                  >카드 결제 취소는 5~7일 정도 소요 예정입니다.<br />마지막 취소
+                  아이템에 배송비가 합산 환불됩니다.</v-col
+                >
+              </v-row>
+              <v-list outlined>
+                <v-list-item>
+                  <v-list-item-subtitle> 취소 상품 </v-list-item-subtitle>
+                  <v-list-item-subtitle>
+                    {{ OrderCancelInfo.name }}
+                  </v-list-item-subtitle>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-subtitle> 총 환불 가격 </v-list-item-subtitle>
+                  <v-list-item-subtitle>
+                    {{ OrderCancelInfo.applyPri.comma() }} 원
+                  </v-list-item-subtitle>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-subtitle> 결제 방법 </v-list-item-subtitle>
+                  <v-list-item-subtitle
+                    >{{ OrderCancelInfo.payMtd }}
+                  </v-list-item-subtitle>
+                </v-list-item>
+              </v-list>
+            </v-col>
           </v-row>
           <v-divider></v-divider>
           <v-row>
@@ -112,18 +146,20 @@ export default {
       let title = "주문 취소 요청";
       let text = "전체 주문 건이 취소됩니다. 다시 한번 확인해주세요.";
       if (this.OrderCancelInfo.procTy != "0") {
-        cancelObj.returnAccount = this.returnAccount;
-        cancelObj.returnBank = this.returnBank;
-        cancelObj.accountHolder = this.accountHolder;
-        cancelObj.prdCd = this.OrderCancelInfo.prdCd;
-        cancelObj.prdListCd = this.OrderCancelInfo.prdListCd;
+        if (this.OrderCancelInfo.payMtd == "ACCOUNT_TRANSFER") {
+          cancelObj.returnAccount = this.returnAccount;
+          cancelObj.returnBank = this.returnBank;
+          cancelObj.accountHolder = this.accountHolder;
+          cancelObj.prdCd = this.OrderCancelInfo.prdCd;
+          cancelObj.prdListCd = this.OrderCancelInfo.prdListCd;
+          text =
+            "환불 받으실 계좌번호는 " +
+            cancelObj.returnAccount +
+            "(" +
+            cancelObj.accountHolder +
+            ") 입니다. <br> 다시 한번 확인해주세요.";
+        } else text = "카드 결제 취소하시겠습니까?";
         title = "개별 주문 취소 요청";
-        text =
-          "환불 받으실 계좌번호는 " +
-          cancelObj.returnAccount +
-          "(" +
-          cancelObj.accountHolder +
-          ") 입니다. <br> 다시 한번 확인해주세요.";
       }
       this.$dialog
         .confirm({

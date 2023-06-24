@@ -166,6 +166,7 @@ export default {
         .then((resp) => {
           if (resp) {
             this.$dialog.message.success("Success");
+            this.selectedRefresh();
             this.$store.dispatch("product/getBasketList");
           } else this.$dialog.message.error("Fail");
         });
@@ -178,9 +179,13 @@ export default {
       this.$store.dispatch("product/delBasketInfo", productKey).then((resp) => {
         if (resp) {
           this.$dialog.message.success("Success");
+          this.selectedRefresh();
           this.$store.dispatch("product/getBasketList");
         } else this.$dialog.message.error("Fail");
       });
+    },
+    selectedRefresh() {
+      this.selectList.splice(0, this.selectList.length);
     },
   },
 };

@@ -204,7 +204,6 @@ export default {
         .then((resp) => {
           if (!resp) return;
           let reqData = {
-            userCd: this.paymentObj.userCd,
             ordsCd: this.paymentObj.cd,
             payDate: this.dateFormatted,
             payPri: this.payPri,

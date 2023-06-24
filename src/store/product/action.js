@@ -101,18 +101,6 @@ export default {
         return false;
       });
   },
-  orderComplete(context, data) {
-    return http
-      .post("/ords/items", data)
-      .then((resp) => {
-        if (resp.data.statusCode == "200") return true;
-        return false;
-      })
-      .catch((resp) => {
-        console.log("서버오류 \n " + resp);
-        return false;
-      });
-  },
   insertPrdImg(context, data) {
     return http
       .post("/prd/img", data)

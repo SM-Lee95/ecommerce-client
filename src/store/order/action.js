@@ -25,7 +25,7 @@ export default {
     return http
       .post("/ords/items", data)
       .then((resp) => {
-        if (resp.data.statusCode == "200") return true;
+        if (!resp.data.statusCode) return resp.data;
         return false;
       })
       .catch((resp) => {
@@ -207,6 +207,30 @@ export default {
   insertPaymentInfo(context, data) {
     return http
       .post("/pay/info/admin", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  insertPaymentInfoByPg(context, data) {
+    return http
+      .post("/pay/info", data)
+      .then((resp) => {
+        if (resp.data.statusCode == "200") return true;
+        return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  insertFailPaymentLog(context, data) {
+    return http
+      .post("/pay/log", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
