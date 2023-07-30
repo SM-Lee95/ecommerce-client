@@ -56,7 +56,7 @@
             </v-row>
           </template>
           <template v-slot:item.deliPri="{ item }">
-            {{ item.deliPri.comma() + " 원" }}
+            {{ String(item.deliPri).comma() + " 원" }}
           </template>
           <template v-slot:item.midSum="{ item }">
             {{ String(item.midSum).comma() + " 원" }}

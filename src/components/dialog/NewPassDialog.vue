@@ -11,8 +11,14 @@
             <v-col class="ml-2 mr-2">
               <validation-provider
                 v-slot="{ errors }"
-                name="newPassword"
-                rules="required|max:20|min:8"
+                name="Password"
+                :rules="{
+                  required: true,
+                  min: 8,
+                  max: 20,
+                  regex: [/^[0-9a-zA-Z!@#$%^+\-=]*$/],
+                  passwordCustom: true,
+                }"
               >
                 <v-text-field
                   v-model="newPwd"
@@ -25,8 +31,8 @@
               </validation-provider>
               <validation-provider
                 v-slot="{ errors }"
-                name="confirm"
-                rules="required|max:20|min:8|confirmed:newPassword"
+                name="Confirm"
+                rules="required|max:20|min:8|confirmed:Password"
               >
                 <v-text-field
                   v-model="confirmPwd"

@@ -35,6 +35,7 @@
                 :error-messages="errors"
                 :counter="13"
                 label="Phone(010-****-****)"
+                @keyup="transToPhone"
               ></v-text-field>
             </validation-provider>
           </v-list-item-content>
@@ -179,7 +180,13 @@
                 <validation-provider
                   v-slot="{ errors }"
                   name="newPassword"
-                  rules="required|max:20|min:8"
+                  :rules="{
+                    required: true,
+                    min: 8,
+                    max: 20,
+                    regex: [/^[0-9a-zA-Z!@#$%^+\-=]*$/],
+                    passwordCustom: true,
+                  }"
                 >
                   <v-text-field
                     v-model="newPwd"
@@ -329,6 +336,11 @@ export default {
         this.emailYn = this.UserInfo.emailYn == "Y";
         this.smsYn = this.UserInfo.smsYn == "Y";
       }
+    },
+    transToPhone(event) {
+      this.phone = event.target.value
+        .replace(/[^0-9]/g, "")
+        .replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`);
     },
   },
   mounted() {

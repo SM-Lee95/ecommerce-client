@@ -7,11 +7,11 @@
             <validation-provider
               v-slot="{ errors }"
               name="이름"
-              rules="required|max:15"
+              rules="required|max:5|min:2"
             >
               <v-text-field
                 v-model="name"
-                :counter="15"
+                :counter="5"
                 :error-messages="errors"
                 label="이름"
                 required
@@ -20,13 +20,20 @@
             <validation-provider
               v-slot="{ errors }"
               name="아이디"
-              rules="required|max:20|existId"
+              :rules="{
+                required: true,
+                min: 6,
+                max: 15,
+                existId: true,
+                regex: [/^[0-9a-zA-Z!@#$%^+\-=]*$/],
+                idCustom: true,
+              }"
             >
               <v-text-field
                 v-model="id"
-                :counter="20"
+                :counter="15"
                 :error-messages="errors"
-                label="아이디"
+                label="아이디 (6~15자의 영문 대소문자, 숫자, 특수문자(!@#$%^+\-=))"
                 required
               ></v-text-field>
             </validation-provider>

@@ -6,8 +6,8 @@ export default {
     if (payload) state.Role = payload.auth;
   },
   tokenSetting(state, payload) {
-    VueCookies.set("AccessToken", payload.accesstoken, "60s");
-    VueCookies.set("RefreshToken", payload.refreshtoken, "1h");
+    VueCookies.set("AccessToken", payload.accesstoken, "2m", "", "", true);
+    VueCookies.set("RefreshToken", payload.refreshtoken, "1h", "", "", true);
     state.accessToken = payload.accesstoken;
     state.refreshToken = payload.refreshtoken;
   },

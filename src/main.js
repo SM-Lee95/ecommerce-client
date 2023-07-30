@@ -31,6 +31,13 @@ extend("existId", {
   },
   message: "존재하는 아이디입니다. 다른 아이디를 입력해주세요.",
 });
+extend("idCustom", {
+  validate(value) {
+    return !value || value.match("^(?=.*[0-9])(?=.*[a-zA-Z])(?=\\S+$).*$");
+  },
+  message:
+    "아이디는 숫자, 영어 알파벳(대/소문자 상관없이) 하나 이상씩을 포함해야합니다.",
+});
 extend("fileSize", {
   validate(value) {
     return !value || value.size < 5000000 ? true : false;
@@ -54,8 +61,7 @@ extend("dateFormat", {
       value.match("^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$")
     );
   },
-  message:
-    "날짜는 YYYY-MM-DD 형식으로 실제 날짜를 입력해야합니다.",
+  message: "날짜는 YYYY-MM-DD 형식으로 실제 날짜를 입력해야합니다.",
 });
 
 Vue.component("ValidationProvider", ValidationProvider);
