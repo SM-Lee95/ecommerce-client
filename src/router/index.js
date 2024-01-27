@@ -17,6 +17,7 @@ import SelectPrd from "../components/SelectPrdPage.vue";
 import CommonMngPage from "../components/CommonMngPage.vue";
 import QnaMngPage from "../components/QnaMngPage.vue";
 import TransMng from "../components/TransMngPage.vue";
+import Kakao from "../util/callback/kakao.vue";
 import VueCookies from "vue-cookies";
 
 Vue.use(VueRouter);
@@ -103,10 +104,15 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/Kakao",
+    name: "Kakao",
+    component: Kakao,
+  }
 ];
 
 const router = new VueRouter({
-  // mode: "history",
+  mode: "history",
   base: process.env.BASE_URL,
   routes,
 });

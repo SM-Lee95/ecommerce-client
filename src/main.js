@@ -93,7 +93,6 @@ String.prototype.comma = function () {
     /(\d)(?=(?:\d{3})+(?!\d))/g,
     "$1,"
   );
-  // return String(this).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
 };
 String.prototype.uncomma = function () {
   return String(this).replace(/[^\d]+/g, "");

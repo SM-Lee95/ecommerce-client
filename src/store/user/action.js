@@ -6,7 +6,6 @@ export default {
       .post("/login", data)
       .then((resp) => {
         if (!resp) return false;
-        context.commit("tokenSetting", resp.headers);
         return context.dispatch("getMyUserInfo").then((resp) => {
           return resp;
         });
@@ -169,6 +168,23 @@ export default {
       })
       .catch((resp) => {
         console.log("서버오류 \n " + resp);
+        return false;
+      });
+  },
+  kakaoLogin(context, data) {
+    return http
+      .post("/auth/kakao", data)
+      .then((resp) => {
+        if (!resp.body) {
+          context.commit("tokenSetting", resp.data);
+          return context.dispatch("getMyUserInfo").then((resp) => {
+            return resp;
+          });
+        }
+        else return false;
+      })
+      .catch((resp) => {
+        console.log("서버오류 \n" + resp);
         return false;
       });
   },

@@ -56,7 +56,9 @@
         <v-icon>mdi-semantic-web</v-icon>
       </v-btn>
 
-      <template v-slot:extension><MenuBar /></template>
+      <template v-slot:extension>
+        <MenuBar />
+      </template>
     </v-app-bar>
     <v-dialog v-model="drawer" width="500px">
       <v-container class="white" fluid>
@@ -108,14 +110,28 @@
                 </v-row>
                 <v-row>
                   <v-col>
-                    <v-btn
-                      block
-                      text
-                      elevation="0"
-                      @click="goLogin"
-                      :disabled="invalid"
-                      >Login
-                    </v-btn>
+                    <v-row no-gutters>
+                      <v-col align-self="center">
+                        <v-btn
+                          block
+                          text
+                          elevation="0"
+                          @click="goLogin"
+                          :disabled="invalid"
+                          >Login
+                        </v-btn>
+                      </v-col>
+                      <v-col align-self="center">
+                        <v-btn text image elevation="0" @click="loginWithKakao">
+                          <v-img
+                            contain
+                            height="40"
+                            width="100%"
+                            src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg"
+                          ></v-img> </v-btn
+                      ></v-col>
+                    </v-row>
+
                     <v-row no-gutters>
                       <v-col>
                         <v-btn block text elevation="0" @click="searchID"
@@ -179,6 +195,11 @@ export default {
     };
   },
   methods: {
+    loginWithKakao() {
+      window.Kakao.Auth.authorize({
+        redirectUri: "http://localhost:7070/Kakao",
+      });
+    },
     toJoinForm() {
       if (this.$route.path != "/JoinForm") this.$router.push("/JoinForm");
     },

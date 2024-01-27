@@ -6,10 +6,14 @@ export default {
     if (payload) state.Role = payload.auth;
   },
   tokenSetting(state, payload) {
-    VueCookies.set("AccessToken", payload.accesstoken, "2m", "", "", true);
-    VueCookies.set("RefreshToken", payload.refreshtoken, "1h", "", "", true);
-    state.accessToken = payload.accesstoken;
-    state.refreshToken = payload.refreshtoken;
+    if(payload.accesstoken)
+      VueCookies.set("AccessToken", payload.accesstoken, "30m", "", "", true);
+    if(payload.refreshtoken)
+      VueCookies.set("RefreshToken", payload.refreshtoken, "7d", "", "", true);
+    if(payload.accessToken)
+        VueCookies.set("AccessToken", payload.accessToken, "30m", "", "", true);
+    if(payload.refreshToken)
+        VueCookies.set("RefreshToken", payload.refreshToken, "7d", "", "", true);
   },
   removeToken(state) {
     VueCookies.remove("AccessToken");
