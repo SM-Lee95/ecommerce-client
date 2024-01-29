@@ -105,7 +105,7 @@ const routes = [
     ],
   },
   {
-    path: "/Kakao",
+    path: "/kakao",
     name: "Kakao",
     component: Kakao,
   }

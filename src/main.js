@@ -106,6 +106,7 @@ Date.prototype.YYYYMMDDHHMMSS = function () {
   var ss = this.getSeconds();
   return yyyy + MM + dd + hh + mm + ss;
 };
+
 new Vue({
   router,
   store,
@@ -113,3 +114,9 @@ new Vue({
   VeeValidate,
   render: (h) => h(App),
 }).$mount("#app");
+const param = new URLSearchParams(window.location.search);
+
+const path = param.get("path");
+const code = param.get("code");
+if(path && code)
+  router.push("/"+path+"?code="+code);

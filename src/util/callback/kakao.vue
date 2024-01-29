@@ -7,7 +7,7 @@ export default {
       this.$store
         .dispatch("user/kakaoLogin", {
           authorizationCode: code,
-          redirectUri: "https://lovane.store/Kakao",
+          redirectUri: "https://www.lovane.store/redirect/kakao",
         })
         .then((resp) => {
           if (!resp)

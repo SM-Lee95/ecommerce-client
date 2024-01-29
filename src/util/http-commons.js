@@ -12,13 +12,12 @@ const createAxios = axios.create({
   },
 });
 const apiURL = baseURL;
-const authURL = "https://lovane.store:8082/";
+const authURL = baseURL;
 //request 설정
 createAxios.interceptors.request.use(
   async function (confi) {
     if (confi.url == "/auth/kakao") confi.baseURL = authURL;
     else confi.baseURL = apiURL;
-    console.log(confi);
     if (!confi.sent && VueCookies.get("AccessToken")) {
       confi.headers["RefreshToken"] = "";
       confi.headers["AccessToken"] = VueCookies.get("AccessToken");
