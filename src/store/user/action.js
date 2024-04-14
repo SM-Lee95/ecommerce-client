@@ -3,7 +3,7 @@ import http from "../../util/http-commons";
 export default {
   login(context, data) {
     return http
-      .post("/login", data)
+      .post("/api/v1/login", data)
       .then((resp) => {
         if (!resp) return false;
         return context.dispatch("getMyUserInfo").then((resp) => {
@@ -17,7 +17,7 @@ export default {
   },
   signUp(context, data) {
     return http
-      .post("/user/myInfo", data)
+      .post("/api/v1/user/myInfo", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -29,7 +29,7 @@ export default {
   },
   existId(context, data) {
     return http
-      .get("/user/existId/" + data)
+      .get("/api/v1/user/existId/" + data)
       .then((resp) => {
         return resp;
       })
@@ -40,7 +40,7 @@ export default {
   },
   getMyUserInfo(context) {
     return http
-      .get("/user/myInfo")
+      .get("/api/v1/user/myInfo")
       .then((resp) => {
         if (!resp.data.statusCode) {
           context.commit("setUserInfo", resp.data);
@@ -54,7 +54,7 @@ export default {
   },
   updateInfo(context, data) {
     return http
-      .put("/user/myInfo", data)
+      .put("/api/v1/user/myInfo", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -66,7 +66,7 @@ export default {
   },
   updatePass(context, data) {
     return http
-      .put("/user/myInfo/pass", data)
+      .put("/api/v1/user/myInfo/pass", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -78,7 +78,7 @@ export default {
   },
   updateEmailPass(context, data) {
     return http
-      .put("/user/email/pass", data)
+      .put("/api/v1/user/email/pass", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -90,7 +90,7 @@ export default {
   },
   selectUserList(context, data) {
     return http
-      .get("/user/list/admin", data)
+      .get("/api/v1/admin/user/list", data)
       .then((resp) => {
         if (!resp.data.statusCode) {
           context.commit("setUserList", resp.data);
@@ -104,7 +104,7 @@ export default {
   },
   emailAuth(context, data) {
     return http
-      .post("/mailing/emailAuth", data)
+      .post("/api/v1/mailing/emailAuth", data)
       .then((resp) => {
         return resp;
       })
@@ -115,7 +115,7 @@ export default {
   },
   emailPass(context, data) {
     return http
-      .post("/mailing/emailPass", data)
+      .post("/api/v1/mailing/emailPass", data)
       .then((resp) => {
         return resp;
       })
@@ -126,7 +126,7 @@ export default {
   },
   emailId(context, data) {
     return http
-      .post("/mailing/emailId", data)
+      .post("/api/v1/mailing/emailId", data)
       .then((resp) => {
         return resp;
       })
@@ -137,7 +137,7 @@ export default {
   },
   compAuth(context, data) {
     return http
-      .get("/mailing/comp/" + data.authId, {
+      .get("/api/v1/mailing/comp/" + data.authId, {
         params: { authNumber: data.authNum },
       })
       .then((resp) => {
@@ -150,7 +150,7 @@ export default {
   },
   selectUserIdFromEmail(context, data) {
     return http
-      .get("/user/email/id", data)
+      .get("/api/v1/user/email/id", data)
       .then((resp) => {
         return resp;
       })
@@ -161,7 +161,7 @@ export default {
   },
   updatePassToInit(context, data) {
     return http
-      .put("/user/pass/admin", data)
+      .put("/api/v1/admin/user/pass", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;

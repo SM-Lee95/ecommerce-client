@@ -198,7 +198,7 @@ export default {
     loginWithKakao() {
       window.Kakao.Auth.authorize({
         redirectUri:
-          window.location.protocol + "//" + window.location.host + "/redirect/kakao",
+          window.location.protocol + "//" + window.location.host + "/auth/redirect/kakao",
       });
     },
     toJoinForm() {

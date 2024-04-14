@@ -3,7 +3,7 @@ import http from "../util/http-commons";
 export default {
   getMenuList(context) {
     return http
-      .get("/cate/list")
+      .get("/api/v1/cate/list")
       .then((resp) => {
         if (resp.data) {
           context.commit("setMenuList", resp.data);
@@ -17,7 +17,7 @@ export default {
   },
   selectAllCommonCode(context) {
     return http
-      .get("/common/code/all")
+      .get("/api/v1/common/code/all")
       .then((resp) => {
         if (resp.data) {
           context.commit("setSizeList", resp.data.sizeList);
@@ -37,7 +37,7 @@ export default {
   },
   selectCommonCode(context, param) {
     return http
-      .get("/common/code/list", param)
+      .get("/api/v1/common/code/list", param)
       .then((resp) => {
         if (resp.data) {
           if (resp.data[0].commonKey.cdFlag == 1)
@@ -54,7 +54,7 @@ export default {
   },
   insertCommonCode(context, param) {
     return http
-      .post("/common/code", param)
+      .post("/api/v1/common/code", param)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -66,7 +66,7 @@ export default {
   },
   selectQuestionList(context, param) {
     return http
-      .get("/question/info/admin", param)
+      .get("/api/v1/admin/question/info", param)
       .then((resp) => {
         if (resp.data) {
           context.commit("setQnaList", resp.data);
@@ -81,7 +81,7 @@ export default {
   },
   updateAnswerInfo(context, param) {
     return http
-      .put("/question/answer/admin", param)
+      .put("/api/v1/admin/question/answer", param)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;

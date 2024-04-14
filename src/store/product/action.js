@@ -8,7 +8,7 @@ export default {
       context.commit("setSelectMenuCd", data.param);
     data.size = 24;
     return http
-      .get("/prd/list/" + context.getters["selectMenuCd"], { params: data })
+      .get("/api/v1/prd/list/" + context.getters["selectMenuCd"], { params: data })
       .then((resp) => {
         if (!resp.data.statusCode) {
           context.commit("setPagination", resp.data);
@@ -22,7 +22,7 @@ export default {
   },
   getDetailInfo(context, data) {
     return http
-      .get("/prd/detail/" + data)
+      .get("/api/v1/prd/detail/" + data)
       .then((resp) => {
         if (!resp.data.statusCode) {
           context.commit("setDetailInfo", resp.data);
@@ -37,7 +37,7 @@ export default {
   },
   putLike(context, data) {
     return http
-      .get("/prd/like/" + data)
+      .get("/api/v1/prd/like/" + data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -49,7 +49,7 @@ export default {
   },
   getJJimList(context) {
     return http
-      .get("/prd/like/list")
+      .get("/api/v1/prd/like/list")
       .then((resp) => {
         if (!resp.data.statusCode) {
           context.commit("setJJimList", resp.data);
@@ -64,7 +64,7 @@ export default {
   },
   postBasket(context, data) {
     return http
-      .post("/prd/basket", data)
+      .post("/api/v1/prd/basket", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -76,7 +76,7 @@ export default {
   },
   getBasketList(context) {
     return http
-      .get("/prd/basket/list")
+      .get("/api/v1/prd/basket/list")
       .then((resp) => {
         if (!resp.data.statusCode) {
           context.commit("setBasketList", resp.data);
@@ -91,7 +91,7 @@ export default {
   },
   delBasketInfo(context, data) {
     return http
-      .delete("/prd/basket/" + data.prdCd + "/" + data.listCd)
+      .delete("/api/v1/prd/basket/" + data.prdCd + "/" + data.listCd)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -103,7 +103,7 @@ export default {
   },
   insertPrdImg(context, data) {
     return http
-      .post("/prd/img", data)
+      .post("/api/v1/prd/img", data)
       .then((resp) => {
         if (resp.data) {
           return resp.data.fullPath;
@@ -117,7 +117,7 @@ export default {
   },
   insertPrdInfo(context, data) {
     return http
-      .post("/prd/info/admin", data)
+      .post("/api/v1/admin/prd/info", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -129,7 +129,7 @@ export default {
   },
   selectPrdList(context, data) {
     return http
-      .get("/prd/list/admin", {
+      .get("/api/v1/admin/prd/list", {
         params: data,
       })
       .then((resp) => {
@@ -146,7 +146,7 @@ export default {
   },
   deletePrdInfo(context, data) {
     return http
-      .delete("/prd/info/admin", {
+      .delete("/api/v1/admin/prd/info", {
         params: {
           prdCd: data,
         },
@@ -162,7 +162,7 @@ export default {
   },
   updatePrdInfo(context, data) {
     return http
-      .put("/prd/info/admin", data)
+      .put("/api/v1/admin/prd/info", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -174,7 +174,7 @@ export default {
   },
   insertExcelProduct(context, data) {
     return http
-      .post("/prd/info/admin/excel", data)
+      .post("/api/v1/admin/prd/info/excel", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -186,7 +186,7 @@ export default {
   },
   toggleStatFlag(context, data) {
     return http
-      .put("/prd/info/admin/statFlag", data)
+      .put("/api/v1/admin/prd/info/statFlag", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -198,7 +198,7 @@ export default {
   },
   selectProductDetailInfoForUpdate(context, data) {
     return http
-      .get("/prd/detail/admin/" + data)
+      .get("/api/v1/admin/prd/detail/" + data)
       .then((resp) => {
         if (!resp.data.statusCode) {
           context.commit("setEditProductDetail", resp.data);
@@ -213,7 +213,7 @@ export default {
   },
   insertProductOption(context, data) {
     return http
-      .post("/prd/detail/admin/option", data)
+      .post("/api/v1/admin/prd/detail/option", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -225,7 +225,7 @@ export default {
   },
   updateProductDetailStatFlag(context, data) {
     return http
-      .put("/prd/detail/admin/statFlag", data)
+      .put("/api/v1/admin/prd/detail/statFlag", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -237,7 +237,7 @@ export default {
   },
   updateProductDetailStockCnt(context, data) {
     return http
-      .put("/prd/detail/admin/stockCnt", data)
+      .put("/api/v1/admin/prd/detail/stockCnt", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -249,7 +249,7 @@ export default {
   },
   selectMyQnaInfoList(context) {
     return http
-      .get("/question/myInfo")
+      .get("/api/v1/question/myInfo")
       .then((resp) => {
         if (!resp.data.statusCode) {
           context.commit("setQnaDetailInfo", resp.data);
@@ -264,7 +264,7 @@ export default {
   },
   insertQuestionInfo(context, data) {
     return http
-      .post("/question/info", data)
+      .post("/api/v1/question/info", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;

@@ -3,7 +3,7 @@ import http from "../../util/http-commons";
 export default {
   getMyPageInfo(context, data) {
     return http
-      .get("/ords/list", {
+      .get("/api/v1/ords/list", {
         params: {
           procTy: data,
         },
@@ -23,7 +23,7 @@ export default {
   },
   orderComplete(context, data) {
     return http
-      .post("/ords/items", data)
+      .post("/api/v1/ords/items", data)
       .then((resp) => {
         if (!resp.data.statusCode) return resp.data;
         return false;
@@ -35,7 +35,7 @@ export default {
   },
   getOrderDetailInfo(context, data) {
     return http
-      .get("/ords/info/" + data)
+      .get("/api/v1/ords/info/" + data)
       .then((resp) => {
         if (!resp.data.statusCode) {
           context.commit("setOrderDetailInfo", resp.data);
@@ -50,7 +50,7 @@ export default {
   },
   insertTraList(context, data) {
     return http
-      .post("/tra/list/admin", data)
+      .post("/api/v1/tra/list/admin", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -62,7 +62,7 @@ export default {
   },
   updateOrdsDtlProc(context, data) {
     return http
-      .put("/ords/list/" + data.procTy + "/admin", data.ordsDtlList)
+      .put("/api/v1/admin/ords/list/" + data.procTy, data.ordsDtlList)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -74,7 +74,7 @@ export default {
   },
   selectOrderMngList(context, data) {
     return http
-      .get("/ords/list/admin", { params: data })
+      .get("/api/v1/admin/ords/list", { params: data })
       .then((resp) => {
         if (!resp.data.statusCode) {
           context.commit("setOrderMngList", resp.data);
@@ -89,7 +89,7 @@ export default {
   },
   updateOrderInfo(context, data) {
     return http
-      .put("/ords/info", data)
+      .put("/api/v1/ords/info", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -101,7 +101,7 @@ export default {
   },
   selectItemOptionInfo(context, data) {
     return http
-      .get("/ords/option/info", data)
+      .get("/api/v1/ords/option/info", data)
       .then((resp) => {
         if (!resp.data.statusCode) {
           resp.data = resp.data.filter(
@@ -119,7 +119,7 @@ export default {
   },
   updateOrdsProductOption(context, data) {
     return http
-      .put("/ords/option/info", data)
+      .put("/api/v1/ords/option/info", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -131,7 +131,7 @@ export default {
   },
   deleteOrdsInfo(context, data) {
     return http
-      .delete("/ords/info", data)
+      .delete("/api/v1/ords/info", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         else return resp.data.message;
@@ -143,7 +143,7 @@ export default {
   },
   updateConfirmPurchase(context, data) {
     return http
-      .put("/ords/confirm", data)
+      .put("/api/v1/ords/confirm", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         else return resp.data.message;
@@ -155,7 +155,7 @@ export default {
   },
   updateExchangeRequest(context, data) {
     return http
-      .put("/ords/exchange", data)
+      .put("/api/v1/ords/exchange", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         else return resp.data.message;
@@ -167,7 +167,7 @@ export default {
   },
   updateReturnRequest(context, data) {
     return http
-      .put("/ords/return/request", data)
+      .put("/api/v1/ords/return/request", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         else return resp.data.message;
@@ -179,7 +179,7 @@ export default {
   },
   selectTransactionInfo(context, data) {
     return http
-      .get("/tra/info/admin", data)
+      .get("/api/v1/admin/tra/info", data)
       .then((resp) => {
         if (!resp.data.statusCode) {
           context.commit("setTransactionInfo", resp.data);
@@ -194,7 +194,7 @@ export default {
   },
   insertReviewInfo(context, data) {
     return http
-      .post("/review/info", data)
+      .post("/api/v1/review/info", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -206,7 +206,7 @@ export default {
   },
   insertPaymentInfo(context, data) {
     return http
-      .post("/pay/info/admin", data)
+      .post("/api/v1/admin/pay/info", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -218,7 +218,7 @@ export default {
   },
   insertPaymentInfoByPg(context, data) {
     return http
-      .post("/pay/info", data)
+      .post("/api/v1/pay/info", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -230,7 +230,7 @@ export default {
   },
   insertFailPaymentLog(context, data) {
     return http
-      .post("/pay/log", data)
+      .post("/api/v1/pay/log", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -242,7 +242,7 @@ export default {
   },
   updateTransProc(context, data) {
     return http
-      .put("/tra/list/admin", data)
+      .put("/api/v1/admin/tra/list", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -254,7 +254,7 @@ export default {
   },
   selectTransactionList(context, data) {
     return http
-      .get("/tra/list/admin", data)
+      .get("/api/v1/admin/tra/list", data)
       .then((resp) => {
         if (!resp.data.statusCode) {
           context.commit("setTransactionList", resp.data);
@@ -269,7 +269,7 @@ export default {
   },
   updateExchangeConfirm(context, data) {
     return http
-      .put("/ords/exchange/confirm", data)
+      .put("/api/v1/ords/exchange/confirm", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
@@ -281,7 +281,7 @@ export default {
   },
   selectCancelRequestInfo(context, data) {
     return http
-      .get("/ords/return/info", data)
+      .get("/api/v1/ords/return/info", data)
       .then((resp) => {
         if (!resp.data.statusCode) {
           context.commit("setCancelRequestInfo", resp.data);
@@ -296,7 +296,7 @@ export default {
   },
   insertReturnPaymentInfo(context, data) {
     return http
-      .put("/ords/return/confirm", data)
+      .put("/api/v1/ords/return/confirm", data)
       .then((resp) => {
         if (resp.data.statusCode == "200") return true;
         return false;
