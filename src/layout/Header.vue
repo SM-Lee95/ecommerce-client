@@ -228,7 +228,6 @@ export default {
         });
     },
     logout() {
-      this.$store.dispatch("product/getItemList", { page: 0 });
       this.$store.commit("user/removeToken");
     },
     goJJim() {

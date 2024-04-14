@@ -142,7 +142,7 @@ export default {
       this.$store.dispatch("product/putLike", cd).then((resp) => {
         if (resp) {
           this.$dialog.message.success("Success");
-          this.$store.state.BasketList[index].love = !love;
+          this.$store.state.BasketList[index].isLove = !love;
         } else {
           this.$dialog.message.warning("Fail");
         }

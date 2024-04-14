@@ -20,8 +20,8 @@
               <v-spacer></v-spacer>
               <v-btn
                 icon
-                @click.stop="like(index, product.cd, product.love)"
-                :color="true == product.love ? 'pink lighten-4' : 'white'"
+                @click.stop="like(index, product.cd, product.isLove)"
+                :color="true == product.isLove ? 'pink lighten-4' : 'white'"
               >
                 <v-icon>mdi-heart</v-icon>
               </v-btn>
@@ -97,7 +97,7 @@ export default {
       this.$store.dispatch("product/putLike", cd).then((resp) => {
         if (resp) {
           this.$dialog.message.success("Success");
-          this.JJimList[index].love = !love;
+          this.JJimList[index].isLove = !love;
         } else {
           this.$dialog.message.warning("Fail");
         }

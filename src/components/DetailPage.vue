@@ -23,8 +23,8 @@
             <v-col class="mr-2 mt-2">
               <v-btn
                 icon
-                @click.stop="like(DetailInfo.cd, DetailInfo.love)"
-                :color="true == DetailInfo.love ? 'pink lighten-4' : 'white'"
+                @click.stop="like(DetailInfo.cd, DetailInfo.isLove)"
+                :color="true == DetailInfo.isLove ? 'pink lighten-4' : 'white'"
               >
                 <v-icon>mdi-heart</v-icon>
               </v-btn>
@@ -431,7 +431,7 @@ export default {
       this.$store.dispatch("product/putLike", cd).then((resp) => {
         if (resp) {
           this.$dialog.message.success("Success");
-          this.DetailInfo.love = !love;
+          this.DetailInfo.isLove = !love;
         } else {
           this.$dialog.message.warning("Fail");
         }
